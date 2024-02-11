@@ -1,14 +1,12 @@
-package edu.ucsd.cse110.successorator;
+package edu.ucsd.cse110.successorator.app;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 
-import edu.ucsd.cse110.successorator.databinding.ActivityMainBinding;
+import edu.ucsd.cse110.successorator.app.databinding.ActivityMainBinding;
 import edu.ucsd.cse110.successorator.lib.data.InMemoryDataSource;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 
@@ -24,8 +22,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(R.string.app_title);
-//        binding = ActivityMainBinding.inflate(getLayoutInflater());
-//        setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(R.layout.activity_main);
 
         var dataSource = InMemoryDataSource.fromDefault();
         this.model = new MainViewModel(new GoalRepository(dataSource));
@@ -40,9 +38,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         String date = new SimpleDateFormat("EEEE, M/dd", Locale.getDefault()).format(new Date());
-        TextView dateTextView = findViewById(R.id.dateTextView);
-        dateTextView.setText(date);
-
+        TextView dateTextView = view.dateTextView;
+        if (dateTextView != null) {
+            dateTextView.setText(date);
+        }
         setContentView(view.getRoot());
     }
 }
