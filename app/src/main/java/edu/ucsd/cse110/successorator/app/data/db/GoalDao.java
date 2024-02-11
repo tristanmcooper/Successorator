@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.successorator.app.data.db;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
@@ -14,13 +15,19 @@ public interface GoalDao {
     Long insert(GoalEntity goal);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    List<Long> insert (List<GoalEntity> goals);
+    List<Long> insert(List<GoalEntity> goals);
 
     @Query("SELECT * FROM goals")
     List<GoalEntity> getAll();
 
     @Query("SELECT * FROM goals WHERE id = :id")
     GoalEntity find(int id);
+
+    @Query ("SELECT * FROM goals")
+    LiveData<List<GoalEntity>> getAllAsLiveData();
+
+    @Query("SELECT * FROM goals WHERE id = :id")
+    LiveData<GoalEntity> findAsLiveData(int id);
 
     @Query("SELECT * FROM goals WHERE completed = :completed")
     List<GoalEntity> completed(boolean completed);

@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import edu.ucsd.cse110.successorator.app.databinding.ActivityMainBinding;
 import edu.ucsd.cse110.successorator.lib.data.InMemoryDataSource;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
+import edu.ucsd.cse110.successorator.lib.domain.SimpleGoalRepository;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -26,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         var dataSource = InMemoryDataSource.fromDefault();
-        this.model = new MainViewModel(new GoalRepository(dataSource));
+        this.model = new MainViewModel(new SimpleGoalRepository(dataSource));
 //        var modelOwner = this;
 //        var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
 //        var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
