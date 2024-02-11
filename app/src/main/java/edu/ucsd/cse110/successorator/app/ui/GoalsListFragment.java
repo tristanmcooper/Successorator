@@ -1,4 +1,4 @@
-package edu.ucsd.cse110.successorator.app;
+package edu.ucsd.cse110.successorator.app.ui;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

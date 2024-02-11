@@ -1,4 +1,4 @@
-package edu.ucsd.cse110.successorator.app;
+package edu.ucsd.cse110.successorator.app.ui;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -7,10 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 
-
-import java.util.zip.Inflater;
 
 import edu.ucsd.cse110.successorator.databinding.FragmentDialogAddGoalsBinding;
 
