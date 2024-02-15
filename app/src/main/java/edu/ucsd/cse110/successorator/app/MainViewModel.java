@@ -58,6 +58,11 @@ public class MainViewModel extends ViewModel{
             this.orderedGoals.setValue(goals);
         });
     }
+
+    //Probably just for testing, might be violating SRP idk
+    public void addGoal(Goal goal){
+        goalRepository.add(goal);
+    }
     public SimpleSubject<List<Goal>> getOrderedGoals() {
         return orderedGoals;
     }

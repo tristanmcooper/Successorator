@@ -26,7 +26,7 @@ public class RoomGoalRepository implements GoalRepository {
 
     @Override
     public Subject<List<Goal>> findAll() {
-        var entitiesLiveData = goalDao.getAllAsLiveData();
+        var entitiesLiveData = goalDao.findAllAsLiveData();
         var goalsLiveData = Transformations.map(entitiesLiveData, entities -> {
             return entities.stream()
                     .map(GoalEntity::toGoal)
@@ -51,5 +51,10 @@ public class RoomGoalRepository implements GoalRepository {
     @Override
     public void add(Goal goal) {
         goalDao.insert(GoalEntity.fromGoal(goal));
+    }
+
+    @Override
+    public void remove(int id) {
+        goalDao.delete(id);
     }
 }

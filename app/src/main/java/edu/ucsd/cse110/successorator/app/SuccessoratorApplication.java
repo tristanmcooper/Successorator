@@ -32,7 +32,7 @@ public class SuccessoratorApplication extends Application {
         var sharedPreferences = getSharedPreferences("successorator", MODE_PRIVATE);
         var isFirstRun = sharedPreferences.getBoolean("isFirstRun", true);
 
-        if (isFirstRun) {
+        if (isFirstRun && database.goalDao().count() == 0) {
             goalRepository.save(InMemoryDataSource.DEFAULT_GOALS);
 
             sharedPreferences.edit()
@@ -43,7 +43,6 @@ public class SuccessoratorApplication extends Application {
 
     public GoalRepository getGoalRepository() {
         return goalRepository;
-
     }
 }
 

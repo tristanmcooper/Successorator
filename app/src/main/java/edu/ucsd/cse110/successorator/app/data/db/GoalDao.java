@@ -9,6 +9,8 @@ import androidx.room.Transaction;
 
 import java.util.List;
 
+import edu.ucsd.cse110.successorator.lib.domain.Goal;
+
 @Dao
 public interface GoalDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -18,17 +20,24 @@ public interface GoalDao {
     List<Long> insert(List<GoalEntity> goals);
 
     @Query("SELECT * FROM goals")
-    List<GoalEntity> getAll();
+    List<GoalEntity> findAll();
 
     @Query("SELECT * FROM goals WHERE id = :id")
     GoalEntity find(int id);
 
     @Query ("SELECT * FROM goals")
-    LiveData<List<GoalEntity>> getAllAsLiveData();
+    LiveData<List<GoalEntity>> findAllAsLiveData();
 
     @Query("SELECT * FROM goals WHERE id = :id")
     LiveData<GoalEntity> findAsLiveData(int id);
 
     @Query("SELECT * FROM goals WHERE completed = :completed")
     List<GoalEntity> completed(boolean completed);
+
+    @Query("SELECT COUNT(*) FROM goals")
+    int count();
+
+    @Query("DELETE FROM goals WHERE id=:id")
+    void delete(int id);
+
 }

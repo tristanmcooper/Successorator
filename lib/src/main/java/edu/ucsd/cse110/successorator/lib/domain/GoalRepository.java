@@ -14,4 +14,6 @@ public interface GoalRepository {
     void save(List<Goal> goals);
 
     void add(Goal goal);
+
+    void remove(int id);
 }

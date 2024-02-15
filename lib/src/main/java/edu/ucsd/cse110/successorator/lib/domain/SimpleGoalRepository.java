@@ -36,4 +36,7 @@ public class SimpleGoalRepository implements GoalRepository {
     public void add(Goal goal) {
         dataSource.putGoal(goal);
     }
+
+    @Override
+    public void remove (int id) {return;}
 }

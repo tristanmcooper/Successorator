@@ -13,6 +13,8 @@ import androidx.lifecycle.ViewModelProvider;
 import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.app.databinding.FragmentDialogAddGoalsBinding;
 
+import edu.ucsd.cse110.successorator.lib.domain.Goal;
+
 //dialog pop up thing
 public class AddGoalFragment extends DialogFragment{
     private FragmentDialogAddGoalsBinding view;
@@ -53,7 +55,8 @@ public class AddGoalFragment extends DialogFragment{
         this.activityModel = modelProvider.get(MainViewModel.class);
     }
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
-
+        Goal newGoal = new Goal(12, "Buy a pumpkin", false);
+        activityModel.addGoal(newGoal);
         dialog.dismiss();
     }
 
