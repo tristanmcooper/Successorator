@@ -1,3 +1,4 @@
+/*
 package edu.ucsd.cse110.successorator.app.ui;
 
 import android.content.Context;
@@ -48,13 +49,13 @@ public class GoalsListAdapter extends ArrayList<String> {
         // Populate the view with the task's data.
         binding.taskName.setText(flashcard.front());
 
-        /*
+
         binding.cardDeleteButton.setOnClickListener(v-> {
             var id =flashcard.id();
             assert id != null;
             onDeleteClick.accept(id);
         });
-        */
+
         return binding.getRoot();
     }
 
@@ -79,3 +80,4 @@ public class GoalsListAdapter extends ArrayList<String> {
     }
 }
 }
+*/
