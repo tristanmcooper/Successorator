@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.successorator.app;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -33,8 +34,10 @@ public class MainActivity extends AppCompatActivity {
 //        this.model = modelProvider.get(MainViewModel.class);
 
         this.view = ActivityMainBinding.inflate(getLayoutInflater());
-
-        model.getDisplayedText().observe(text -> view.placeholderText.setText(text));
+        //resources from the strings file
+        Resources res = getResources();
+        view.defaultGoals.setText(res.getString(R.string.default_goals));
+        //model.getDisplayedText().observe(text -> view.defaultGoals.setText(text));
 
 
         String date = new SimpleDateFormat("EEEE, M/dd", Locale.getDefault()).format(new Date());
