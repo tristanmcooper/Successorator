@@ -13,6 +13,7 @@ import edu.ucsd.cse110.successorator.app.data.db.GoalDao_Impl;
 import edu.ucsd.cse110.successorator.app.data.db.RoomGoalRepository;
 import edu.ucsd.cse110.successorator.app.data.db.SuccessoratorDatabase;
 import edu.ucsd.cse110.successorator.app.databinding.ActivityMainBinding;
+import edu.ucsd.cse110.successorator.app.ui.dialog.AddGoalFragment;
 import edu.ucsd.cse110.successorator.lib.data.InMemoryDataSource;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 import edu.ucsd.cse110.successorator.lib.domain.SimpleGoalRepository;
@@ -56,6 +57,10 @@ public class MainActivity extends AppCompatActivity {
         view.defaultGoals.setText(res.getString(R.string.default_goals));
         //model.getDisplayedText().observe(text -> view.defaultGoals.setText(text));
 
+        view.addButton3.setOnClickListener(v -> {
+            var dialogFragment = AddGoalFragment.newInstance();
+            dialogFragment.show(getSupportFragmentManager(), "AddGoalFragment");
+        });
 
         String date = new SimpleDateFormat("EEEE, M/dd", Locale.getDefault()).format(new Date());
         TextView dateTextView = view.dateTextView;
