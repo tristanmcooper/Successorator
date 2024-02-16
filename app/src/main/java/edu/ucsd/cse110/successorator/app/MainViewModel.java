@@ -63,6 +63,8 @@ public class MainViewModel extends ViewModel{
     public void addGoal(Goal goal){
         goalRepository.add(goal);
     }
+
+    public int getCount(){ return goalRepository.count(); }
     public SimpleSubject<List<Goal>> getOrderedGoals() {
         return orderedGoals;
     }

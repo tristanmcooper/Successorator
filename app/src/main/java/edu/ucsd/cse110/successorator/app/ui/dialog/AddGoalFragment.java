@@ -3,6 +3,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,7 +38,7 @@ public class AddGoalFragment extends DialogFragment{
         this.view = FragmentDialogAddGoalsBinding.inflate(getLayoutInflater());
 
         return new AlertDialog.Builder(getActivity())
-                .setTitle("NewCard")
+                .setTitle("New Goal")
                 .setMessage("Please provide the new card text.")
                 .setView(view.getRoot())
                 .setPositiveButton("Create", this::onPositiveButtonClick)
@@ -54,10 +55,27 @@ public class AddGoalFragment extends DialogFragment{
         var modelProvider = new ViewModelProvider(modelOwner,modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
     }
+
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
-        Goal newGoal = new Goal(12, "Buy a pumpkin", false);
+        // Get user input from the EditText
+        String description = view.editText.getText().toString();
+        int currCount = activityModel.getCount();
+
+        // Create the new Goal object with user input as the description
+        Goal newGoal = new Goal(currCount+1, description, false);
+
+        // Add the new goal to your model
         activityModel.addGoal(newGoal);
+
+
+        // Dismiss the dialog
         dialog.dismiss();
+
+
+
+        /*Goal newGoal = new Goal(12, "Buy a pumpkin", false);
+        activityModel.addGoal(newGoal);
+        dialog.dismiss();*/
     }
 
     private void onNegativeButtonClick(DialogInterface dialog, int which) {

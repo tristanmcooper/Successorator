@@ -1,6 +1,5 @@
 package edu.ucsd.cse110.successorator.app.data.db;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 
 import java.util.List;
@@ -51,6 +50,10 @@ public class RoomGoalRepository implements GoalRepository {
     @Override
     public void add(Goal goal) {
         goalDao.insert(GoalEntity.fromGoal(goal));
+    }
+
+    @Override public int count(){
+        return goalDao.count();
     }
 
     @Override

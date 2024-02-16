@@ -15,5 +15,7 @@ public interface GoalRepository {
 
     void add(Goal goal);
 
+    int count();
+
     void remove(int id);
 }

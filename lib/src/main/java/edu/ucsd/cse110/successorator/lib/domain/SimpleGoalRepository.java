@@ -39,4 +39,7 @@ public class SimpleGoalRepository implements GoalRepository {
 
     @Override
     public void remove (int id) {return;}
+
+    @Override
+    public int count(){return 0;}
 }
