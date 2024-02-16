@@ -19,14 +19,13 @@ import edu.ucsd.cse110.successorator.lib.domain.Goal;
 public class GoalsListAdapter extends ArrayAdapter<Goal> {
     Consumer<Integer> onDeleteClick;
 
-    public GoalsListAdapter(Context context, List<String> goals, Consumer<Integer> onDeleteClick) {
+    public GoalsListAdapter(Context context, List<Goal> goals) {
         // This sets a bunch of stuff internally, which we can access
         // with getContext() and getItem() for example.
         //
         // Also note that ArrayAdapter NEEDS a mutable List (ArrayList),
         // or it will crash!
         super(context, 0, new ArrayList<>(goals));
-        this.onDeleteClick = onDeleteClick;
     }
 
     //FIXING CURRENTLY

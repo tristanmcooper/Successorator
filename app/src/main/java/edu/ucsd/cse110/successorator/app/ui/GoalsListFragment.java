@@ -18,12 +18,12 @@ import edu.ucsd.cse110.successorator.app.databinding.ListTaskItemBinding;
 import edu.ucsd.cse110.successorator.app.databinding.FragmentTaskListBinding;
 import edu.ucsd.cse110.successorator.app.ui.dialog.AddGoalFragment;
 
-
+/*
 public class GoalsListFragment extends Fragment {
     private MainViewModel activityModel;
-    private ActivityMainBinding view;
+    private @NonNull FragmentTaskListBinding view;
     //^^^ depends on the current view the button is in
-    //private CardListAdapter adapter;
+    private GoalsListAdapter adapter;
 
     public static GoalsListFragment newInstance() {
         GoalsListFragment fragment = new GoalsListFragment();
@@ -42,16 +42,16 @@ public class GoalsListFragment extends Fragment {
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
 
-        /*
+
         // Initialize the Adapter (with an empty list for now)
-        this.adapter = new GoalsListAdapter(requireContext(), List.of(), activityModel::remove);
-        activityModel.getOrderedCards().observe(cards -> {
-            if (cards == null) return;
+        this.adapter = new GoalsListAdapter(requireContext(), List.of());
+        activityModel.getOrderedGoals().observe(goals -> {
+            if (goals == null) return;
             adapter.clear();
-            adapter.addAll(new ArrayList<>(cards)); // remember the mutable copy here!
+            adapter.addAll(new ArrayList<>(goals)); // remember the mutable copy here!
             adapter.notifyDataSetChanged();
         });
-        */
+
 
     }
 
@@ -60,10 +60,10 @@ public class GoalsListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
     @Nullable ViewGroup container,
     @Nullable Bundle savedInstanceState) {
-        //this.view = FragmentTaskListBinding.inflate(inflater, container, false);
-        this.view = ActivityMainBinding.inflate(inflater,container,false);
+        this.view = FragmentTaskListBinding.inflate(inflater, container, false);
+
         // Set the adapter on the ListView
-        //view.cardList.setAdapter(adapter);
+        view.taskList.setAdapter(adapter);
 
         //connect the + to the functionality--> open up the dialog
 

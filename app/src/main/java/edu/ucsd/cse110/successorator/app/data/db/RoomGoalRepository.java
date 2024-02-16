@@ -2,6 +2,7 @@ package edu.ucsd.cse110.successorator.app.data.db;
 
 import androidx.lifecycle.Transformations;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,6 +33,14 @@ public class RoomGoalRepository implements GoalRepository {
                     .collect(Collectors.toList());
         });
         return new LiveDataSubjectAdapter<>(goalsLiveData);
+    }
+    public List<Goal> tempFindAll(){
+        var goalEntities = goalDao.findAll();
+        ArrayList<Goal> ans = new ArrayList<>();
+        for(GoalEntity entity: goalEntities){
+            ans.add(entity.toGoal());
+        }
+        return ans;
     }
 
     @Override

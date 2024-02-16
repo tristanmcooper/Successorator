@@ -4,7 +4,7 @@ import java.util.List;
 
 import edu.ucsd.cse110.successorator.lib.data.InMemoryDataSource;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
-
+/*
 public class SimpleGoalRepository implements GoalRepository {
     private final InMemoryDataSource dataSource;
 
@@ -43,3 +43,4 @@ public class SimpleGoalRepository implements GoalRepository {
     @Override
     public int count(){return 0;}
 }
+*/
