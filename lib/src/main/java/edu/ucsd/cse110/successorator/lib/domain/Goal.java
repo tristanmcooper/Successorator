@@ -26,7 +26,7 @@ public class Goal {
         return id;
     }
 
-    public String description() {
+    public @NonNull String description() {
         return description;
     }
 

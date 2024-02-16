@@ -1,10 +1,11 @@
-/*
+
 package edu.ucsd.cse110.successorator.app.ui;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 
@@ -13,17 +14,18 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import edu.ucsd.cse110.successorator.app.databinding.ListTaskItemBinding;
+import edu.ucsd.cse110.successorator.lib.domain.Goal;
 
-public class GoalsListAdapter extends ArrayList<String> {
+public class GoalsListAdapter extends ArrayAdapter<Goal> {
     Consumer<Integer> onDeleteClick;
 
-    public GoalsListAdapter(Context context, List<String> flashcards, Consumer<Integer> onDeleteClick) {
+    public GoalsListAdapter(Context context, List<String> goals, Consumer<Integer> onDeleteClick) {
         // This sets a bunch of stuff internally, which we can access
         // with getContext() and getItem() for example.
         //
         // Also note that ArrayAdapter NEEDS a mutable List (ArrayList),
         // or it will crash!
-        super(context, 0, new ArrayList<>(flashcards));
+        super(context, 0, new ArrayList<>(goals));
         this.onDeleteClick = onDeleteClick;
     }
 
@@ -32,8 +34,8 @@ public class GoalsListAdapter extends ArrayList<String> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the flashcard for this position.
-        var flashcard = getItem(position);
-        assert flashcard != null;
+        var goal = getItem(position);
+        assert goal != null;
 
         // Check if a view is being reused...
         ListTaskItemBinding binding;
@@ -47,14 +49,8 @@ public class GoalsListAdapter extends ArrayList<String> {
         }
 
         // Populate the view with the task's data.
-        binding.taskName.setText(flashcard.front());
+        binding.taskName.setText(goal.description());
 
-
-        binding.cardDeleteButton.setOnClickListener(v-> {
-            var id =flashcard.id();
-            assert id != null;
-            onDeleteClick.accept(id);
-        });
 
         return binding.getRoot();
     }
@@ -70,14 +66,13 @@ public class GoalsListAdapter extends ArrayList<String> {
 
     @Override
     public long getItemId(int position) {
-        var flashcard = getItem(position);
-        assert flashcard != null;
+        var goal = getItem(position);
+        assert goal != null;
 
-        var id = flashcard.id();
+        var id = goal.id();
         assert id != null;
 
         return id;
     }
 }
-}
-*/
+
