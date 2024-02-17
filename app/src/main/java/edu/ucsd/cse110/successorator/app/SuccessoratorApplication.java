@@ -14,7 +14,7 @@ public class SuccessoratorApplication extends Application {
     private InMemoryDataSource dataSource;
     private GoalRepository goalRepository;
 
-    @Override
+    //@Override
     public void onCreate() {
         super.onCreate();
 
@@ -33,7 +33,7 @@ public class SuccessoratorApplication extends Application {
         var isFirstRun = sharedPreferences.getBoolean("isFirstRun", true);
 
         if (isFirstRun && database.goalDao().count() == 0) {
-            goalRepository.save(InMemoryDataSource.DEFAULT_GOALS);
+            //goalRepository.save(InMemoryDataSource.DEFAULT_GOALS);
 
             sharedPreferences.edit()
                 .putBoolean("isFirstRun", false)

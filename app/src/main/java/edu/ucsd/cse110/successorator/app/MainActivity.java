@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.room.Room;
 
 import edu.ucsd.cse110.successorator.app.data.db.GoalDao;
@@ -16,6 +17,7 @@ import edu.ucsd.cse110.successorator.app.databinding.ActivityMainBinding;
 import edu.ucsd.cse110.successorator.app.ui.GoalsListAdapter;
 import edu.ucsd.cse110.successorator.app.ui.dialog.AddGoalFragment;
 import edu.ucsd.cse110.successorator.lib.data.InMemoryDataSource;
+import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 //import edu.ucsd.cse110.successorator.lib.domain.SimpleGoalRepository;
 
@@ -30,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding view;
     private GoalsListAdapter adapter;
     private MainViewModel model; // won't need later when we do fragments
+
+    private DisplayUpdater displayUpdater;
 
 
     @Override
@@ -50,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
         //var dataSource = InMemoryDataSource.fromDefault();
         var dataSource = new RoomGoalRepository(database.goalDao());
         this.model = new MainViewModel(dataSource);
+
 //        var modelOwner = this;
 //        var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
 //        var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
@@ -61,6 +66,9 @@ public class MainActivity extends AppCompatActivity {
         view.defaultGoals.setText(res.getString(R.string.default_goals));
         //model.getDisplayedText().observe(text -> view.defaultGoals.setText(text));
         this.adapter = new GoalsListAdapter(MainActivity.this, List.of());
+        this.displayUpdater = new DisplayUpdater(MainActivity.this);
+
+
         /*
         model.getOrderedGoals().observe(goals -> {
             if (goals == null) return;
@@ -71,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
         */
         adapter.addAll(model.getOrderedGoals());
         view.taskList.setAdapter(adapter);
+
+        model.goalRepository.observe(displayUpdater);
 
         view.addButton3.setOnClickListener(v -> {
             var dialogFragment = AddGoalFragment.newInstance();
@@ -83,5 +93,13 @@ public class MainActivity extends AppCompatActivity {
             dateTextView.setText(date);
         }
         setContentView(view.getRoot());
+    }
+
+    public void reloadGoalsListView(ArrayList<Goal> value){
+        if (value != null){
+            adapter.clear();
+            adapter.addAll(value);
+            view.taskList.setAdapter(adapter);
+        }
     }
 }

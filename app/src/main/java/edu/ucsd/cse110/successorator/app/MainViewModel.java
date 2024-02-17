@@ -1,6 +1,8 @@
 package edu.ucsd.cse110.successorator.app;
 import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY;
 
+import android.app.Application;
+
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
@@ -15,14 +17,19 @@ import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 
+
+
 public class MainViewModel extends ViewModel{
     private static final String LOG_TAG = "MainViewModel";
-    private GoalRepository goalRepository;
+    public RoomGoalRepository goalRepository;
 
     //private final SimpleSubject<List<Integer>> goalOrdering;
     //private final SimpleSubject<List<Goal>> orderedGoals;
     private ArrayList<Goal> orderedGoals;
     private final SimpleSubject<String> displayedText;
+    private SuccessoratorApplication app;
+
+
 
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
@@ -30,10 +37,11 @@ public class MainViewModel extends ViewModel{
                     creationExtras -> {
                         var app = (SuccessoratorApplication) creationExtras.get(APPLICATION_KEY);
                         assert  app != null;
-                        return new MainViewModel(app.getGoalRepository());
+                        return new MainViewModel((RoomGoalRepository) app.getGoalRepository());
                     });
 
-    public MainViewModel(GoalRepository goalRepository) {
+
+    public MainViewModel(RoomGoalRepository goalRepository) {
         this.goalRepository = goalRepository;
 
         //this.goalOrdering = new SimpleSubject<>();
@@ -43,6 +51,8 @@ public class MainViewModel extends ViewModel{
 
 
         orderedGoals = (ArrayList<Goal>) goalRepository.tempFindAll();
+
+
 
 /*
         // When the list of cards changes (or is first loaded), reset the ordering.
