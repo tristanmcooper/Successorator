@@ -52,7 +52,12 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
     @Override
     public void add(Goal goal) {
         goalDao.insert(GoalEntity.fromGoal(goal));
-        this.setValue(tempFindAll());
+        var goalEntities = goalDao.findAll();
+        ArrayList<Goal> goals = new ArrayList<>();
+        for(GoalEntity entity: goalEntities){
+            goals.add(entity.toGoal());
+        }
+        this.setValue(goals);
         this.notifyObservers();
     }
 
