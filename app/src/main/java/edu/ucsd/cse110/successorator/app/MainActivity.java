@@ -12,8 +12,6 @@ import edu.ucsd.cse110.successorator.app.databinding.ActivityMainBinding;
 import edu.ucsd.cse110.successorator.app.ui.GoalListAdapter;
 import edu.ucsd.cse110.successorator.app.ui.GoalListFragment;
 import edu.ucsd.cse110.successorator.app.ui.dialog.AddGoalFragment;
-import edu.ucsd.cse110.successorator.lib.domain.Goal;
-//import edu.ucsd.cse110.successorator.lib.domain.SimpleGoalRepository;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -26,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding view;
     private GoalListAdapter adapter;
     private MainViewModel model; // won't need later when we do fragments
-    private DisplayUpdater displayUpdater;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         this.adapter = new GoalListAdapter(getApplicationContext(), List.of());
-        this.displayUpdater = new DisplayUpdater(this);
 
 
         model.getOrderedGoals().registerObserver(goals -> {
