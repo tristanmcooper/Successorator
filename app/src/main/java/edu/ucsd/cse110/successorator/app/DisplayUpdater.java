@@ -15,6 +15,6 @@ public class DisplayUpdater extends RepositoryObserver {
     }
 
     public void onChanged(ArrayList<Goal> value) {
-        mainActivity.reloadGoalsListView(value);
+//        mainActivity.reloadGoalsListView(value);
     }
 }

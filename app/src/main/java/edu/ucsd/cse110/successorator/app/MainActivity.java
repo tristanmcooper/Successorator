@@ -1,6 +1,7 @@
 package edu.ucsd.cse110.successorator.app;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -21,14 +22,11 @@ import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
-    private ActivityMainBinding binding;
+
     private ActivityMainBinding view;
     private GoalListAdapter adapter;
     private MainViewModel model; // won't need later when we do fragments
-
     private DisplayUpdater displayUpdater;
-
-    private SuccessoratorApplication appSec = new SuccessoratorApplication();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,7 +56,15 @@ public class MainActivity extends AppCompatActivity {
 
 
         model.getOrderedGoals().registerObserver(goals -> {
-            if (goals == null) return;
+            if (goals == null) {
+                view.defaultGoals.setVisibility(View.VISIBLE);
+                return;
+            }
+            if (goals.size() == 0) {
+                view.defaultGoals.setVisibility(View.VISIBLE);
+            } else {
+                view.defaultGoals.setVisibility(View.INVISIBLE);
+            }
             adapter.clear();
             adapter.addAll(new ArrayList<>(goals)); // remember the mutable copy here!
             adapter.notifyDataSetChanged();
@@ -71,13 +77,13 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(view.getRoot());
     }
-    public void reloadGoalsListView(ArrayList<Goal> value){
-        if (value != null){
-            adapter.clear();
-            adapter.addAll(value);
-            view.goalList.setAdapter(adapter);
-        }
-    }
+//    public void reloadGoalsListView(ArrayList<Goal> value){
+//        if (value != null){
+//            adapter.clear();
+//            adapter.addAll(value);
+//            view.goalList.setAdapter(adapter);
+//        }
+//    }
 
 }
     /*
