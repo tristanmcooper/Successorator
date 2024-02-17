@@ -61,15 +61,24 @@ public class AddGoalFragment extends DialogFragment{
         String description = view.editText.getText().toString();
         int currCount = activityModel.getCount();
 
+        if (description.length() == 0) {
+            new AlertDialog.Builder(requireContext())
+                    .setTitle("Error")
+                    .setMessage("The Goal name can't be empty")
+                    .setNegativeButton("OK", null)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+            return;
+        }
+
         // Create the new Goal object with user input as the description
         Goal newGoal = new Goal(currCount+1, description, false);
 
         // Add the new goal to your model
         activityModel.addGoal(newGoal);
 
-
         // Dismiss the dialog
-        dialog.dismiss();
+            dialog.dismiss();
     }
 
     private void onNegativeButtonClick(DialogInterface dialog, int which) {
