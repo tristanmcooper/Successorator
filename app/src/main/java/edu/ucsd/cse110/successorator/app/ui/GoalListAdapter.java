@@ -13,13 +13,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import edu.ucsd.cse110.successorator.app.databinding.ListTaskItemBinding;
+import edu.ucsd.cse110.successorator.app.databinding.ListGoalItemBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 
-public class GoalsListAdapter extends ArrayAdapter<Goal> {
+public class GoalListAdapter extends ArrayAdapter<Goal> {
     Consumer<Integer> onDeleteClick;
 
-    public GoalsListAdapter(Context context, List<Goal> goals) {
+    public GoalListAdapter(Context context, List<Goal> goals) {
         // This sets a bunch of stuff internally, which we can access
         // with getContext() and getItem() for example.
         //
@@ -37,18 +37,18 @@ public class GoalsListAdapter extends ArrayAdapter<Goal> {
         assert goal != null;
 
         // Check if a view is being reused...
-        ListTaskItemBinding binding;
+        ListGoalItemBinding binding;
         if (convertView != null) {
             // if so, bind to it
-            binding = ListTaskItemBinding.bind(convertView);
+            binding = ListGoalItemBinding.bind(convertView);
         } else {
             // otherwise inflate a new view from our layout XML.
             var layoutInflater = LayoutInflater.from(getContext());
-            binding = ListTaskItemBinding.inflate(layoutInflater, parent, false);
+            binding = ListGoalItemBinding.inflate(layoutInflater, parent, false);
         }
 
         // Populate the view with the task's data.
-        binding.taskName.setText(goal.description());
+        binding.goalDescription.setText(goal.description());
 
 
         return binding.getRoot();

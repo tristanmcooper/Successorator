@@ -8,7 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import edu.ucsd.cse110.successorator.app.databinding.ActivityMainBinding;
-import edu.ucsd.cse110.successorator.app.ui.GoalsListAdapter;
+import edu.ucsd.cse110.successorator.app.ui.GoalListAdapter;
+import edu.ucsd.cse110.successorator.app.ui.GoalListFragment;
 import edu.ucsd.cse110.successorator.app.ui.dialog.AddGoalFragment;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 //import edu.ucsd.cse110.successorator.lib.domain.SimpleGoalRepository;
@@ -22,7 +23,7 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private ActivityMainBinding view;
-    private GoalsListAdapter adapter;
+    private GoalListAdapter adapter;
     private MainViewModel model; // won't need later when we do fragments
 
     private DisplayUpdater displayUpdater;
@@ -52,8 +53,8 @@ public class MainActivity extends AppCompatActivity {
         this.model = modelProvider.get(MainViewModel.class);
 
 
-        this.adapter = new GoalsListAdapter(MainActivity.this, List.of());
-        this.displayUpdater = new DisplayUpdater(MainActivity.this);
+        this.adapter = new GoalListAdapter(getApplicationContext(), List.of());
+        this.displayUpdater = new DisplayUpdater(this);
 
 
         model.getOrderedGoals().registerObserver(goals -> {
@@ -63,15 +64,21 @@ public class MainActivity extends AppCompatActivity {
             adapter.notifyDataSetChanged();
         });
 
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, GoalListFragment.newInstance())
+                .commit();
+
         setContentView(view.getRoot());
     }
     public void reloadGoalsListView(ArrayList<Goal> value){
         if (value != null){
             adapter.clear();
             adapter.addAll(value);
-            view.taskList.setAdapter(adapter);
+            view.goalList.setAdapter(adapter);
         }
     }
+
 }
     /*
         //resources from the strings file
