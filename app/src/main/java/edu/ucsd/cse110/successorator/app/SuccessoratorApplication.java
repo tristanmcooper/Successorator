@@ -20,6 +20,7 @@ public class SuccessoratorApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
+        // Build database
         var database = Room.databaseBuilder(
                 getApplicationContext(),
                 SuccessoratorDatabase.class,
@@ -41,19 +42,13 @@ public class SuccessoratorApplication extends Application {
             new Goal(3, "Goal 3", false)
         );
 
+        // Populate database with default values
         if (isFirstRun && database.goalDao().count() == 0) {
             goalRepository.save(DEFAULT_GOALS);
 
             sharedPreferences.edit()
                 .putBoolean("isFirstRun", false)
                 .apply();
-        }
-        System.out.println(goalRepository.tempFindAll());
-        for (var each : goalRepository.tempFindAll()) {
-            System.out.println(each);
-            System.out.println(each.id());
-            System.out.println(each.description());
-            System.out.println(each.completed());
         }
     }
 

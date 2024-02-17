@@ -17,10 +17,9 @@ public class MainViewModel extends ViewModel{
     private final RoomGoalRepository goalRepository;
     private SimpleSubject<List<Goal>> orderedGoals;
     private MainActivity mainActivity;
-    private final SimpleSubject<String> displayedText;
     private SuccessoratorApplication app;
 
-    //basically grabs the database.
+    //basically grabs the database
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
                     MainViewModel.class,
@@ -30,11 +29,12 @@ public class MainViewModel extends ViewModel{
                         return new MainViewModel((RoomGoalRepository) app.getGoalRepository());
                     });
 
-
+    //when making a new mainviewmodel ^ called up there
     public MainViewModel(RoomGoalRepository goalRepository) {
+         
+        //creating simple subjects here so that we can observe them
         this.goalRepository = goalRepository;
         this.orderedGoals = new SimpleSubject<>();
-        this.displayedText = new SimpleSubject<>();
 
         goalRepository.findAll().registerObserver(goals -> {
             if (goals == null) return;
@@ -45,18 +45,19 @@ public class MainViewModel extends ViewModel{
             orderedGoals.setValue(newOrderedGoals);
         });
     }
+
     //Probably just for testing, might be violating SRP idk
     public void addGoal(Goal goal){
         goalRepository.add(goal);
     }
 
-    public int getCount(){ return goalRepository.count(); }
-
-    public SimpleSubject<List<Goal>> getOrderedGoals(){
-        return orderedGoals;
+    //the getters so that other classes can watch when the db changes so they can upd UI
+    public int getCount(){ 
+        return goalRepository.count(); 
     }
 
-    public SimpleSubject<String> getDisplayedText() {
-        return displayedText;
+    
+    public SimpleSubject<List<Goal>> getOrderedGoals(){
+        return orderedGoals;
     }
 }

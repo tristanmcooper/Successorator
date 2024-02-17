@@ -9,6 +9,7 @@ import edu.ucsd.cse110.successorator.lib.domain.Goal;
 
 @Entity(tableName = "goals")
 public class GoalEntity {
+    // Use ID as primary key
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     public Integer id;
@@ -19,17 +20,20 @@ public class GoalEntity {
     @ColumnInfo(name = "completed")
     public boolean completed;
 
+    // Constructor for GoalEntity
     GoalEntity(@NonNull int id, @NonNull String description, @NonNull boolean completed) {
         this.id = id;
         this.description = description;
         this.completed = completed;
     }
 
+    // Change Goal object into GoalEntity object
     public static GoalEntity fromGoal(@NonNull Goal goal) {
         var goalEntity = new GoalEntity(goal.id(), goal.description(), goal.completed());
         return goalEntity;
     }
 
+    // Change GoalEntity object into Goal object
     public @NonNull Goal toGoal() {
         return new Goal(id, description, completed);
     }

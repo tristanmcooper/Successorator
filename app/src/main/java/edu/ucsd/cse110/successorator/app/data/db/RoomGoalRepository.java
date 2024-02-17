@@ -35,14 +35,6 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
         });
         return new LiveDataSubjectAdapter<>(goalsLiveData);
     }
-    public ArrayList<Goal> tempFindAll(){
-        var goalEntities = goalDao.findAll();
-        ArrayList<Goal> ans = new ArrayList<>();
-        for(GoalEntity entity: goalEntities){
-            ans.add(entity.toGoal());
-        }
-        return ans;
-    }
 
     @Override
     public void save(Goal goal) {
@@ -64,7 +56,8 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
         this.notifyObservers();
     }
 
-    @Override public int count(){
+    @Override
+    public int count(){
         return goalDao.count();
     }
 
