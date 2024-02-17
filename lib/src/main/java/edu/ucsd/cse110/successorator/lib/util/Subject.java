@@ -18,7 +18,7 @@ public interface Subject<T> {
      *
      * @param observer The observer to add.
      */
-    void observe(Observer<T> observer);
+    void registerObserver(Observer<T> observer);
 
     /**
      * Removes an observer from the subject.

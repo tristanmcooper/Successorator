@@ -6,22 +6,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/add_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="+"
-        tools:layout_editor_absoluteX="314dp"
-        tools:layout_editor_absoluteY="7dp" />
-
     <ListView
-        android:id="@+id/task_list"
+        android:id="@+id/goal_list"
         android:layout_width="405dp"
         android:layout_height="659dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:listitem="@layout/list_task_item" >
+        tools:listitem="@layout/list_goal_item" >
 
     </ListView>
 </androidx.constraintlayout.widget.ConstraintLayout>

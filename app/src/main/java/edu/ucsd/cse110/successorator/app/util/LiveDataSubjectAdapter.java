@@ -21,7 +21,7 @@ public class LiveDataSubjectAdapter<T> implements Subject<T> {
     }
 
     @Override
-    public void observe(Observer<T> observer) {
+    public void registerObserver(Observer<T> observer) {
         adaptee.observeForever(observer::onChanged);
     }
 

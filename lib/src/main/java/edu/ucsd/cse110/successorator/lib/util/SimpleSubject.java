@@ -22,7 +22,7 @@ public class SimpleSubject<T> implements MutableSubject<T> {
     }
 
     @Override
-    public void observe(Observer<T> observer) {
+    public void registerObserver(Observer<T> observer) {
         observers.add(observer);
         observer.onChanged(value);
     }
