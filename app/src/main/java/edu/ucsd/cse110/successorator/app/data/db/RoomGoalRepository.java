@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import edu.ucsd.cse110.successorator.app.util.*;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
+import edu.ucsd.cse110.successorator.lib.util.RepositoryObserver;
 import edu.ucsd.cse110.successorator.lib.util.RepositorySubject;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
 

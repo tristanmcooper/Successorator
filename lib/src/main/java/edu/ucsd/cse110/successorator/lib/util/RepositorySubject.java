@@ -23,7 +23,7 @@ public class RepositorySubject implements Subject{
     }
 
     @Override
-    public void observe(Observer observer) {
+    public void registerObserver(Observer observer) {
         observers.add(observer);
         observer.onChanged(value);
     }

@@ -23,7 +23,7 @@
         android:layout_marginTop="16dp"
         android:text="date_placeholder"
         android:textSize="24sp"
-        app:layout_constraintEnd_toStartOf="@+id/add_button3"
+        app:layout_constraintEnd_toStartOf="@+id/add_goal_button"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -38,7 +38,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
     <Button
-        android:id="@+id/add_button3"
+        android:id="@+id/add_goal_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="+"
