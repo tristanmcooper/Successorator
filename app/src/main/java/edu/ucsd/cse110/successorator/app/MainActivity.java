@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding view;
     private GoalListAdapter adapter;
-    private MainViewModel model; // won't need later when we do fragments
+    private MainViewModel model;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,20 +73,4 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(view.getRoot());
     }
-//    public void reloadGoalsListView(ArrayList<Goal> value){
-//        if (value != null){
-//            adapter.clear();
-//            adapter.addAll(value);
-//            view.goalList.setAdapter(adapter);
-//        }
-//    }
-
 }
-    /*
-        //resources from the strings file
-        Resources res = getResources();
-        view.defaultGoals.setText(res.getString(R.string.default_goals));
-        //model.getDisplayedText().observe(text -> view.defaultGoals.setText(text));
-    }
-}
-*/

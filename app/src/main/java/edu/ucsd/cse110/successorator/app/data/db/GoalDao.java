@@ -9,8 +9,6 @@ import androidx.room.Transaction;
 
 import java.util.List;
 
-import edu.ucsd.cse110.successorator.lib.domain.Goal;
-
 @Dao
 public interface GoalDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
