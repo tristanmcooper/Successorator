@@ -3,4 +3,7 @@
     <string name="app_title">Successorator Goals</string>
     <string name="placeholder">Placeholder</string>
     <string name="hello_world">Hello, World!</string>
+    <string name="default_goals">No goals for the day. Click the + at the upper right to enter your
+        most important thing!</string>
+
 </resources>

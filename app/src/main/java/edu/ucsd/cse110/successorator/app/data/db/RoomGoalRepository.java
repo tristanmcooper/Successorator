@@ -5,7 +5,7 @@ import androidx.lifecycle.Transformations;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-/*
+
 import edu.ucsd.cse110.successorator.app.util.*;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
@@ -37,6 +37,17 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
     }
 
     @Override
+    public Subject<List<Goal>> findCompleted(Boolean completed) {
+        var entitiesLiveData = goalDao.findCompleted(completed);
+        var goalsLiveData = Transformations.map(entitiesLiveData, entities -> {
+            return entities.stream()
+                    .map(GoalEntity::toGoal)
+                    .collect(Collectors.toList());
+        });
+        return new LiveDataSubjectAdapter<>(goalsLiveData);
+    }
+
+    @Override
     public void save(Goal goal) {
         goalDao.insert(GoalEntity.fromGoal(goal));
     }
@@ -52,7 +63,20 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
     @Override
     public void add(Goal goal) {
         goalDao.insert(GoalEntity.fromGoal(goal));
-        this.setValue((ArrayList<Goal>) tempFindAll());
+        var goalEntities = goalDao.findAll();
+        ArrayList<Goal> goals = new ArrayList<>();
+        for(GoalEntity entity: goalEntities){
+            goals.add(entity.toGoal());
+        }
+        this.setValue(goals);
+        this.notifyObservers();
+    }
+
+
+    @Override
+    public void changeCompleted(int id) {
+        var goal = goalDao.find(id).toGoal();
+        goalDao.insert(new GoalEntity(goal.id(), goal.description(), !goal.completed()));
         this.notifyObservers();
     }
 
@@ -62,13 +86,7 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
     }
 
     @Override
-    public List<Goal> tempFindAll() {
-        return null;
-    }
-
-    @Override
     public void remove(int id) {
         goalDao.delete(id);
     }
 }
-*/

@@ -17,9 +17,9 @@ public class InMemoryDataSource {
 
     private final Map<Integer, Goal> goals
             = new HashMap<>();
-    private final Map<Integer, SimpleSubject<Goal>> goalSimpleSubjects
+    private final Map<Integer, SimpleSubject<Goal>> goalSubjects
             = new HashMap<>();
-    private final SimpleSubject<List<Goal>> allGoalsSimpleSubject
+    private final SimpleSubject<List<Goal>> allGoalsSubjects
             = new SimpleSubject<>();
 
     public InMemoryDataSource() {
@@ -33,31 +33,36 @@ public class InMemoryDataSource {
         return goals.get(id);
     }
 
-    public SimpleSubject<Goal> getGoalSimpleSubject(int id) {
-        if (!goalSimpleSubjects.containsKey(id)) {
+    public SimpleSubject<Goal> getGoalSubject(int id) {
+        if (!goalSubjects.containsKey(id)) {
             var subject = new SimpleSubject<Goal>();
             subject.setValue(getGoal(id));
-            goalSimpleSubjects.put(id, subject);
+            goalSubjects.put(id, subject);
         }
-        return goalSimpleSubjects.get(id);
+        return goalSubjects.get(id);
     }
 
-    public SimpleSubject<List<Goal>> getAllGoalsSimpleSubject() {
-        return allGoalsSimpleSubject;
+    public SimpleSubject<List<Goal>> getAllGoalsSubjects() {
+        return allGoalsSubjects;
     }
 
     public void putGoal(Goal goal) {
         goals.put(goal.id(), goal);
-        if (goalSimpleSubjects.containsKey(goal.id())) {
-            goalSimpleSubjects.get(goal.id()).setValue(goal);
+        if (goalSubjects.containsKey(goal.id())) {
+            goalSubjects.get(goal.id()).setValue(goal);
         }
-        allGoalsSimpleSubject.setValue(getGoals());
+        allGoalsSubjects.setValue(getGoals());
+    }
+
+    public void putGoals(List<Goal> goals) {
+        goals.forEach(goal -> goals.add(goal.id(), goal));
+        allGoalsSubjects.setValue(getGoals());
     }
 
     public final static List<Goal> DEFAULT_GOALS = List.of(
-            new Goal(0, "Goal 0: Get Lettuce"),
-            new Goal(1, "Goal 1: Get Tomato"),
-            new Goal(2, "Goal 2: Finish Project PLEASE")
+            new Goal(0, "Goal 0: Get Lettuce", false),
+            new Goal(1, "Goal 1: Get Tomato", false),
+            new Goal(2, "Goal 2: Finish Project PLEASE", false)
     );
 
     public static InMemoryDataSource fromDefault() {

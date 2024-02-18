@@ -2,29 +2,24 @@ package edu.ucsd.cse110.successorator.lib.domain;
 
 import java.util.List;
 
-import edu.ucsd.cse110.successorator.lib.data.InMemoryDataSource;
-import edu.ucsd.cse110.successorator.lib.util.SimpleSubject; // change to Subject later?
+import edu.ucsd.cse110.successorator.lib.util.Subject;
 
-public class GoalRepository {
-    private final InMemoryDataSource dataSource;
+public interface GoalRepository {
+    Subject<Goal> find(int id);
 
-    public GoalRepository(InMemoryDataSource dataSource) {
-        this.dataSource = dataSource;
-    }
+    Subject<List<Goal>> findAll();
 
-    public Integer count() {
-        return dataSource.getGoals().size();
-    }
+    Subject<List<Goal>> findCompleted(Boolean completed);
 
-    public SimpleSubject<Goal> find(int id) {
-        return dataSource.getGoalSimpleSubject(id);
-    }
+    void save(Goal goal);
 
-    public SimpleSubject<List<Goal>> findAll() {
-        return dataSource.getAllGoalsSimpleSubject();
-    }
+    void save(List<Goal> goals);
 
-    public void save(Goal Goal) {
-        dataSource.putGoal(Goal);
-    }
+    void changeCompleted(int id);
+
+    void add(Goal goal);
+
+    int count();
+
+    void remove(int id);
 }
