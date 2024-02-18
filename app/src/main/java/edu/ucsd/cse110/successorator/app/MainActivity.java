@@ -70,13 +70,6 @@ public class MainActivity extends AppCompatActivity {
         buttonAdvanceDate = findViewById(R.id.button_advance_date);
         // Initial update
 
-
-        // Schedule periodic updates (e.g., every minute)
-
-
-
-
-
         currentCalendar = Calendar.getInstance();
         updateDate();
 
@@ -102,8 +95,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
-    // Method to update the date
     // Method to update the date
     private void updateDate() {
         String currentDate = DateFormat.getDateInstance(DateFormat.FULL).format(currentCalendar.getTime());
