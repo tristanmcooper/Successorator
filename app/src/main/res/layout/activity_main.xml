@@ -42,8 +42,8 @@
 
     <TextView
         android:id="@+id/default_goals"
-        android:layout_width="278dp"
-        android:layout_height="203dp"
+        android:layout_width="321dp"
+        android:layout_height="530dp"
         android:text="@string/default_goals"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
