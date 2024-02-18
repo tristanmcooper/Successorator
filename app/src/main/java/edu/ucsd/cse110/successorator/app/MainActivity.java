@@ -58,11 +58,6 @@ public class MainActivity extends AppCompatActivity {
 
         var dataSource = InMemoryDataSource.fromDefault();
         this.model = new MainViewModel(new GoalRepository(dataSource));
-//        var modelOwner = this;
-//        var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
-//        var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
-//        this.model = modelProvider.get(MainViewModel.class);
-
         this.view = ActivityMainBinding.inflate(getLayoutInflater());
 
         setContentView(R.layout.activity_main);
@@ -84,29 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
         currentCalendar = Calendar.getInstance();
         updateDate();
-        // Initial update
-        /*
-        Calendar calendar = Calendar.getInstance();
-        String currentDate = DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
-        TextView textViewDate = findViewById(R.id.text_view_date);
-        textViewDate.setText(currentDate);
 
-=======
-        //set up the date
->>>>>>> 9aa69cf8a3a026c767941010bdbf229078107400
->>>>>>> Stashed changes
-        String date = new SimpleDateFormat("EEEE, M/dd", Locale.getDefault()).format(new Date());
-        TextView dateTextView = view.dateTextView;
-        if (dateTextView != null) {
-            dateTextView.setText(date);
-        }
-        setContentView(view.getRoot());
-<<<<<<< Updated upstream
-    }
-}
-=======
-
- */
         dateUpdater = new Runnable() {
             @Override
             public void run() {
