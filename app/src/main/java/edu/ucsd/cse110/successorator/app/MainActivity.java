@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
         //setup the adapter for the list, so it can update it at the beginning
         this.adapter = new GoalListAdapter(getApplicationContext(), List.of(), null);
 
-        //check for changes in the database thorugh getOrderedGoals
         model.getIncompleteGoals().registerObserver(goals -> {
             if (goals == null) {
                 view.defaultGoals.setVisibility(View.VISIBLE);
@@ -68,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
                 view.defaultGoals.setVisibility(View.INVISIBLE);
             }
             adapter.clear();
-            adapter.addAll(new ArrayList<>(goals)); // remember the mutable copy here!
+            adapter.addAll(new ArrayList<>(goals));
             adapter.notifyDataSetChanged();
         });
         

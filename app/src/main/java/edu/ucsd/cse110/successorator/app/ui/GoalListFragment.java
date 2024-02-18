@@ -49,6 +49,7 @@ public class GoalListFragment extends Fragment {
         });
         activityModel.getIncompleteGoals().registerObserver(goals -> {
             if (goals == null) return;
+
             incompleteAdapter.clear();
             incompleteAdapter.addAll(new ArrayList<>(goals)); // remember the mutable copy here!
             incompleteAdapter.notifyDataSetChanged();
