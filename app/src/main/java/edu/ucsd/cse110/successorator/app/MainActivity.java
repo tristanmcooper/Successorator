@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
+    private ActivityMainBinding binding;
     private ActivityMainBinding view;
 
     private MainViewModel model; // won't need later when we do fragments
@@ -64,13 +65,16 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(R.layout.activity_main);
 
-        var dataSource = InMemoryDataSource.fromDefault();
-        this.model = new MainViewModel(new GoalRepository(dataSource));
+        //connect to the model(MainViewModel)
+        var modelOwner = this;
+        var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
+        var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
+        this.model = modelProvider.get(MainViewModel.class);
         this.view = ActivityMainBinding.inflate(getLayoutInflater());
 
         setContentView(R.layout.activity_main);
         //grab view by inflating xml layout file
-        this.view = ActivityMainBinding.inflate(getLayoutInflater());
+
 
 
         textViewDate = findViewById(R.id.dateTextView);
@@ -107,11 +111,7 @@ public class MainActivity extends AppCompatActivity {
             dialogFragment.show(getSupportFragmentManager(), "AddGoalFragment");
         });
 
-        //connect to the model(MainViewModel)
-        var modelOwner = this;
-        var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
-        var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
-        this.model = modelProvider.get(MainViewModel.class);
+
 
         //setup the adapter for the list, so it can update it at the beginning
         this.adapter = new GoalListAdapter(getApplicationContext(), List.of(), null);
