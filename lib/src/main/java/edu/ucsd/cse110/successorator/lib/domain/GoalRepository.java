@@ -9,9 +9,13 @@ public interface GoalRepository {
 
     Subject<List<Goal>> findAll();
 
+    Subject<List<Goal>> findCompleted(Boolean completed);
+
     void save(Goal goal);
 
     void save(List<Goal> goals);
+
+    void changeCompleted(int id);
 
     void add(Goal goal);
 

@@ -9,6 +9,8 @@ import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 
+import org.xml.sax.helpers.AttributeListImpl;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -19,16 +21,17 @@ import edu.ucsd.cse110.successorator.lib.domain.Goal;
 public class GoalListAdapter extends ArrayAdapter<Goal> {
     Consumer<Integer> onDeleteClick;
 
-    public GoalListAdapter(Context context, List<Goal> goals) {
+    public GoalListAdapter(Context context, List<Goal> goals, Consumer<Integer> onDeleteClick) {
         // This sets a bunch of stuff internally, which we can access
         // with getContext() and getItem() for example.
         //
         // Also note that ArrayAdapter NEEDS a mutable List (ArrayList),
         // or it will crash!
         super(context, 0, new ArrayList<>(goals));
+        this.onDeleteClick = onDeleteClick;
     }
 
-    //FIXING CURRENTLY
+    //get the view for eaach goal item
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -49,7 +52,11 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
 
         // Populate the view with the task's data.
         binding.goalDescription.setText(goal.description());
-
+        binding.goalDescription.setOnClickListener(v -> {
+            var id = goal.id();
+            assert id != null;
+            onDeleteClick.accept(id);
+        });
 
         return binding.getRoot();
     }

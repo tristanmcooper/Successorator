@@ -15,7 +15,8 @@ import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 public class MainViewModel extends ViewModel{
     private static final String LOG_TAG = "MainViewModel";
     private final RoomGoalRepository goalRepository;
-    private SimpleSubject<List<Goal>> orderedGoals;
+    private SimpleSubject<List<Goal>> incompleteGoals;
+    private SimpleSubject<List<Goal>> completeGoals;
     private MainActivity mainActivity;
     private SuccessoratorApplication app;
 
@@ -34,15 +35,25 @@ public class MainViewModel extends ViewModel{
          
         //creating simple subjects here so that we can observe them
         this.goalRepository = goalRepository;
-        this.orderedGoals = new SimpleSubject<>();
+        this.incompleteGoals = new SimpleSubject<>();
+        this.completeGoals = new SimpleSubject<>();
 
-        goalRepository.findAll().registerObserver(goals -> {
+        goalRepository.findCompleted(false).registerObserver(goals -> {
             if (goals == null) return;
 
-            var newOrderedGoals = goals.stream()
+            var newIncompleteGoals = goals.stream()
                     .sorted(Comparator.comparingInt(Goal::id))
                     .collect(Collectors.toList());
-            orderedGoals.setValue(newOrderedGoals);
+            incompleteGoals.setValue(newIncompleteGoals);
+        });
+
+        goalRepository.findCompleted(true).registerObserver(goals -> {
+            if (goals == null) return;
+
+            var newCompleteGoals = goals.stream()
+                    .sorted(Comparator.comparingInt(Goal::id))
+                    .collect(Collectors.toList());
+            completeGoals.setValue(newCompleteGoals);
         });
     }
 
@@ -56,8 +67,14 @@ public class MainViewModel extends ViewModel{
         return goalRepository.count(); 
     }
 
-    
-    public SimpleSubject<List<Goal>> getOrderedGoals(){
-        return orderedGoals;
+    public void changeCompleteStatus(int id){
+        goalRepository.changeCompleted(id);
+    }
+    public SimpleSubject<List<Goal>> getIncompleteGoals(){
+        return incompleteGoals;
+    }
+
+    public SimpleSubject<List<Goal>> getCompleteGoals(){
+        return completeGoals;
     }
 }

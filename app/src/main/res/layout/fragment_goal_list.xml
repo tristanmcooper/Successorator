@@ -7,13 +7,27 @@
     android:layout_height="match_parent">
 
     <ListView
-        android:id="@+id/goal_list"
-        android:layout_width="405dp"
-        android:layout_height="659dp"
+        android:id="@+id/uncompleted_goal_list"
+        android:layout_width="wrap_content"
+        android:layout_height="350dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/completed_goal_list"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/list_goal_item">
+
+    </ListView>
+
+    <ListView
+        android:id="@+id/completed_goal_list"
+        android:layout_width="wrap_content"
+        android:layout_height="350dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:listitem="@layout/list_goal_item" >
-
-    </ListView>
+        app:layout_constraintTop_toBottomOf="@+id/uncompleted_goal_list" />
 </androidx.constraintlayout.widget.ConstraintLayout>

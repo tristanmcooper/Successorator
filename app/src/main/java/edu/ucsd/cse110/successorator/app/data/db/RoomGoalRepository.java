@@ -37,6 +37,17 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
     }
 
     @Override
+    public Subject<List<Goal>> findCompleted(Boolean completed) {
+        var entitiesLiveData = goalDao.findCompleted(completed);
+        var goalsLiveData = Transformations.map(entitiesLiveData, entities -> {
+            return entities.stream()
+                    .map(GoalEntity::toGoal)
+                    .collect(Collectors.toList());
+        });
+        return new LiveDataSubjectAdapter<>(goalsLiveData);
+    }
+
+    @Override
     public void save(Goal goal) {
         goalDao.insert(GoalEntity.fromGoal(goal));
     }
@@ -58,6 +69,14 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
             goals.add(entity.toGoal());
         }
         this.setValue(goals);
+        this.notifyObservers();
+    }
+
+
+    @Override
+    public void changeCompleted(int id) {
+        var goal = goalDao.find(id).toGoal();
+        goalDao.insert(new GoalEntity(goal.id(), goal.description(), !goal.completed()));
         this.notifyObservers();
     }
 

@@ -37,7 +37,7 @@ public interface GoalDao {
 
     // Return all completed/uncompleted goals
     @Query("SELECT * FROM goals WHERE completed = :completed")
-    List<GoalEntity> completed(boolean completed);
+    LiveData<List<GoalEntity>> findCompleted(boolean completed);
 
     // Return number of goals in database
     @Query("SELECT COUNT(*) FROM goals")
@@ -46,5 +46,4 @@ public interface GoalDao {
     // Delete a goal from database
     @Query("DELETE FROM goals WHERE id=:id")
     void delete(int id);
-
 }

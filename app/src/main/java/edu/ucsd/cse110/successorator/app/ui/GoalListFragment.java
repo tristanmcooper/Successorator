@@ -15,12 +15,12 @@ import java.util.List;
 
 import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.app.databinding.FragmentGoalListBinding;
-import edu.ucsd.cse110.successorator.app.ui.dialog.AddGoalFragment;
 
 public class GoalListFragment extends Fragment {
     private MainViewModel activityModel;
     private FragmentGoalListBinding view;
-    private GoalListAdapter adapter;
+    private GoalListAdapter incompleteAdapter;
+    private GoalListAdapter completeAdapter;
 
     public GoalListFragment() {
         // Required empty public constructor
@@ -43,13 +43,26 @@ public class GoalListFragment extends Fragment {
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
 
-        // Initialize the Adapter (with an empty list for now)
-        this.adapter = new GoalListAdapter(requireContext(), List.of());
-        activityModel.getOrderedGoals().registerObserver(goals -> {
+        // Initialize the Adapter (with an empty list for now) for incomplete tasks
+        this.incompleteAdapter = new GoalListAdapter(requireContext(), List.of(), id -> {
+            activityModel.changeCompleteStatus(id);
+        });
+        activityModel.getIncompleteGoals().registerObserver(goals -> {
             if (goals == null) return;
-            adapter.clear();
-            adapter.addAll(new ArrayList<>(goals)); // remember the mutable copy here!
-            adapter.notifyDataSetChanged();
+            incompleteAdapter.clear();
+            incompleteAdapter.addAll(new ArrayList<>(goals)); // remember the mutable copy here!
+            incompleteAdapter.notifyDataSetChanged();
+        });
+
+        // Initialize the adapter for completed tasks
+        this.completeAdapter = new GoalListAdapter(requireContext(), List.of(), id -> {
+            activityModel.changeCompleteStatus(id);
+        });
+        activityModel.getCompleteGoals().registerObserver(goals -> {
+            if (goals == null) return;
+            completeAdapter.clear();
+            completeAdapter.addAll(new ArrayList<>(goals));
+            completeAdapter.notifyDataSetChanged();
         });
     }
 
@@ -59,7 +72,8 @@ public class GoalListFragment extends Fragment {
         this.view = FragmentGoalListBinding.inflate(inflater, container, false);
 
         // Set the adapter on the ListView
-        view.goalList.setAdapter(adapter);
+        view.uncompletedGoalList.setAdapter(incompleteAdapter);
+        view.completedGoalList.setAdapter(completeAdapter);
 
         return view.getRoot();
     }

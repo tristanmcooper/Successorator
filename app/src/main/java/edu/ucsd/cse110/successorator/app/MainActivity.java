@@ -54,10 +54,10 @@ public class MainActivity extends AppCompatActivity {
         this.model = modelProvider.get(MainViewModel.class);
 
         //setup the adapter for the list, so it can update it at the beginning
-        this.adapter = new GoalListAdapter(getApplicationContext(), List.of());
+        this.adapter = new GoalListAdapter(getApplicationContext(), List.of(), null);
 
         //check for changes in the database thorugh getOrderedGoals
-        model.getOrderedGoals().registerObserver(goals -> {
+        model.getIncompleteGoals().registerObserver(goals -> {
             if (goals == null) {
                 view.defaultGoals.setVisibility(View.VISIBLE);
                 return;
