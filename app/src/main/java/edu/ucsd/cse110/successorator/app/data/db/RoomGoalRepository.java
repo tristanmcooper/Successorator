@@ -37,6 +37,12 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
     }
 
     @Override
+    public Goal tempFind(int id){
+        var goalEntity = goalDao.find(id);
+        return goalEntity.toGoal();
+    }
+
+    @Override
     public Subject<List<Goal>> findCompleted(Boolean completed) {
         var entitiesLiveData = goalDao.findCompleted(completed);
         var goalsLiveData = Transformations.map(entitiesLiveData, entities -> {
@@ -88,6 +94,10 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
     @Override
     public void deleteCompleted() {
         goalDao.deleteComplete();
+    }
+    @Override
+    public void clear() {
+        goalDao.clear();
     }
 
     @Override

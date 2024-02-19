@@ -22,6 +22,9 @@ public interface GoalRepository {
     int count();
 
     void deleteCompleted();
+    Goal tempFind(int id);
+
+    void clear();
 
     void remove(int id);
 }

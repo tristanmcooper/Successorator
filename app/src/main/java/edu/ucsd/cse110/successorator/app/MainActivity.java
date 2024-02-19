@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Method to advance the date manually
-    private void advanceDate() {
+    public void advanceDate() {
         // Advance the date by one day
         currentCalendar.add(Calendar.DAY_OF_MONTH, 1);
         updateDate(); // Update the TextView with the new date
@@ -158,5 +158,9 @@ public class MainActivity extends AppCompatActivity {
         // Remove callbacks to prevent memory leaks
         handler.removeCallbacks(dateUpdater);
         super.onDestroy();
+    }
+
+    public MainViewModel getMainViewModel(){
+        return this.model;
     }
 }

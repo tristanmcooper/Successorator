@@ -43,6 +43,9 @@ public interface GoalDao {
     @Query("SELECT COUNT(*) FROM goals")
     int count();
 
+    @Query("DELETE FROM goals")
+    void clear();
+
     // Delete a goal from database
     @Query("DELETE FROM goals WHERE id=:id")
     void delete(int id);
