@@ -14,7 +14,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="date_placeholder"
-        android:textSize="24sp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@+id/add_goal_button"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"

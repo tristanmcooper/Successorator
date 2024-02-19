@@ -77,4 +77,7 @@ public class MainViewModel extends ViewModel{
     public SimpleSubject<List<Goal>> getCompleteGoals(){
         return completeGoals;
     }
+    public void deleteCompleted(){
+        goalRepository.deleteCompleted();
+    }
 }

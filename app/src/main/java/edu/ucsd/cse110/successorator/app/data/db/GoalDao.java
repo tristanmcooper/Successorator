@@ -46,4 +46,7 @@ public interface GoalDao {
     // Delete a goal from database
     @Query("DELETE FROM goals WHERE id=:id")
     void delete(int id);
+
+    @Query("DELETE FROM goals WHERE completed=true")
+    void deleteComplete();
 }

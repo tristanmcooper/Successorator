@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private Runnable dateUpdater;
     private Calendar currentCalendar;
     private GoalListAdapter adapter;
+    private String prevDate;
 
 
 
@@ -58,25 +59,17 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        
+
         super.onCreate(savedInstanceState);
         setTitle(R.string.app_title);
-
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(R.layout.activity_main);
-
+        this.view = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(view.getRoot());
         //connect to the model(MainViewModel)
         var modelOwner = this;
         var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.model = modelProvider.get(MainViewModel.class);
-        this.view = ActivityMainBinding.inflate(getLayoutInflater());
-
-        setContentView(R.layout.activity_main);
         //grab view by inflating xml layout file
-
-
-
         textViewDate = findViewById(R.id.dateTextView);
         handler = new Handler();
         buttonAdvanceDate = findViewById(R.id.button_advance_date);
@@ -146,6 +139,11 @@ public class MainActivity extends AppCompatActivity {
     private void updateDate() {
         String currentDate = DateFormat.getDateInstance(DateFormat.FULL).format(currentCalendar.getTime());
         textViewDate.setText(currentDate);
+
+        if(prevDate != null && !(prevDate.equals(currentDate))){
+            model.deleteCompleted();
+        }
+        prevDate = currentDate;
     }
 
     // Method to advance the date manually
