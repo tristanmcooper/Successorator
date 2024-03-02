@@ -123,6 +123,8 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.fragment_container, TodayListFragment.newInstance())
                 .commit();
 
+        setTitle("Today's Goals");
+
         //set the current view this main activity that we just set up
         setContentView(view.getRoot());
     }
@@ -184,24 +186,28 @@ public class MainActivity extends AppCompatActivity {
                         .beginTransaction()
                         .replace(R.id.fragment_container, TodayListFragment.newInstance())
                         .commit();
+                setTitle("Today's Goals");
                 return;
             case 1:
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragment_container, TomorrowListFragment.newInstance())
                         .commit();
+                setTitle("Tomorrow's Goals");
                 return;
             case 2:
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragment_container, PendingListFragment.newInstance())
                         .commit();
+                setTitle("Pending Goals");
                 return;
             case 3:
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragment_container, RecurringListFragment.newInstance())
                         .commit();
+                setTitle("Recurring Goals");
                 return;
             default:
                 return;
