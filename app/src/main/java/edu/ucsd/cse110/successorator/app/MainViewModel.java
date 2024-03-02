@@ -14,12 +14,9 @@ import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 
 public class MainViewModel extends ViewModel{
-    private static final String LOG_TAG = "MainViewModel";
     private final RoomGoalRepository goalRepository;
     private SimpleSubject<List<Goal>> incompleteGoals;
     private SimpleSubject<List<Goal>> completeGoals;
-    private MainActivity mainActivity;
-    private SuccessoratorApplication app;
 
     //basically grabs the database
     public static final ViewModelInitializer<MainViewModel> initializer =

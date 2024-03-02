@@ -3,7 +3,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,21 +11,21 @@ import androidx.lifecycle.ViewModelProvider;
 
 
 import edu.ucsd.cse110.successorator.app.MainViewModel;
-import edu.ucsd.cse110.successorator.app.databinding.FragmentDialogAddGoalsBinding;
+import edu.ucsd.cse110.successorator.app.databinding.DialogAddGoalsBinding;
 
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 
 //dialog pop up thing
-public class AddGoalFragment extends DialogFragment{
-    private FragmentDialogAddGoalsBinding view;
+public class AddGoalDialog extends DialogFragment{
+    private DialogAddGoalsBinding view;
     private MainViewModel activityModel;
 
-    AddGoalFragment() {
+    AddGoalDialog() {
         //Required empty public constructor
     }
 
-    public static AddGoalFragment newInstance() {
-        var fragment = new AddGoalFragment();
+    public static AddGoalDialog newInstance() {
+        var fragment = new AddGoalDialog();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -35,7 +34,7 @@ public class AddGoalFragment extends DialogFragment{
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        this.view = FragmentDialogAddGoalsBinding.inflate(getLayoutInflater());
+        this.view = DialogAddGoalsBinding.inflate(getLayoutInflater());
 
         return new AlertDialog.Builder(getActivity())
                 .setTitle("New Goal")
