@@ -184,7 +184,6 @@ public class MainActivity extends AppCompatActivity {
     public void onResume(){
         updateDate();
         super.onResume();
-        System.out.println("Ran on resume");
     }
 
     @Override
