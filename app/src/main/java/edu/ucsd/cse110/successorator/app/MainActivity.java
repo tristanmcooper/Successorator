@@ -36,10 +36,6 @@ import java.util.List;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
@@ -56,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private LocalDateTime currentDateTime;
     private GoalListAdapter adapter;
     private String prevDate;
+    private boolean advButtonClicked = false;
 
     //sets up the initial main activity view xml
     @SuppressLint("WrongViewCast")
@@ -121,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
             adapter.addAll(new ArrayList<>(goals));
             adapter.notifyDataSetChanged();
         });
-        registerReceiver(timeTickReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
+
         //show the GoalListFragment
         getSupportFragmentManager()
                 .beginTransaction()
@@ -133,13 +130,7 @@ public class MainActivity extends AppCompatActivity {
         //set the current view this main activity that we just set up
         setContentView(view.getRoot());
     }
-    private BroadcastReceiver timeTickReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            currentDateTime = LocalDateTime.now();
-            updateDate();
-        }
-    };
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -167,6 +158,10 @@ public class MainActivity extends AppCompatActivity {
 
     // Method to update the date
     private void updateDate() {
+        if(advButtonClicked==false){
+            currentDateTime = LocalDateTime.now(); // Update currentDateTime
+        }
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE, MMMM dd, yyyy", Locale.getDefault());
         String currentDate = currentDateTime.format(formatter);
         textViewDate.setText(currentDate);
@@ -177,17 +172,25 @@ public class MainActivity extends AppCompatActivity {
         prevDate = currentDate;
     }
 
+
     // Method to advance the date manually
     public void advanceDate() {
         currentDateTime = currentDateTime.plusDays(1);
+        advButtonClicked = true;
         updateDate();
+    }
+
+    @Override
+    public void onResume(){
+        updateDate();
+        super.onResume();
+        System.out.println("Ran on resume");
     }
 
     @Override
     protected void onDestroy() {
         // Remove callbacks to prevent memory leaks
         handler.removeCallbacks(dateUpdater);
-        unregisterReceiver(timeTickReceiver);
         super.onDestroy();
     }
 
