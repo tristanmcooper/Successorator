@@ -75,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Initial update
         currentDateTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE, MMMM dd, yyyy", Locale.getDefault());
+        prevDate = currentDateTime.format(formatter);
         updateDate();
 
         dateUpdater = new Runnable() {
@@ -166,10 +168,11 @@ public class MainActivity extends AppCompatActivity {
         String currentDate = currentDateTime.format(formatter);
         textViewDate.setText(currentDate);
 
-        if(prevDate != null && !(prevDate.equals(currentDate))){
+        if(prevDate != null && !(prevDate.equals(currentDate)) && currentDateTime.getHour() >= 2){
             model.deleteCompleted();
+            prevDate = currentDate;
         }
-        prevDate = currentDate;
+
     }
 
 
