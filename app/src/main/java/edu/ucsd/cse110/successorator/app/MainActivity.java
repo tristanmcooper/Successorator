@@ -33,7 +33,16 @@ import java.util.Calendar;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+
 public class MainActivity extends AppCompatActivity {
+    private ActivityMainBinding binding;
     private ActivityMainBinding view;
 
     private MainViewModel model; // won't need later when we do fragments
@@ -44,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private AppCompatImageButton buttonAdvanceDate;
 
     private Runnable dateUpdater;
-    private Calendar currentCalendar;
+    private LocalDateTime currentDateTime;
     private GoalListAdapter adapter;
     private String prevDate;
 
@@ -68,22 +77,18 @@ public class MainActivity extends AppCompatActivity {
         buttonAdvanceDate = findViewById(R.id.button_advance_date);
 
         // Initial update
-        currentCalendar = Calendar.getInstance();
+        currentDateTime = LocalDateTime.now();
         updateDate();
 
         dateUpdater = new Runnable() {
             @Override
             public void run() {
                 updateDate();
-                // Schedule the next update
-                handler.postDelayed(this, 60000);
+                handler.postDelayed(this, 60); // Update every second
             }
         };
+        handler.postDelayed(dateUpdater, 60);
 
-        // Schedule periodic updates (e.g., every minute)
-        handler.postDelayed(dateUpdater, 60000);
-
-        // Button click listener for manual date advancement
         buttonAdvanceDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -116,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
             adapter.addAll(new ArrayList<>(goals));
             adapter.notifyDataSetChanged();
         });
-        
+        registerReceiver(timeTickReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
         //show the GoalListFragment
         getSupportFragmentManager()
                 .beginTransaction()
@@ -128,6 +133,13 @@ public class MainActivity extends AppCompatActivity {
         //set the current view this main activity that we just set up
         setContentView(view.getRoot());
     }
+    private BroadcastReceiver timeTickReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            currentDateTime = LocalDateTime.now();
+            updateDate();
+        }
+    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -155,7 +167,8 @@ public class MainActivity extends AppCompatActivity {
 
     // Method to update the date
     private void updateDate() {
-        String currentDate = DateFormat.getDateInstance(DateFormat.FULL).format(currentCalendar.getTime());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE, MMMM dd, yyyy", Locale.getDefault());
+        String currentDate = currentDateTime.format(formatter);
         textViewDate.setText(currentDate);
 
         if(prevDate != null && !(prevDate.equals(currentDate))){
@@ -166,15 +179,15 @@ public class MainActivity extends AppCompatActivity {
 
     // Method to advance the date manually
     public void advanceDate() {
-        // Advance the date by one day
-        currentCalendar.add(Calendar.DAY_OF_MONTH, 1);
-        updateDate(); // Update the TextView with the new date
+        currentDateTime = currentDateTime.plusDays(1);
+        updateDate();
     }
 
     @Override
     protected void onDestroy() {
         // Remove callbacks to prevent memory leaks
         handler.removeCallbacks(dateUpdater);
+        unregisterReceiver(timeTickReceiver);
         super.onDestroy();
     }
 
