@@ -81,10 +81,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 updateDate();
-                handler.postDelayed(this, 60); // Update every second
+                handler.postDelayed(this, 100); // Update every second
             }
         };
-        handler.postDelayed(dateUpdater, 60);
+        handler.postDelayed(dateUpdater, 100);
 
         buttonAdvanceDate.setOnClickListener(new View.OnClickListener() {
             @Override
