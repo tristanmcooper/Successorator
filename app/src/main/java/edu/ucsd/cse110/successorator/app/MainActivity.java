@@ -8,7 +8,6 @@ import android.os.Handler;
 
 import android.view.View;
 
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -16,21 +15,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import androidx.appcompat.widget.AppCompatImageButton;
-import androidx.lifecycle.ViewModelProvider;
 
 
 import edu.ucsd.cse110.successorator.app.databinding.ActivityMainBinding;
 import edu.ucsd.cse110.successorator.app.ui.GoalListAdapter;
-import edu.ucsd.cse110.successorator.app.ui.GoalListFragment;
+import edu.ucsd.cse110.successorator.app.ui.PendingListFragment;
 import edu.ucsd.cse110.successorator.app.ui.dialog.AddGoalFragment;
 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
@@ -127,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
         //show the GoalListFragment
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_container, GoalListFragment.newInstance())
+                .replace(R.id.fragment_container, PendingListFragment.newInstance())
                 .commit();
 
         //set the current view this main activity that we just set up
