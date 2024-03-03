@@ -6,10 +6,13 @@ import android.os.Bundle;
 
 import android.os.Handler;
 
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -19,8 +22,11 @@ import androidx.appcompat.widget.AppCompatImageButton;
 
 import edu.ucsd.cse110.successorator.app.databinding.ActivityMainBinding;
 import edu.ucsd.cse110.successorator.app.ui.GoalListAdapter;
+import edu.ucsd.cse110.successorator.app.ui.TodayListFragment;
+import edu.ucsd.cse110.successorator.app.ui.TomorrowListFragment;
 import edu.ucsd.cse110.successorator.app.ui.PendingListFragment;
-import edu.ucsd.cse110.successorator.app.ui.dialog.AddGoalFragment;
+import edu.ucsd.cse110.successorator.app.ui.RecurringListFragment;
+import edu.ucsd.cse110.successorator.app.ui.dialog.AddGoalDialog;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -28,7 +34,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private ActivityMainBinding binding;
     private ActivityMainBinding view;
 
     private MainViewModel model; // won't need later when we do fragments
@@ -42,13 +47,6 @@ public class MainActivity extends AppCompatActivity {
     private Calendar currentCalendar;
     private GoalListAdapter adapter;
     private String prevDate;
-
-
-
-
-    //sets up the initial main activity view xml
-    
-    
 
     //sets up the initial main activity view xml
     @SuppressLint("WrongViewCast")
@@ -68,8 +66,8 @@ public class MainActivity extends AppCompatActivity {
         textViewDate = findViewById(R.id.dateTextView);
         handler = new Handler();
         buttonAdvanceDate = findViewById(R.id.button_advance_date);
-        // Initial update
 
+        // Initial update
         currentCalendar = Calendar.getInstance();
         updateDate();
 
@@ -95,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
 
         //connect the add goal button to the addGoalDialogFragment onClick
         view.addGoalButton.setOnClickListener(v -> {
-            var dialogFragment = AddGoalFragment.newInstance();
+            var dialogFragment = AddGoalDialog.newInstance();
             dialogFragment.show(getSupportFragmentManager(), "AddGoalFragment");
         });
 
@@ -122,12 +120,37 @@ public class MainActivity extends AppCompatActivity {
         //show the GoalListFragment
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_container, PendingListFragment.newInstance())
+                .replace(R.id.fragment_container, TodayListFragment.newInstance())
                 .commit();
+
+        setTitle("Today's Goals");
 
         //set the current view this main activity that we just set up
         setContentView(view.getRoot());
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.action_bar, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        var itemId = item.getItemId();
+
+        // can't use switch here, need to use if statements
+        if (itemId == R.id.today_view) {
+            swapFragments(0);
+        } else if (itemId == R.id.tomorrow_view) {
+            swapFragments(1);
+        } else if (itemId == R.id.pending_view) {
+            swapFragments(2);
+        } else if (itemId == R.id.recurring_view) {
+            swapFragments(3);
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     // Method to update the date
@@ -155,6 +178,41 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    private void swapFragments(int fragmentNum) {
+        // fragmentNum: 0 = today, 1 = tomorrow, 2 = pending, 3 = recurring
+        switch (fragmentNum) {
+            case 0:
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, TodayListFragment.newInstance())
+                        .commit();
+                setTitle("Today's Goals");
+                return;
+            case 1:
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, TomorrowListFragment.newInstance())
+                        .commit();
+                setTitle("Tomorrow's Goals");
+                return;
+            case 2:
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, PendingListFragment.newInstance())
+                        .commit();
+                setTitle("Pending Goals");
+                return;
+            case 3:
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, RecurringListFragment.newInstance())
+                        .commit();
+                setTitle("Recurring Goals");
+                return;
+            default:
+                return;
+        }
+    }
     public MainViewModel getMainViewModel(){
         return this.model;
     }
