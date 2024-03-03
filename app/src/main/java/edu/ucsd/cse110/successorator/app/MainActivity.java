@@ -27,7 +27,6 @@ import edu.ucsd.cse110.successorator.app.ui.TomorrowListFragment;
 import edu.ucsd.cse110.successorator.app.ui.PendingListFragment;
 import edu.ucsd.cse110.successorator.app.ui.RecurringListFragment;
 import edu.ucsd.cse110.successorator.app.ui.dialog.AddGoalDialog;
-import edu.ucsd.cse110.successorator.app.ui.dialog.TodayTomorrowAddGoalDialog;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -48,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
     private Calendar currentCalendar;
     private GoalListAdapter adapter;
     private String prevDate;
-    private boolean dateForwarded;
 
     //sets up the initial main activity view xml
     @SuppressLint("WrongViewCast")
@@ -93,12 +91,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //default page is today's view, so connect the add goal button to
-        //dialog for adding today goals
+        //connect the add goal button to the addGoalDialogFragment onClick
         view.addGoalButton.setOnClickListener(v -> {
-            var dialogFragment = TodayTomorrowAddGoalDialog.newInstance();
-            dialogFragment.show(getSupportFragmentManager(), "AddGoalDialog");
+            var dialogFragment = AddGoalDialog.newInstance();
+            dialogFragment.show(getSupportFragmentManager(), "AddGoalFragment");
         });
+
 
 
         //setup the adapter for the list, so it can update it at the beginning
@@ -125,7 +123,6 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.fragment_container, TodayListFragment.newInstance())
                 .commit();
 
-        dateForwarded = false;
         setTitle("Today's Goals");
 
         //set the current view this main activity that we just set up
@@ -185,74 +182,31 @@ public class MainActivity extends AppCompatActivity {
         // fragmentNum: 0 = today, 1 = tomorrow, 2 = pending, 3 = recurring
         switch (fragmentNum) {
             case 0:
-                // Load fragment
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragment_container, TodayListFragment.newInstance())
                         .commit();
-
-                // Connect corresponding addGoalDialog
-                view.addGoalButton.setOnClickListener(v -> {
-                    var dialogFragment = TodayTomorrowAddGoalDialog.newInstance();
-                    dialogFragment.show(getSupportFragmentManager(), "AddGoalDialog");
-                });
-
-                // TODO: set date display to today's date
-                updateDate();
                 setTitle("Today's Goals");
                 return;
             case 1:
-                // Load fragment
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragment_container, TomorrowListFragment.newInstance())
                         .commit();
-
-                // Connect corresponding addGoalDialog
-                view.addGoalButton.setOnClickListener(v -> {
-                    var dialogFragment = AddGoalDialog.newInstance();
-                    dialogFragment.show(getSupportFragmentManager(), "AddGoalDialog");
-                });
-
-                // TODO: set date display to tomorrow's date
                 setTitle("Tomorrow's Goals");
                 return;
             case 2:
-                // Load fragment
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragment_container, PendingListFragment.newInstance())
                         .commit();
-
-                // Connect corresponding addGoalDialog
-                view.addGoalButton.setOnClickListener(v -> {
-                    var dialogFragment = AddGoalDialog.newInstance();
-                    dialogFragment.show(getSupportFragmentManager(), "AddGoalDialog");
-                });
-
-                // Remove date display
-                textViewDate.setText(null);
-
-                // Change menu bar display
                 setTitle("Pending Goals");
                 return;
             case 3:
-                // Load fragment
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragment_container, RecurringListFragment.newInstance())
                         .commit();
-
-                // Connect corresponding addGoalDialog
-                view.addGoalButton.setOnClickListener(v -> {
-                    var dialogFragment = AddGoalDialog.newInstance();
-                    dialogFragment.show(getSupportFragmentManager(), "AddGoalDialog");
-                });
-
-                // Remove date display
-                textViewDate.setText(null);
-
-                // Change menu bar display
                 setTitle("Recurring Goals");
                 return;
             default:
