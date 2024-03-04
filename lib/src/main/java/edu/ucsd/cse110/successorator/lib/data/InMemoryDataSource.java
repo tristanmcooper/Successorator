@@ -2,6 +2,7 @@ package edu.ucsd.cse110.successorator.lib.data;
 
 
 // Import Java data structures
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,9 +61,9 @@ public class InMemoryDataSource {
     }
 
     public final static List<Goal> DEFAULT_GOALS = List.of(
-            new Goal(0, "Goal 0: Get Lettuce", false),
-            new Goal(1, "Goal 1: Get Tomato", false),
-            new Goal(2, "Goal 2: Finish Project PLEASE", false)
+            new Goal(0, "Goal 0: Get Lettuce", false, LocalDateTime.now().toString(), 1),
+            new Goal(1, "Goal 1: Get Tomato", false, LocalDateTime.now().toString(), 1),
+            new Goal(2, "Goal 2: Finish Project PLEASE", false, LocalDateTime.now().toString(), 1)
     );
 
     public static InMemoryDataSource fromDefault() {

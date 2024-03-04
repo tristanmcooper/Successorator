@@ -14,19 +14,20 @@ import androidx.lifecycle.ViewModelProvider;
 import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.app.databinding.DialogAddGoalsBinding;
 
+import edu.ucsd.cse110.successorator.app.databinding.DialogTodayTomorrowAddGoalsBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 
 //dialog pop up thing
-public class AddGoalDialog extends DialogFragment{
-    private DialogAddGoalsBinding view;
+public class TomorrowAddGoalDialog extends DialogFragment{
+    private @NonNull DialogTodayTomorrowAddGoalsBinding view;
     private MainViewModel activityModel;
 
-    AddGoalDialog() {
+    TomorrowAddGoalDialog() {
         //Required empty public constructor
     }
 
-    public static AddGoalDialog newInstance() {
-        var fragment = new AddGoalDialog();
+    public static TomorrowAddGoalDialog newInstance() {
+        var fragment = new TomorrowAddGoalDialog();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -35,11 +36,11 @@ public class AddGoalDialog extends DialogFragment{
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        this.view = DialogAddGoalsBinding.inflate(getLayoutInflater());
+        this.view = DialogTodayTomorrowAddGoalsBinding.inflate(getLayoutInflater());
 
         return new AlertDialog.Builder(getActivity())
-                .setTitle("New Goal")
-                .setMessage("Please provide the new card text.")
+                .setTitle("New Goal for tmrw")
+                .setMessage("Please provide the new card text for tmrw.")
                 .setView(view.getRoot())
                 .setPositiveButton("Create", this::onPositiveButtonClick)
                 .setNegativeButton("Cancel", this::onNegativeButtonClick)
@@ -71,14 +72,17 @@ public class AddGoalDialog extends DialogFragment{
             return;
         }
 
+        ;
         // Create the new Goal object with user input as the description
-        Goal newGoal = new Goal(currCount+1, description, false,LocalDateTime.now().toString(), 1);
+        LocalDateTime curtime = LocalDateTime.now();
+        curtime = curtime.plusDays(1);
+        Goal newGoal = new Goal(currCount+1, description, false,curtime.toString(), view.repTypeRadio.getCheckedRadioButtonId());
 
         // Add the new goal to your model
         activityModel.addGoal(newGoal);
 
         // Dismiss the dialog
-            dialog.dismiss();
+        dialog.dismiss();
     }
 
     private void onNegativeButtonClick(DialogInterface dialog, int which) {
