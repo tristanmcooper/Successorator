@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import java.time.LocalDateTime;
+import android.widget.RadioButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -76,7 +77,20 @@ public class TomorrowAddGoalDialog extends DialogFragment{
         // Create the new Goal object with user input as the description
         LocalDateTime curtime = LocalDateTime.now();
         curtime = curtime.plusDays(1);
-        Goal newGoal = new Goal(currCount+1, description, false,curtime.toString(), view.repTypeRadio.getCheckedRadioButtonId());
+        int repType = view.repTypeRadio.getCheckedRadioButtonId();
+        switch(repType){
+            case 2131231185:
+                repType = 0;
+            case 2131231183:
+                repType = 1;
+            case 2131231187:
+                repType = 2;
+            case 2131231184:
+                repType = 3;
+            case 2131231188:
+                repType = 4;
+        }
+        Goal newGoal = new Goal(currCount+1, description, false,curtime.toString(), repType);
 
         // Add the new goal to your model
         activityModel.addGoal(newGoal);
