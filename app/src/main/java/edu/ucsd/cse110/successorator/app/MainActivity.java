@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Initial update
         currentDateTime = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE, MMMM dd, yyyy", Locale.getDefault());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E, M/d", Locale.getDefault());
         prevDate = currentDateTime.format(formatter);
         updateDate();
 
@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
             currentDateTime = LocalDateTime.now(); // Update currentDateTime
         }
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE, MMMM dd, yyyy", Locale.getDefault());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E, M/d", Locale.getDefault());
         String currentDate = currentDateTime.format(formatter);
         textViewDate.setText(currentDate);
 
