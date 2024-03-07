@@ -90,7 +90,7 @@ public class TomorrowAddGoalDialog extends DialogFragment{
             case 2131231188:
                 repType = 4;
         }
-        Goal newGoal = new Goal(currCount+1, description, false,curtime.toString(), repType);
+        Goal newGoal = new Goal(currCount+1, description, false,curtime.toString(), "", "");
 
         // Add the new goal to your model
         activityModel.addGoal(newGoal);

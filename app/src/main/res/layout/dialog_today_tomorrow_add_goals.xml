@@ -27,12 +27,13 @@
         android:id="@+id/repTypeRadio"
         android:layout_width="323dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="200dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="150dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.578"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/editText"
         app:layout_constraintVertical_bias="0.0">
@@ -73,91 +74,106 @@
             android:textSize="24sp" />
     </RadioGroup>
 
-
-<!--    <androidx.constraintlayout.widget.Group-->
-<!--        android:id="@+id/buttonGroup"-->
-<!--        android:layout_width="100dp"-->
-<!--        android:layout_height="100dp"-->
-<!--        app:constraint_referenced_ids="workButton,schoolButton,errandButton,homeButton"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="@+id/editText" />-->
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/homeButton"
-        android:layout_width="57dp"
-        android:layout_height="64dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="H"
-        app:backgroundTint="@color/orange"
-        app:cornerRadius="999dp"
-        app:layout_constraintEnd_toStartOf="@+id/workButton"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/workButton"
-        android:layout_width="57dp"
-        android:layout_height="64dp"
-        android:layout_marginTop="16dp"
-        android:text="W"
-        app:backgroundTint="@color/blue"
-        app:cornerRadius="999dp"
-        app:layout_constraintEnd_toStartOf="@+id/schoolButton"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/homeButton"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/schoolButton"
-        android:layout_width="57dp"
-        android:layout_height="64dp"
-        android:layout_marginTop="16dp"
-        android:text="S"
-        app:backgroundTint="@color/purple"
-        app:cornerRadius="999dp"
-        app:layout_constraintEnd_toStartOf="@+id/errandButton"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/workButton"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/errandButton"
-        android:layout_width="57dp"
-        android:layout_height="64dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:text="E"
-        app:backgroundTint="@color/green"
-        app:cornerRadius="999dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/schoolButton"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
-
-    <!--    <com.google.android.material.button.MaterialButton-->
+<!--    <com.google.android.material.button.MaterialButton-->
 <!--        android:id="@+id/homeButton"-->
 <!--        android:layout_width="57dp"-->
 <!--        android:layout_height="64dp"-->
 <!--        android:layout_marginStart="16dp"-->
 <!--        android:layout_marginTop="16dp"-->
-<!--        android:layout_marginBottom="16dp"-->
 <!--        android:text="H"-->
 <!--        app:backgroundTint="@color/orange"-->
 <!--        app:cornerRadius="999dp"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/repTypeRadio"-->
 <!--        app:layout_constraintEnd_toStartOf="@+id/workButton"-->
 <!--        app:layout_constraintHorizontal_bias="0.5"-->
 <!--        app:layout_constraintStart_toStartOf="parent"-->
 <!--        app:layout_constraintTop_toBottomOf="@+id/editText" />-->
 
+<!--    <com.google.android.material.button.MaterialButton-->
+<!--        android:id="@+id/workButton"-->
+<!--        android:layout_width="57dp"-->
+<!--        android:layout_height="64dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:text="W"-->
+<!--        app:backgroundTint="@color/blue"-->
+<!--        app:cornerRadius="999dp"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/schoolButton"-->
+<!--        app:layout_constraintHorizontal_bias="0.5"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/homeButton"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/editText" />-->
 
+<!--    <com.google.android.material.button.MaterialButton-->
+<!--        android:id="@+id/schoolButton"-->
+<!--        android:layout_width="57dp"-->
+<!--        android:layout_height="64dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:text="S"-->
+<!--        app:backgroundTint="@color/purple"-->
+<!--        app:cornerRadius="999dp"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/errandButton"-->
+<!--        app:layout_constraintHorizontal_bias="0.5"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/workButton"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/editText" />-->
 
+<!--    <com.google.android.material.button.MaterialButton-->
+<!--        android:id="@+id/errandButton"-->
+<!--        android:layout_width="57dp"-->
+<!--        android:layout_height="64dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:layout_marginEnd="16dp"-->
+<!--        android:text="E"-->
+<!--        app:backgroundTint="@color/green"-->
+<!--        app:cornerRadius="999dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.5"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/schoolButton"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/editText" />-->
 
+    <RadioGroup
+        android:id="@+id/contextRadioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/editText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5">
 
+        <RadioButton
+            android:id="@+id/homeRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/orange"
+            app:buttonTint="@color/orange"
+            android:text="H"
+            tools:ignore="UselessParent" />
+
+        <RadioButton
+            android:id="@+id/workRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/blue"
+            app:buttonTint="@color/blue"
+            android:text="W"
+            tools:ignore="UselessParent" />
+
+        <RadioButton
+            android:id="@+id/schoolRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/purple"
+            app:buttonTint="@color/purple"
+            android:text="S"
+            tools:ignore="UselessParent" />
+
+        <RadioButton
+            android:id="@+id/errandRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/green"
+            app:buttonTint="@color/green"
+            android:text="E"
+            tools:ignore="UselessParent" />
+    </RadioGroup>
 
 
 

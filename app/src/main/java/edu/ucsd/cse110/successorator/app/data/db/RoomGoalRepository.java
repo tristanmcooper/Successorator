@@ -82,7 +82,7 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
     @Override
     public void changeCompleted(int id) {
         var goal = goalDao.find(id).toGoal();
-        goalDao.insert(new GoalEntity(goal.id(), goal.description(), !goal.completed(), goal.date(), goal.repType()));
+        goalDao.insert(new GoalEntity(goal.id(), goal.description(), !goal.completed(), goal.date(), goal.repType(), goal.contextType()));
         this.notifyObservers();
     }
 

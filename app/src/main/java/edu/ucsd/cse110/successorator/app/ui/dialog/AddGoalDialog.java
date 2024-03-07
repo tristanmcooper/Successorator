@@ -44,7 +44,7 @@ public class AddGoalDialog extends DialogFragment{
 
         return new AlertDialog.Builder(getActivity())
                 .setTitle("New Goal")
-                .setMessage("Please provide the new card text.")
+                .setMessage("Enter new goal with option to select context and recurring.")
                 .setView(view.getRoot())
                 .setPositiveButton("Create", this::onPositiveButtonClick)
                 .setNegativeButton("Cancel", this::onNegativeButtonClick)
@@ -76,13 +76,27 @@ public class AddGoalDialog extends DialogFragment{
             return;
         }
 
-        RadioGroup radioGroup = view.repTypeRadio;
-        int selectedId = radioGroup.getCheckedRadioButtonId();
-        RadioButton selectedRadioButton = view.getRoot().findViewById(selectedId);
-        String repType = selectedRadioButton.getText().toString();
+        RadioGroup repTypeGroup = view.repTypeRadio;
+        int selectedRepTypeId = repTypeGroup.getCheckedRadioButtonId();
+        RadioButton selectedRepTypeRadioButton = view.getRoot().findViewById(selectedRepTypeId);
+        String repType = selectedRepTypeRadioButton.getText().toString();
+
+        RadioGroup contextTypeGroup = view.contextRadioGroup;
+        int selectedContextTypeId = contextTypeGroup.getCheckedRadioButtonId();
+        RadioButton selectedContextTypeRadioButton = view.getRoot().findViewById(selectedContextTypeId);
+        String contextType = selectedContextTypeRadioButton.getText().toString();
+
+
+
+
 
         // Create the new Goal object with user input as the description
-        Goal newGoal = new Goal(currCount + 1, description, false,LocalDateTime.now().toString(), 1);
+        Goal newGoal = new Goal(currCount + 1,
+                description,
+                false,
+                LocalDateTime.now().toString(),
+                repType,
+                contextType);
 
         // Add the new goal to your model
         activityModel.addGoal(newGoal);

@@ -12,19 +12,22 @@ public class Goal {
     private final @NonNull String description;
     private boolean completed;
     private String date;
-    private int repType;
+    private String repType;
+
+    private String contextType;
 
     public Goal(
             @NonNull Integer id,
             @NonNull String description,
             boolean completed,
             String date,
-            int repType) {
+            String repType, String contextType) {
         this.id = id;
         this.description = description;
         this.completed = completed;
         this.date = date;
         this.repType = repType;
+        this.contextType = contextType;
     }
 
     public Integer id() {
@@ -55,8 +58,12 @@ public class Goal {
         return Objects.hash(id, description, completed, date);
     }
 
-    public int repType() {
+    public String repType() {
         return repType;
+    }
+
+    public String contextType() {
+        return contextType;
     }
 }
 

@@ -61,9 +61,9 @@ public class InMemoryDataSource {
     }
 
     public final static List<Goal> DEFAULT_GOALS = List.of(
-            new Goal(0, "Goal 0: Get Lettuce", false, LocalDateTime.now().toString(), 1),
-            new Goal(1, "Goal 1: Get Tomato", false, LocalDateTime.now().toString(), 1),
-            new Goal(2, "Goal 2: Finish Project PLEASE", false, LocalDateTime.now().toString(), 1)
+            new Goal(0, "Goal 0: Get Lettuce", false, LocalDateTime.now().toString(), "", ""),
+            new Goal(1, "Goal 1: Get Tomato", false, LocalDateTime.now().toString(), "", ""),
+            new Goal(2, "Goal 2: Finish Project PLEASE", false, LocalDateTime.now().toString(), "", "")
     );
 
     public static InMemoryDataSource fromDefault() {
