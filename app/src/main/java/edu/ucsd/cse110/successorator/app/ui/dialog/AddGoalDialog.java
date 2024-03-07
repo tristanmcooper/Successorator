@@ -3,6 +3,9 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+
 import java.time.LocalDateTime;
 
 import androidx.annotation.NonNull;
@@ -14,11 +17,13 @@ import androidx.lifecycle.ViewModelProvider;
 import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.app.databinding.DialogAddGoalsBinding;
 
+
+import edu.ucsd.cse110.successorator.app.databinding.DialogTodayTomorrowAddGoalsBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 
 //dialog pop up thing
 public class AddGoalDialog extends DialogFragment{
-    private DialogAddGoalsBinding view;
+    private DialogTodayTomorrowAddGoalsBinding view;
     private MainViewModel activityModel;
 
     AddGoalDialog() {
@@ -35,7 +40,7 @@ public class AddGoalDialog extends DialogFragment{
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        this.view = DialogAddGoalsBinding.inflate(getLayoutInflater());
+        this.view = DialogTodayTomorrowAddGoalsBinding.inflate(getLayoutInflater());
 
         return new AlertDialog.Builder(getActivity())
                 .setTitle("New Goal")
@@ -71,8 +76,13 @@ public class AddGoalDialog extends DialogFragment{
             return;
         }
 
+        RadioGroup radioGroup = view.repTypeRadio;
+        int selectedId = radioGroup.getCheckedRadioButtonId();
+        RadioButton selectedRadioButton = view.getRoot().findViewById(selectedId);
+        String repType = selectedRadioButton.getText().toString();
+
         // Create the new Goal object with user input as the description
-        Goal newGoal = new Goal(currCount+1, description, false,LocalDateTime.now().toString(), 1);
+        Goal newGoal = new Goal(currCount + 1, description, false,LocalDateTime.now().toString(), 1);
 
         // Add the new goal to your model
         activityModel.addGoal(newGoal);
