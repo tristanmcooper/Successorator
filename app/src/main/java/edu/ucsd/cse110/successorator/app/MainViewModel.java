@@ -4,6 +4,7 @@ import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLI
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,6 +18,8 @@ public class MainViewModel extends ViewModel{
     private final RoomGoalRepository goalRepository;
     private SimpleSubject<List<Goal>> incompleteGoals;
     private SimpleSubject<List<Goal>> completeGoals;
+    private LocalDateTime currentDate;
+
 
     //basically grabs the database
     public static final ViewModelInitializer<MainViewModel> initializer =
@@ -60,6 +63,7 @@ public class MainViewModel extends ViewModel{
     public void addGoal(Goal goal){
         goalRepository.add(goal);
     }
+    public void removeSpecificGoal(int id){goalRepository.remove(id);}
 
     /*
     public void updateTomorrow(){
@@ -87,6 +91,16 @@ public class MainViewModel extends ViewModel{
     }
     public void deleteCompleted(){
         goalRepository.deleteCompleted();
+    }
+    public void updateModelCurrentDate(LocalDateTime datetime){
+        if(currentDate != null && !(currentDate.getDayOfYear()==datetime.getDayOfYear()) && datetime.getHour() >= 2){
+            this.currentDate = datetime;
+            //notify
+        }
+    }
+
+    public LocalDateTime getCurrentDate(){
+        return this.currentDate;
     }
 
 

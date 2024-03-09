@@ -53,6 +53,9 @@ public interface GoalDao {
     @Query("DELETE FROM goals WHERE completed=true")
     void deleteComplete();
 
+    @Query("DELETE FROM goals WHERE id= :idPass")
+    void deleteGoal(int idPass);
+
     @Query("SELECT * FROM goals WHERE repType = :completed")
     LiveData<List<GoalEntity>> makeTomorrow(String completed);
 }

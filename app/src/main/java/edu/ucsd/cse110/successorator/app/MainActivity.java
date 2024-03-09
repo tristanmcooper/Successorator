@@ -28,6 +28,7 @@ import edu.ucsd.cse110.successorator.app.ui.PendingListFragment;
 import edu.ucsd.cse110.successorator.app.ui.RecurringListFragment;
 import edu.ucsd.cse110.successorator.app.ui.dialog.AddGoalDialog;
 import edu.ucsd.cse110.successorator.app.ui.dialog.TomorrowAddGoalDialog;
+import edu.ucsd.cse110.successorator.lib.domain.Goal;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -179,6 +180,7 @@ public class MainActivity extends AppCompatActivity {
     private void updateDate() {
         if(advButtonClicked==false){
             currentDateTime = LocalDateTime.now(); // Update currentDateTime
+
         }
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E, M/d", Locale.getDefault());
@@ -189,8 +191,22 @@ public class MainActivity extends AppCompatActivity {
             model.deleteCompleted();
             //model.updateTomorrow();
             prevDate = currentDate;
+            model.addGoal(new Goal(-1,
+                    "",
+                    false,
+                    LocalDateTime.now().toString(),
+                    "Once",
+                    "Work"));
+            model.removeSpecificGoal(-1);
+            if(fragmentType==0){
+                TodayListFragment todayfrag = (TodayListFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                if (todayfrag != null) {
+                    todayfrag.updateDate(currentDateTime);
+                }
+            }
         }
 
+        model.updateModelCurrentDate(currentDateTime);
     }
 
 
