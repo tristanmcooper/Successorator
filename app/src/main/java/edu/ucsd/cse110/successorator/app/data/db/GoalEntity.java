@@ -5,6 +5,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.time.LocalDateTime;
+
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 
 @Entity(tableName = "goals")
@@ -29,14 +31,6 @@ public class GoalEntity {
     @ColumnInfo(name = "contextType")
     public String contextType;
 
-    /*
-    0 - one time goal
-    1 - Daily goal
-    2 - Weekly goal
-    3 - Monthly goal
-    4 - Yearly goal
-     */
-
 
     // Constructor for GoalEntity
     GoalEntity(@NonNull int id, @NonNull String description, @NonNull boolean completed, String date, String repType, String contextType) {
@@ -59,3 +53,4 @@ public class GoalEntity {
         return new Goal(id, description, completed, date, "", "");
     }
 }
+

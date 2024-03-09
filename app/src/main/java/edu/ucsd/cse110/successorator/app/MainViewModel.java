@@ -53,12 +53,22 @@ public class MainViewModel extends ViewModel{
                     .collect(Collectors.toList());
             completeGoals.setValue(newCompleteGoals);
         });
+
     }
 
     //Probably just for testing, might be violating SRP idk
     public void addGoal(Goal goal){
         goalRepository.add(goal);
     }
+
+    /*
+    public void updateTomorrow(){
+        goalRepository.
+    }
+     */
+
+
+
 
     //the getters so that other classes can watch when the db changes so they can upd UI
     public int getCount(){ 

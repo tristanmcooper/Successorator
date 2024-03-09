@@ -27,4 +27,6 @@ public interface GoalRepository {
     void clear();
 
     void remove(int id);
+
+    void generateTomorrow();
 }

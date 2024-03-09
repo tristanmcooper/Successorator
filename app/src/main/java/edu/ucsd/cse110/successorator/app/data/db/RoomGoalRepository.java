@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.successorator.app.data.db;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 
 import java.util.ArrayList;
@@ -103,5 +104,10 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
     @Override
     public void remove(int id) {
         goalDao.delete(id);
+    }
+
+    @Override
+    public void generateTomorrow(){
+        LiveData<List<GoalEntity>> list =  goalDao.makeTomorrow("Daily");
     }
 }

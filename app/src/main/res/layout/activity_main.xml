@@ -42,17 +42,7 @@
         app:layout_constraintTop_toBottomOf="@+id/dateTextView"
         app:layout_constraintVertical_bias="0.437" />
 
-    <TextView
-        android:id="@+id/default_goals"
-        android:layout_width="321dp"
-        android:layout_height="530dp"
-        android:text="@string/default_goals"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="invisible" />
+
 
     <ImageButton
         android:id="@+id/button_advance_date"

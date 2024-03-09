@@ -50,6 +50,12 @@ public class TodayListFragment extends Fragment {
         activityModel.getIncompleteGoals().registerObserver(goals -> {
             if (goals == null) return;
 
+            if (goals.size() == 0) {
+                view.defaultGoals.setVisibility(View.VISIBLE);
+            }
+            else {
+                view.defaultGoals.setVisibility(View.INVISIBLE);
+            }
             incompleteAdapter.clear();
             incompleteAdapter.addAll(new ArrayList<>(goals)); // remember the mutable copy here!
             incompleteAdapter.notifyDataSetChanged();

@@ -112,7 +112,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         //setup the adapter for the list, so it can update it at the beginning
+
+        /*
         this.adapter = new GoalListAdapter(getApplicationContext(), List.of(), null);
+
 
         model.getIncompleteGoals().registerObserver(goals -> {
             if (goals == null) {
@@ -128,6 +131,8 @@ public class MainActivity extends AppCompatActivity {
             adapter.addAll(new ArrayList<>(goals));
             adapter.notifyDataSetChanged();
         });
+         */
+
 
         //show the GoalListFragment
         getSupportFragmentManager()
@@ -182,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(prevDate != null && !(prevDate.equals(currentDate)) && currentDateTime.getHour() >= 2){
             model.deleteCompleted();
+            //model.updateTomorrow();
             prevDate = currentDate;
         }
 
