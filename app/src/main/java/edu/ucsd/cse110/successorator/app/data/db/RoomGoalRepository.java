@@ -3,8 +3,11 @@ package edu.ucsd.cse110.successorator.app.data.db;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.successorator.app.util.*;
@@ -109,5 +112,15 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
     @Override
     public void generateTomorrow(){
         LiveData<List<GoalEntity>> list =  goalDao.makeTomorrow("Daily");
+    }
+    @Override
+    public void changeToTodayViewComplete(int id) {
+        Goal temp = goalDao.find(id).toGoal();
+        String tmrwDate = temp.date();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS", Locale.getDefault());
+        LocalDateTime goalDate = LocalDateTime.parse(tmrwDate, formatter).minusDays(1);
+        Goal copy = new Goal(temp.id(), temp.description(), true, goalDate.toString(), temp.repType(), temp.contextType());
+        remove(id);
+        add(copy);
     }
 }

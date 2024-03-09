@@ -101,6 +101,10 @@ public class MainViewModel extends ViewModel{
         return this.currentDate;
     }
 
+    public void changeToTodayViewComplete(int id){
+        goalRepository.changeToTodayViewComplete(id);
+    }
+
 
     public GoalRepository getRepo(){ return this.goalRepository;}
 }

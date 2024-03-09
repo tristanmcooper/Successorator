@@ -51,7 +51,7 @@ public class TomorrowListFragment extends Fragment {
 
         // Initialize the Adapter (with an empty list for now) for incomplete tasks
         this.incompleteAdapter = new GoalListAdapter(requireContext(), List.of(), id -> {
-            activityModel.changeCompleteStatus(id);
+            activityModel.changeToTodayViewComplete(id);
         });
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS", Locale.getDefault());
         activityModel.getIncompleteGoals().registerObserver(goals -> {
@@ -72,16 +72,7 @@ public class TomorrowListFragment extends Fragment {
             incompleteAdapter.notifyDataSetChanged();
         });
 
-        // Initialize the adapter for completed tasks
-        this.completeAdapter = new GoalListAdapter(requireContext(), List.of(), id -> {
-            activityModel.changeCompleteStatus(id);
-        });
-        activityModel.getCompleteGoals().registerObserver(goals -> {
-            if (goals == null) return;
-            completeAdapter.clear();
-            completeAdapter.addAll(new ArrayList<>(goals));
-            completeAdapter.notifyDataSetChanged();
-        });
+
     }
 
     @Nullable
@@ -91,7 +82,7 @@ public class TomorrowListFragment extends Fragment {
 
         // Set the adapter on the ListView
         view.uncompletedGoalList.setAdapter(incompleteAdapter);
-        view.completedGoalList.setAdapter(completeAdapter);
+
 
         return view.getRoot();
     }

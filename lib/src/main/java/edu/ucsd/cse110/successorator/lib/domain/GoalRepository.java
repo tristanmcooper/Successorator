@@ -29,4 +29,6 @@ public interface GoalRepository {
     void remove(int id);
 
     void generateTomorrow();
+
+    void changeToTodayViewComplete(int id);
 }
