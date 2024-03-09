@@ -76,7 +76,7 @@ public class TomorrowAddGoalDialog extends DialogFragment{
 
         ;
         // Create the new Goal object with user input as the description
-        LocalDateTime curtime = LocalDateTime.now();
+        LocalDateTime curtime = activityModel.getCurrentDate();
         curtime = curtime.plusDays(1);
         RadioGroup repTypeGroup = view.repTypeRadio;
         int selectedRepTypeId = repTypeGroup.getCheckedRadioButtonId();

@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private Runnable dateUpdater;
     private LocalDateTime currentDateTime;
     private GoalListAdapter adapter;
-    private String prevDate;
+    private LocalDateTime prevDate;
     private boolean advButtonClicked = false;
     private int fragmentType = 0;
 
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         // Initial update
         currentDateTime = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E, M/d", Locale.getDefault());
-        prevDate = currentDateTime.format(formatter);
+        prevDate = currentDateTime;
         updateDate();
 
         dateUpdater = new Runnable() {
@@ -162,9 +162,11 @@ public class MainActivity extends AppCompatActivity {
         if (itemId == R.id.today_view) {
             swapFragments(0);
             fragmentType = 0;
+            refreshDatabase();
         } else if (itemId == R.id.tomorrow_view) {
             swapFragments(1);
             fragmentType = 1;
+            refreshDatabase();
         } else if (itemId == R.id.pending_view) {
             swapFragments(2);
             fragmentType = 3;
@@ -180,30 +182,53 @@ public class MainActivity extends AppCompatActivity {
     private void updateDate() {
         if(advButtonClicked==false){
             currentDateTime = LocalDateTime.now(); // Update currentDateTime
-
         }
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E, M/d", Locale.getDefault());
-        String currentDate = currentDateTime.format(formatter);
-        textViewDate.setText(currentDate);
 
-        if(prevDate != null && !(prevDate.equals(currentDate)) && currentDateTime.getHour() >= 2){
+
+        if(fragmentType==0){
+            TodayListFragment todayfrag = (TodayListFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+            if (todayfrag != null) {
+                todayfrag.updateDate(currentDateTime);
+                LocalDateTime temp = todayfrag.getDate();
+                String currentDate = temp.format(formatter);
+                textViewDate.setText(currentDate);
+            }
+        }
+        else if(fragmentType==1){
+            TomorrowListFragment tmrwfrag = (TomorrowListFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+            if (tmrwfrag != null) {
+                tmrwfrag.updateDate(currentDateTime);
+                LocalDateTime temp = tmrwfrag.getDate();
+                String currentDate = temp.format(formatter);
+                textViewDate.setText(currentDate);
+            }
+        }
+        else{
+            String currentDate = currentDateTime.format(formatter);
+            textViewDate.setText(currentDate);
+        }
+
+
+        if(prevDate != null && prevDate.getDayOfYear()!=currentDateTime.getDayOfYear() && currentDateTime.getHour() >= 2){
             model.deleteCompleted();
             //model.updateTomorrow();
-            prevDate = currentDate;
-            model.addGoal(new Goal(-1,
-                    "",
-                    false,
-                    LocalDateTime.now().toString(),
-                    "Once",
-                    "Work"));
-            model.removeSpecificGoal(-1);
+            prevDate = currentDateTime;
+            model.updateModelCurrentDate(currentDateTime);
             if(fragmentType==0){
                 TodayListFragment todayfrag = (TodayListFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_container);
                 if (todayfrag != null) {
                     todayfrag.updateDate(currentDateTime);
                 }
             }
+            if(fragmentType==1){
+                TomorrowListFragment tmrwfrag = (TomorrowListFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                if (tmrwfrag != null) {
+                    tmrwfrag.updateDate(currentDateTime);
+                }
+            }
+            refreshDatabase();
         }
 
         model.updateModelCurrentDate(currentDateTime);
@@ -215,6 +240,15 @@ public class MainActivity extends AppCompatActivity {
         currentDateTime = currentDateTime.plusDays(1);
         advButtonClicked = true;
         updateDate();
+    }
+    public void refreshDatabase(){
+        model.addGoal(new Goal(-1,
+                "",
+                false,
+                LocalDateTime.now().toString(),
+                "Once",
+                "Work"));
+        model.removeSpecificGoal(-1);
     }
 
     @Override
@@ -239,6 +273,7 @@ public class MainActivity extends AppCompatActivity {
                         .replace(R.id.fragment_container, TodayListFragment.newInstance())
                         .commit();
                 setTitle("Today's Goals");
+                updateDate();
                 return;
             case 1:
                 getSupportFragmentManager()
@@ -246,6 +281,7 @@ public class MainActivity extends AppCompatActivity {
                         .replace(R.id.fragment_container, TomorrowListFragment.newInstance())
                         .commit();
                 setTitle("Tomorrow's Goals");
+                updateDate();
                 return;
             case 2:
                 getSupportFragmentManager()

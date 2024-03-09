@@ -93,10 +93,8 @@ public class MainViewModel extends ViewModel{
         goalRepository.deleteCompleted();
     }
     public void updateModelCurrentDate(LocalDateTime datetime){
-        if(currentDate != null && !(currentDate.getDayOfYear()==datetime.getDayOfYear()) && datetime.getHour() >= 2){
             this.currentDate = datetime;
             //notify
-        }
     }
 
     public LocalDateTime getCurrentDate(){

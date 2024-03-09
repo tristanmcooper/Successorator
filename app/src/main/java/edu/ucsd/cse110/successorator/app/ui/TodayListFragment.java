@@ -56,15 +56,7 @@ public class TodayListFragment extends Fragment {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS", Locale.getDefault());
         activityModel.getIncompleteGoals().registerObserver(goals -> {
             if (goals == null) return;
-/*
-            if (goals.size() == 0) {
-                view.defaultGoals.setVisibility(View.VISIBLE);
-            }
-            else {
-                view.defaultGoals.setVisibility(View.INVISIBLE);
-            }
 
- */
             var todaysGoals = new ArrayList<Goal>();
             for(Goal g : goals){
                 LocalDateTime goalDate = LocalDateTime.parse(g.date(), formatter);
@@ -72,6 +64,14 @@ public class TodayListFragment extends Fragment {
                     todaysGoals.add(g);
                 }
             }
+/*
+            if (todaysGoals.size() == 0) {
+                view.defaultGoals.setVisibility(View.VISIBLE);
+            }
+            else {
+                view.defaultGoals.setVisibility(View.INVISIBLE);
+            }
+ */
             incompleteAdapter.clear();
             incompleteAdapter.addAll(todaysGoals); // remember the mutable copy here!
             incompleteAdapter.notifyDataSetChanged();
@@ -109,9 +109,8 @@ public class TodayListFragment extends Fragment {
     }
     public void updateDate(LocalDateTime date){
         this.currentDate = date;
-        refreshGoalsList();
     }
-    public void refreshGoalsList(){
-
+    public LocalDateTime getDate(){
+        return this.currentDate;
     }
 }
