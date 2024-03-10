@@ -169,10 +169,10 @@ public class MainActivity extends AppCompatActivity {
             refreshDatabase();
         } else if (itemId == R.id.pending_view) {
             swapFragments(2);
-            fragmentType = 3;
+            fragmentType = 2;
         } else if (itemId == R.id.recurring_view) {
             swapFragments(3);
-            fragmentType = 4;
+            fragmentType = 3;
         }
 
         return super.onOptionsItemSelected(item);
