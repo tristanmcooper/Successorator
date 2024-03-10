@@ -1,9 +1,13 @@
 package edu.ucsd.cse110.successorator.app.data.db;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.successorator.app.util.*;
@@ -82,7 +86,7 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
     @Override
     public void changeCompleted(int id) {
         var goal = goalDao.find(id).toGoal();
-        goalDao.insert(new GoalEntity(goal.id(), goal.description(), !goal.completed()));
+        goalDao.insert(new GoalEntity(goal.id(), goal.description(), !goal.completed(), goal.date(), goal.repType(), goal.contextType()));
         this.notifyObservers();
     }
 
@@ -103,5 +107,20 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
     @Override
     public void remove(int id) {
         goalDao.delete(id);
+    }
+
+    @Override
+    public void generateTomorrow(){
+        LiveData<List<GoalEntity>> list =  goalDao.makeTomorrow("Daily");
+    }
+    @Override
+    public void changeToTodayViewComplete(int id) {
+        Goal temp = goalDao.find(id).toGoal();
+        String tmrwDate = temp.date();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS", Locale.getDefault());
+        LocalDateTime goalDate = LocalDateTime.parse(tmrwDate, formatter).minusDays(1);
+        Goal copy = new Goal(temp.id(), temp.description(), true, goalDate.toString(), temp.repType(), temp.contextType());
+        remove(id);
+        add(copy);
     }
 }

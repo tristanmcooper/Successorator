@@ -32,7 +32,7 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
         this.onDeleteClick = onDeleteClick;
     }
 
-    //get the view for eaach goal item
+    //get the view for each goal item
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -52,7 +52,7 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
         }
 
         // Populate the view with the task's data.
-        if (goal.completed() == false){
+        if (!goal.completed()){
             binding.goalDescription.setText(goal.description());
         }
         else{
@@ -88,6 +88,10 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
         assert id != null;
 
         return id;
+    }
+
+    public int getItemCount() {
+        return super.getCount();
     }
 }
 

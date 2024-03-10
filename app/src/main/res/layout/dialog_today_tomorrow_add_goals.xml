@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:textSize="24sp"
+        android:inputType="text"
+        android:text="Goal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <RadioGroup
+        android:id="@+id/repTypeRadio"
+        android:layout_width="323dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.578"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/contextRadioGroup"
+        app:layout_constraintVertical_bias="0.0">
+
+        <RadioButton
+            android:id="@+id/once"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Once"
+            android:textSize="24sp" />
+
+        <RadioButton
+            android:id="@+id/daily"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Daily"
+            android:textSize="24sp" />
+
+        <RadioButton
+            android:id="@+id/weekly"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Weekly"
+            android:textSize="24sp" />
+
+        <RadioButton
+            android:id="@+id/Monthly"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="monthly"
+            android:textSize="24sp" />
+
+        <RadioButton
+            android:id="@+id/Yearly"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="yearly"
+            android:textSize="24sp" />
+    </RadioGroup>
+
+<!--    <com.google.android.material.button.MaterialButton-->
+<!--        android:id="@+id/homeButton"-->
+<!--        android:layout_width="57dp"-->
+<!--        android:layout_height="64dp"-->
+<!--        android:layout_marginStart="16dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:text="H"-->
+<!--        app:backgroundTint="@color/orange"-->
+<!--        app:cornerRadius="999dp"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/workButton"-->
+<!--        app:layout_constraintHorizontal_bias="0.5"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/editText" />-->
+
+<!--    <com.google.android.material.button.MaterialButton-->
+<!--        android:id="@+id/workButton"-->
+<!--        android:layout_width="57dp"-->
+<!--        android:layout_height="64dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:text="W"-->
+<!--        app:backgroundTint="@color/blue"-->
+<!--        app:cornerRadius="999dp"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/schoolButton"-->
+<!--        app:layout_constraintHorizontal_bias="0.5"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/homeButton"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/editText" />-->
+
+<!--    <com.google.android.material.button.MaterialButton-->
+<!--        android:id="@+id/schoolButton"-->
+<!--        android:layout_width="57dp"-->
+<!--        android:layout_height="64dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:text="S"-->
+<!--        app:backgroundTint="@color/purple"-->
+<!--        app:cornerRadius="999dp"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/errandButton"-->
+<!--        app:layout_constraintHorizontal_bias="0.5"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/workButton"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/editText" />-->
+
+<!--    <com.google.android.material.button.MaterialButton-->
+<!--        android:id="@+id/errandButton"-->
+<!--        android:layout_width="57dp"-->
+<!--        android:layout_height="64dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:layout_marginEnd="16dp"-->
+<!--        android:text="E"-->
+<!--        app:backgroundTint="@color/green"-->
+<!--        app:cornerRadius="999dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.5"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/schoolButton"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/editText" />-->
+
+    <RadioGroup
+        android:id="@+id/contextRadioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editText">
+
+        <RadioButton
+            android:id="@+id/homeRadioButton"
+            android:layout_width="65dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/orange"
+            android:text="H"
+            android:textColor="@color/orange"
+            android:textSize="24sp"
+            app:buttonTint="@color/orange"
+            tools:ignore="UselessParent" />
+
+        <RadioButton
+            android:id="@+id/workRadioButton"
+            android:layout_width="65dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/blue"
+            android:text="W"
+            android:textColor="@color/blue"
+            android:textSize="24sp"
+            app:buttonTint="@color/blue"
+            tools:ignore="UselessParent" />
+
+        <RadioButton
+            android:id="@+id/schoolRadioButton"
+            android:layout_width="65dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/purple"
+            android:text="S"
+            android:textColor="@color/purple"
+            android:textSize="24sp"
+            app:buttonTint="@color/purple"
+            tools:ignore="UselessParent" />
+
+        <RadioButton
+            android:id="@+id/errandRadioButton"
+            android:layout_width="65dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/green"
+            android:text="E"
+            android:textColor="@color/green"
+            android:textSize="24sp"
+            app:buttonTint="@color/green"
+            tools:ignore="UselessParent" />
+    </RadioGroup>
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

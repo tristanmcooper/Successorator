@@ -3,10 +3,9 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import java.time.LocalDateTime;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-
-import java.time.LocalDateTime;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,21 +16,20 @@ import androidx.lifecycle.ViewModelProvider;
 import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.app.databinding.DialogAddGoalsBinding;
 
-
 import edu.ucsd.cse110.successorator.app.databinding.DialogTodayTomorrowAddGoalsBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 
 //dialog pop up thing
-public class AddGoalDialog extends DialogFragment{
-    private DialogTodayTomorrowAddGoalsBinding view;
+public class TomorrowAddGoalDialog extends DialogFragment{
+    private @NonNull DialogTodayTomorrowAddGoalsBinding view;
     private MainViewModel activityModel;
 
-    AddGoalDialog() {
+    TomorrowAddGoalDialog() {
         //Required empty public constructor
     }
 
-    public static AddGoalDialog newInstance() {
-        var fragment = new AddGoalDialog();
+    public static TomorrowAddGoalDialog newInstance() {
+        var fragment = new TomorrowAddGoalDialog();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -43,8 +41,8 @@ public class AddGoalDialog extends DialogFragment{
         this.view = DialogTodayTomorrowAddGoalsBinding.inflate(getLayoutInflater());
 
         return new AlertDialog.Builder(getActivity())
-                .setTitle("New Goal")
-                .setMessage("Enter new goal with option to select context and recurring.")
+                .setTitle("New Goal for tmrw")
+                .setMessage("Please provide the new card text for tmrw.")
                 .setView(view.getRoot())
                 .setPositiveButton("Create", this::onPositiveButtonClick)
                 .setNegativeButton("Cancel", this::onNegativeButtonClick)
@@ -76,6 +74,10 @@ public class AddGoalDialog extends DialogFragment{
             return;
         }
 
+        ;
+        // Create the new Goal object with user input as the description
+        LocalDateTime curtime = activityModel.getCurrentDate();
+        curtime = curtime.plusDays(1);
         RadioGroup repTypeGroup = view.repTypeRadio;
         int selectedRepTypeId = repTypeGroup.getCheckedRadioButtonId();
         RadioButton selectedRepTypeRadioButton = view.getRoot().findViewById(selectedRepTypeId);
@@ -85,24 +87,13 @@ public class AddGoalDialog extends DialogFragment{
         int selectedContextTypeId = contextTypeGroup.getCheckedRadioButtonId();
         RadioButton selectedContextTypeRadioButton = view.getRoot().findViewById(selectedContextTypeId);
         String contextType = selectedContextTypeRadioButton.getText().toString();
-
-
-
-
-
-        // Create the new Goal object with user input as the description
-        Goal newGoal = new Goal(currCount + 1,
-                description,
-                false,
-                LocalDateTime.now().toString(),
-                repType,
-                contextType);
+        Goal newGoal = new Goal(currCount+1, description, false,curtime.toString(), repType, contextType);
 
         // Add the new goal to your model
         activityModel.addGoal(newGoal);
 
         // Dismiss the dialog
-            dialog.dismiss();
+        dialog.dismiss();
     }
 
     private void onNegativeButtonClick(DialogInterface dialog, int which) {

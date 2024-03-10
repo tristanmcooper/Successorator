@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.room.Room;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import edu.ucsd.cse110.successorator.app.data.db.RoomGoalRepository;
@@ -37,14 +38,14 @@ public class SuccessoratorApplication extends Application {
 
         // Default goals for testing purposes
         List<Goal> DEFAULT_GOALS = List.of(
-            new Goal(1, "Goal 1", false),
-            new Goal(2, "Goal 2", false),
-            new Goal(3, "Goal 3", false)
+            new Goal(1, "Goal 1", false, LocalDateTime.now().toString(), "", ""),
+            new Goal(2, "Goal 2", false, LocalDateTime.now().toString(), "", ""),
+            new Goal(3, "Goal 3", false, LocalDateTime.now().toString(), "", "")
         );
 
         // Populate database with default values
         if (isFirstRun && database.goalDao().count() == 0) {
-            goalRepository.save(DEFAULT_GOALS);
+            //goalRepository.save(DEFAULT_GOALS);
 
             sharedPreferences.edit()
                 .putBoolean("isFirstRun", false)
