@@ -1,6 +1,7 @@
 package edu.ucsd.cse110.successorator.app;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.room.Room;
 
@@ -38,10 +39,15 @@ public class SuccessoratorApplication extends Application {
 
         // Default goals for testing purposes
         List<Goal> DEFAULT_GOALS = List.of(
-            new Goal(1, "Goal 1", false, LocalDateTime.now().toString(), "", ""),
-            new Goal(2, "Goal 2", false, LocalDateTime.now().toString(), "", ""),
-            new Goal(3, "Goal 3", false, LocalDateTime.now().toString(), "", "")
+            new Goal(1, "Goal 1", false, LocalDateTime.now().toString(), "", "W"),
+            new Goal(2, "Goal 2", false, LocalDateTime.now().toString(), "", "W"),
+            new Goal(3, "Goal 3", false, LocalDateTime.now().toString(), "", "H")
         );
+
+        //Testing context type
+        for (Goal goal : DEFAULT_GOALS) {
+            Log.d("YourActivity", "Goal Context Type: " + goal.getContextType());
+        }
 
         // Populate database with default values
         if (isFirstRun && database.goalDao().count() == 0) {

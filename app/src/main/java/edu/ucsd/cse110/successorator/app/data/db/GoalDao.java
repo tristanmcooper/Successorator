@@ -58,4 +58,9 @@ public interface GoalDao {
 
     @Query("SELECT * FROM goals WHERE repType = :completed")
     LiveData<List<GoalEntity>> makeTomorrow(String completed);
+
+    //Return goal context
+    @Query("SELECT * FROM goals WHERE contextType = :contextType")
+    LiveData<List<GoalEntity>> getGoalsByContext(String contextType);
+
 }

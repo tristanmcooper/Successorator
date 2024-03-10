@@ -21,6 +21,7 @@ public class MainViewModel extends ViewModel{
     private LocalDateTime currentDate;
 
 
+
     //basically grabs the database
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
@@ -107,4 +108,7 @@ public class MainViewModel extends ViewModel{
 
 
     public GoalRepository getRepo(){ return this.goalRepository;}
+
+
+
 }
