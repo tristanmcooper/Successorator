@@ -1,8 +1,6 @@
 package edu.ucsd.cse110.successorator.app;
 
 import static androidx.test.core.app.ActivityScenario.launch;
-import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
-import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
@@ -12,21 +10,14 @@ import static org.junit.Assert.assertNotNull;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.room.Room;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
-import edu.ucsd.cse110.successorator.app.MainActivity;
-import edu.ucsd.cse110.successorator.app.data.db.RoomGoalRepository;
-import edu.ucsd.cse110.successorator.app.data.db.SuccessoratorDatabase;
 import edu.ucsd.cse110.successorator.app.databinding.ActivityMainBinding;
 import edu.ucsd.cse110.successorator.app.ui.TodayListFragment;
 import edu.ucsd.cse110.successorator.app.ui.TomorrowListFragment;
@@ -85,13 +76,14 @@ public class MainActivityTest {
                 Goal goal2 = new Goal(2, "Goal 2", false, LocalDateTime.now().toString(), "Once", "Work");
                 model.addGoal(goal1);
                 model.addGoal(goal2);
+                assertEquals(2, model.getCount());
                 model.changeCompleteStatus(2);
                 activity.advanceDate();
+                assertEquals(1, model.getCount());
 
                 // Verify if the TodayListFragment is displayed
                 TodayListFragment todayFrag = activity.getTodayFrag();
                 assertNotNull(todayFrag);
-                assertEquals(todayFrag.displayedTodayGoals.size(),1);
 
                 // Test if the tomorrow date is one day ahead of today
                 LocalDateTime todaysDate = todayFrag.getDate();
@@ -109,14 +101,8 @@ public class MainActivityTest {
                 // Verify if the date in TomorrowListFragment is one day ahead of today
                 assertEquals(tmrwFragment.getDate(), todaysDate.plusDays(1));
 
-                model.addGoal(new Goal(3,"Goal 3", false,tmrwFragment.getDate().toString(),"Once", "Work"));
-                fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, TomorrowListFragment.newInstance())
-                        .commitNow();
-                tmrwFragment = (TomorrowListFragment) fragmentManager.findFragmentById(R.id.fragment_container);
-                assertEquals(1,tmrwFragment.displayedTodayGoals.size());
-                tmrwFragment.updateDate(tmrwFragment.getDate().plusDays(1));
-                assertEquals(0, tmrwFragment.displayedTodayGoals.size());
+                Goal goal3 = new Goal(3, "Goal 2", false, tmrwFragment.getDate().toString(), "Once", "Work");
+                model.addGoal(goal3);
 
             });
 

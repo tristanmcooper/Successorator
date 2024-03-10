@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,6 +20,10 @@ public class MainViewModel extends ViewModel{
     private SimpleSubject<List<Goal>> incompleteGoals;
     private SimpleSubject<List<Goal>> completeGoals;
     private LocalDateTime currentDate;
+
+    //For testing US1
+    private ArrayList<Goal> displayedTodayGoals;
+    private ArrayList<Goal> displayedTomorrowGoals;
 
 
     //basically grabs the database
@@ -107,4 +112,21 @@ public class MainViewModel extends ViewModel{
 
 
     public GoalRepository getRepo(){ return this.goalRepository;}
+
+    //For testing us1
+    public void setDisplayedTodayGoals(ArrayList<Goal> temp) {
+        displayedTodayGoals = temp;
+    }
+
+    public ArrayList<Goal> getDisplayedTodayGoals(){
+        return displayedTodayGoals;
+    }
+
+    public void setDisplayedTomorrowGoals(ArrayList<Goal> temp) {
+        displayedTomorrowGoals = temp;
+    }
+
+    public ArrayList<Goal> getDisplayedTomorrowGoals(){
+        return displayedTomorrowGoals;
+    }
 }

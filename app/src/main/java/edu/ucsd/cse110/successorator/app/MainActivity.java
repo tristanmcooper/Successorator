@@ -207,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        if(prevDate != null && prevDate.getDayOfYear()!=currentDateTime.getDayOfYear() && currentDateTime.getHour() >= 2){
+        if(prevDate != null && prevDate.getDayOfYear()!=currentDateTime.getDayOfYear()){
             model.deleteCompleted();
             //model.updateTomorrow();
             prevDate = currentDateTime;

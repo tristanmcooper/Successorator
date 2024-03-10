@@ -26,7 +26,6 @@ public class TomorrowListFragment extends Fragment {
     private GoalListAdapter incompleteAdapter;
     private GoalListAdapter completeAdapter;
     private LocalDateTime currentDate;
-    public ArrayList displayedTodayGoals = new ArrayList<Goal>();
 
     public TomorrowListFragment() {
         // Required empty public constructor
@@ -66,14 +65,13 @@ public class TomorrowListFragment extends Fragment {
                 LocalDateTime goalDate = LocalDateTime.parse(g.date(), formatter);
                 if(goalDate.getDayOfYear()==currentDate.getDayOfYear()){
                     tmrwGoals.add(g);
-                    System.out.println(currentDate.toString());
                 }
                 //add edge case for end of year
                 System.out.println("Goal doesn't match"+currentDate.toString());
             }
             incompleteAdapter.clear();
             incompleteAdapter.addAll(tmrwGoals); // remember the mutable copy here!
-            displayedTodayGoals = (ArrayList) goals;
+            activityModel.setDisplayedTomorrowGoals(tmrwGoals);
             incompleteAdapter.notifyDataSetChanged();
         });
 

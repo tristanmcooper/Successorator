@@ -42,7 +42,7 @@
             android:id="@+id/once"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Once-time"
+            android:text="Once"
             android:textSize="24sp" />
 
         <RadioButton

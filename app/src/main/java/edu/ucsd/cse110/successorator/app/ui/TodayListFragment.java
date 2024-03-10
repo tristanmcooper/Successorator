@@ -10,7 +10,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import java.sql.Array;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -20,7 +19,6 @@ import java.util.Locale;
 import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.app.databinding.FragmentTodayListBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
-import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 
 public class TodayListFragment extends Fragment {
     private MainViewModel activityModel;
@@ -28,7 +26,6 @@ public class TodayListFragment extends Fragment {
     private GoalListAdapter incompleteAdapter;
     private GoalListAdapter completeAdapter;
     private LocalDateTime currentDate;
-    public ArrayList displayedTodayGoals = new ArrayList<Goal>();
 
     public TodayListFragment() {
         // Required empty public constructor
@@ -86,7 +83,7 @@ public class TodayListFragment extends Fragment {
 
             incompleteAdapter.clear();
             incompleteAdapter.addAll(todaysGoals); // remember the mutable copy here!
-            displayedTodayGoals = todaysGoals;
+            activityModel.setDisplayedTodayGoals(todaysGoals);
             incompleteAdapter.notifyDataSetChanged();
         });
 
