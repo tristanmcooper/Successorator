@@ -28,6 +28,7 @@ public class TodayListFragment extends Fragment {
     private GoalListAdapter incompleteAdapter;
     private GoalListAdapter completeAdapter;
     private LocalDateTime currentDate;
+    public ArrayList displayedTodayGoals = new ArrayList<Goal>();
 
     public TodayListFragment() {
         // Required empty public constructor
@@ -40,68 +41,7 @@ public class TodayListFragment extends Fragment {
         return fragment;
     }
 
-    /*
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
-        currentDate = LocalDateTime.now();
-        // Initialize the Model
-        var modelOwner = requireActivity();
-        var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
-        var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
-        this.activityModel = modelProvider.get(MainViewModel.class);
-        // Initialize the Adapter (with an empty list for now) for incomplete tasks
-        this.incompleteAdapter = new GoalListAdapter(requireContext(), List.of(), id -> {
-            activityModel.changeCompleteStatus(id);
-        });
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS", Locale.getDefault());
-
-        activityModel.getIncompleteGoals().registerObserver(goals -> {
-            if (goals == null) return;
-
-            var todaysGoals = new ArrayList<Goal>();
-            for(Goal g : goals){
-                LocalDateTime goalDate = LocalDateTime.parse(g.date(), formatter);
-                if(goalDate.getDayOfYear()<=currentDate.getDayOfYear()){
-                    todaysGoals.add(g);
-                }
-            }
-
-            if (view.defaultGoals != null) {
-                // Set defaultGoals visibility
-                if (todaysGoals.size() == 0) {
-                    view.defaultGoals.setVisibility(View.VISIBLE);
-                } else {
-                    view.defaultGoals.setVisibility(View.INVISIBLE);
-                }
-            } else {
-                System.out.println("defaultGoals view is null");
-            }
-
-            incompleteAdapter.clear();
-            incompleteAdapter.addAll(todaysGoals); // remember the mutable copy here!
-            incompleteAdapter.notifyDataSetChanged();
-        });
-
-        // Initialize the adapter for completed tasks
-        this.completeAdapter = new GoalListAdapter(requireContext(), List.of(), id -> {
-            activityModel.changeCompleteStatus(id);
-        });
-        activityModel.getCompleteGoals().registerObserver(goals -> {
-            if (goals == null) return;
-            var todaysGoals = new ArrayList<Goal>();
-            for(Goal g : goals){
-                LocalDateTime goalDate = LocalDateTime.parse(g.date(), formatter);
-                if(goalDate.getDayOfYear()==currentDate.getDayOfYear()){
-                    todaysGoals.add(g);
-                }
-            }
-            completeAdapter.clear();
-            completeAdapter.addAll(todaysGoals);
-            completeAdapter.notifyDataSetChanged();
-        });
-    }*/
 
     @Nullable
     @Override
@@ -146,6 +86,7 @@ public class TodayListFragment extends Fragment {
 
             incompleteAdapter.clear();
             incompleteAdapter.addAll(todaysGoals); // remember the mutable copy here!
+            displayedTodayGoals = todaysGoals;
             incompleteAdapter.notifyDataSetChanged();
         });
 

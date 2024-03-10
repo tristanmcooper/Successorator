@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import androidx.appcompat.widget.AppCompatImageButton;
@@ -29,11 +30,6 @@ import edu.ucsd.cse110.successorator.app.ui.RecurringListFragment;
 import edu.ucsd.cse110.successorator.app.ui.dialog.AddGoalDialog;
 import edu.ucsd.cse110.successorator.app.ui.dialog.TomorrowAddGoalDialog;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
-
-import java.text.DateFormat;
-import java.util.Calendar;
-import java.util.ArrayList;
-import java.util.List;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -179,16 +175,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Method to update the date
-    private void updateDate() {
+    public void updateDate() {
         if(advButtonClicked==false){
             currentDateTime = LocalDateTime.now(); // Update currentDateTime
         }
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E, M/d", Locale.getDefault());
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
 
-
-        if(fragmentType==0){
-            TodayListFragment todayfrag = (TodayListFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if(fragmentType==0 && fragment instanceof TodayListFragment){
+            TodayListFragment todayfrag = (TodayListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
             if (todayfrag != null) {
                 todayfrag.updateDate(currentDateTime);
                 LocalDateTime temp = todayfrag.getDate();
@@ -196,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
                 textViewDate.setText(currentDate);
             }
         }
-        else if(fragmentType==1){
+        else if(fragmentType==1 && fragment instanceof TomorrowListFragment){
             TomorrowListFragment tmrwfrag = (TomorrowListFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_container);
             if (tmrwfrag != null) {
                 tmrwfrag.updateDate(currentDateTime);
@@ -301,7 +297,26 @@ public class MainActivity extends AppCompatActivity {
                 return;
         }
     }
+
+    public TodayListFragment getTodayFrag(){
+        TodayListFragment todayfrag = (TodayListFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        return todayfrag;
+    }
+    public TomorrowListFragment getTTmrwFrag(){
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if(fragment instanceof TomorrowListFragment){
+            TomorrowListFragment getTTmrwFrag = (TomorrowListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+            return getTTmrwFrag;
+        }
+        return null;
+    }
     public MainViewModel getMainViewModel(){
         return this.model;
+    }
+    public void switchToTomorrowFrag(){
+        swapFragments(1);
+    }
+    public void switchToTodayFrag(){
+        swapFragments(0);
     }
 }
