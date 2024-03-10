@@ -52,13 +52,10 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
             binding = ListGoalItemBinding.inflate(layoutInflater, parent, false);
         }
 
-        String contextType = goal.getContextType();
-        Log.d("GoalListAdapter", goal.date());
-        Log.d("GoalListAdapter", "Context Type: " + contextType);
-            binding.contextIcon.setText(contextType);
+        //populate the view with the task's context type
+            binding.contextIcon.setText(goal.getContextType());
 
-
-        // Populate the view with the task's data.
+        // Populate the view with the task's description.
 
         if (!goal.completed()){
             binding.goalDescription.setText(goal.description());

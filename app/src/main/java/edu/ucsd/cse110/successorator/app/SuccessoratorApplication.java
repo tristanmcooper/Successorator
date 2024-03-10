@@ -45,11 +45,6 @@ public class SuccessoratorApplication extends Application {
             new Goal(4, "Goal 3", false, LocalDateTime.now().toString(), "", "E")
         );
 
-        //Testing context type
-        for (Goal goal : DEFAULT_GOALS) {
-            //Log.d("YourActivity", "Goal Context Type: " + goal.getContextType());
-        }
-
         // Populate database with default values
         if (isFirstRun && database.goalDao().count() == 0) {
             //goalRepository.save(DEFAULT_GOALS);
