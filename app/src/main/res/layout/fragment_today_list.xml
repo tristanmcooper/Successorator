@@ -17,14 +17,15 @@
     <TextView
         android:id="@+id/default_goals"
         android:layout_width="321dp"
-        android:layout_height="530dp"
+        android:layout_height="wrap_content"
         android:text="@string/default_goals"
         android:textSize="24sp"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="invisible" />
+        tools:visibility="visible" />
     <ListView
         android:id="@+id/uncompleted_goal_list"
         android:layout_width="wrap_content"
@@ -40,10 +41,11 @@
     <ListView
         android:id="@+id/completed_goal_list"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/uncompleted_goal_list" />
+        app:layout_constraintTop_toBottomOf="@+id/uncompleted_goal_list"
+        tools:listitem="@layout/list_goal_item"></ListView>
 </androidx.constraintlayout.widget.ConstraintLayout>

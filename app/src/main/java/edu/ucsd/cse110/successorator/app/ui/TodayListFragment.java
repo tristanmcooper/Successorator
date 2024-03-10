@@ -54,6 +54,9 @@ public class TodayListFragment extends Fragment {
             activityModel.changeCompleteStatus(id);
         });
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS", Locale.getDefault());
+
+
+
         activityModel.getIncompleteGoals().registerObserver(goals -> {
             if (goals == null) return;
 
@@ -64,14 +67,18 @@ public class TodayListFragment extends Fragment {
                     todaysGoals.add(g);
                 }
             }
-/*
-            if (todaysGoals.size() == 0) {
-                view.defaultGoals.setVisibility(View.VISIBLE);
+
+            if (view.defaultGoals != null) {
+                // Set defaultGoals visibility
+                if (todaysGoals.size() == 0) {
+                    view.defaultGoals.setVisibility(View.VISIBLE);
+                } else {
+                    view.defaultGoals.setVisibility(View.INVISIBLE);
+                }
+            } else {
+                System.out.println("defaultGoals view is null");
             }
-            else {
-                view.defaultGoals.setVisibility(View.INVISIBLE);
-            }
- */
+
             incompleteAdapter.clear();
             incompleteAdapter.addAll(todaysGoals); // remember the mutable copy here!
             incompleteAdapter.notifyDataSetChanged();
@@ -99,13 +106,22 @@ public class TodayListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        this.view = FragmentTodayListBinding.inflate(inflater, container, false);
+
+        FragmentTodayListBinding binding = FragmentTodayListBinding.inflate(inflater, container, false);
+        this.view = binding;
 
         // Set the adapter on the ListView
         view.uncompletedGoalList.setAdapter(incompleteAdapter);
         view.completedGoalList.setAdapter(completeAdapter);
 
-        return view.getRoot();
+        // Access defaultGoals view and set its visibility
+        /*if (incompleteAdapter.getItemCount() == 0) {
+            view.defaultGoals.setVisibility(View.VISIBLE);
+        } else {
+            view.defaultGoals.setVisibility(View.INVISIBLE);
+        }*/
+
+        return binding.getRoot();
     }
     public void updateDate(LocalDateTime date){
         this.currentDate = date;
