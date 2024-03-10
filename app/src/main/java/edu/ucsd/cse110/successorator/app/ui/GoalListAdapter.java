@@ -53,8 +53,6 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
         }
 
         String contextType = goal.getContextType();
-        Log.d("GoalListAdapter", goal.date());
-        Log.d("GoalListAdapter", "Context Type: " + contextType);
             binding.contextIcon.setText(contextType);
 
 
