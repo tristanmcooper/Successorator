@@ -1,7 +1,6 @@
 package edu.ucsd.cse110.successorator.app;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.room.Room;
 
@@ -42,12 +41,12 @@ public class SuccessoratorApplication extends Application {
             new Goal(1, "Goal 1", false, LocalDateTime.now().toString(), "", "H"),
             new Goal(2, "Goal 2", false, LocalDateTime.now().toString(), "", "W"),
             new Goal(3, "Goal 3", false, LocalDateTime.now().toString(), "", "S"),
-            new Goal(4, "Goal 3", false, LocalDateTime.now().toString(), "", "E")
+            new Goal(4, "Goal 4", false, LocalDateTime.now().toString(), "", "E")
         );
 
         // Populate database with default values
         if (isFirstRun && database.goalDao().count() == 0) {
-            //goalRepository.save(DEFAULT_GOALS);
+            goalRepository.save(DEFAULT_GOALS);
 
             sharedPreferences.edit()
                 .putBoolean("isFirstRun", false)

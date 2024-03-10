@@ -55,6 +55,7 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
         //populate the view with the task's context type
             binding.contextIcon.setText(goal.getContextType());
 
+
         // Populate the view with the task's description.
 
         if (!goal.completed()){
