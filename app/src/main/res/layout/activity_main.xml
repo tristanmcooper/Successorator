@@ -7,16 +7,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageButton
+        android:layout_width="0dp"
+        android:layout_height="34dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/filter_menu_button"
+        app:iconTint="#020101"
+        app:layout_constraintEnd_toStartOf="@+id/dateTextView"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/dateTextView"
-        android:layout_width="0dp"
+        android:layout_width="270dp"
         android:layout_height="34dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="date_placeholder"
         android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@+id/add_goal_button"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf=""
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
@@ -24,7 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="0dp"
         android:text="+"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -36,10 +47,10 @@
         android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageButton
         android:id="@+id/button_advance_date"
