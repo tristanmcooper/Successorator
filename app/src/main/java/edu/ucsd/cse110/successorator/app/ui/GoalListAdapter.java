@@ -53,13 +53,9 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
         }
 
         String contextType = goal.getContextType();
+        Log.d("GoalListAdapter", goal.date());
         Log.d("GoalListAdapter", "Context Type: " + contextType);
-        if (contextType != null && !contextType.isEmpty()) {
-            binding.contextIcon.setText("J");
-            //binding.contextIcon.setText(goal.getContextType());
-        } else {
-            binding.contextIcon.setText("F");
-        }
+            binding.contextIcon.setText(contextType);
 
 
         // Populate the view with the task's data.

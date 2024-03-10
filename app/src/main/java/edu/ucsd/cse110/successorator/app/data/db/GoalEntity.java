@@ -30,7 +30,6 @@ public class GoalEntity {
     public String repType;
 
     @ColumnInfo(name = "contextType")
-    @Nullable
     public String contextType;
 
 
@@ -53,6 +52,6 @@ public class GoalEntity {
 
     // Change GoalEntity object into Goal object
     public @NonNull Goal toGoal() {
-        return new Goal(id, description, completed, date, "", "");
+        return new Goal(id, description, completed, date, repType, contextType);
     }
 }

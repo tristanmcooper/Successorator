@@ -7,7 +7,7 @@
 
     <!-- Context Icon (TextView or ImageView) -->
     <TextView
-        android:id="@+id/contextIcon"
+        android:id="@+id/context_icon"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginStart="16dp"
@@ -33,7 +33,7 @@
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/contextIcon"
+        app:layout_constraintStart_toEndOf="@+id/context_icon"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

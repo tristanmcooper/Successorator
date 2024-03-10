@@ -1,6 +1,7 @@
 package edu.ucsd.cse110.successorator.app.ui;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,6 +63,7 @@ public class TodayListFragment extends Fragment {
                 LocalDateTime goalDate = LocalDateTime.parse(g.date(), formatter);
                 if(goalDate.getDayOfYear()<=currentDate.getDayOfYear()){
                     todaysGoals.add(g);
+                    Log.d("TodayListFrag", "is context here: " + g.getContextType());
                 }
             }
 /*
