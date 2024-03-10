@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RadioGroup
+        android:id="@+id/focusModeRadioGroup"
+        android:layout_width="206dp"
+        android:layout_height="280dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RadioButton
+            android:id="@+id/homeRadioButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/orange"
+            android:checked="true"
+            android:text="Home"
+            android:textColor="@color/orange"
+            android:textSize="40sp"
+            app:buttonTint="@color/orange"
+            tools:ignore="UselessParent" />
+
+        <RadioButton
+            android:id="@+id/workRadioButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/blue"
+            android:text="Work"
+            android:textColor="@color/blue"
+            android:textSize="40sp"
+            app:buttonTint="@color/blue"
+            tools:ignore="UselessParent" />
+
+        <RadioButton
+            android:id="@+id/schoolRadioButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/purple"
+            android:text="School"
+            android:textColor="@color/purple"
+            android:textSize="40sp"
+            app:buttonTint="@color/purple"
+            tools:ignore="UselessParent" />
+
+        <RadioButton
+            android:id="@+id/errandRadioButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/green"
+            android:text="Errands"
+            android:textColor="@color/green"
+            android:textSize="40sp"
+            app:buttonTint="@color/green"
+            tools:ignore="UselessParent" />
+
+        <RadioButton
+            android:id="@+id/noneRadioButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="N/A"
+            android:textColor="@color/black"
+            android:textSize="40sp"
+            tools:ignore="UselessParent" />
+    </RadioGroup>
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
