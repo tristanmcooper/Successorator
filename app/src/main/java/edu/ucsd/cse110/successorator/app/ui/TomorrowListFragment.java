@@ -37,7 +37,7 @@ public class TomorrowListFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-
+/*
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,15 +74,46 @@ public class TomorrowListFragment extends Fragment {
 
 
     }
+    */
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        this.view = FragmentTomorrowListBinding.inflate(inflater, container, false);
+        FragmentTomorrowListBinding binding = FragmentTomorrowListBinding.inflate(inflater, container, false);
+        this.view = binding;
+
+        // Initialize the Model
+        var modelOwner = requireActivity();
+        var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
+        var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
+        this.activityModel = modelProvider.get(MainViewModel.class);
+        currentDate = activityModel.getCurrentDate().plusDays(1);
+
+        // Initialize the Adapter (with an empty list for now) for incomplete tasks
+        this.incompleteAdapter = new GoalListAdapter(requireContext(), List.of(), id -> {
+            activityModel.changeToTodayViewComplete(id);
+        });
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS", Locale.getDefault());
+        activityModel.getIncompleteGoals().registerObserver(goals -> {
+            if (goals == null) return;
+
+            var tmrwGoals = new ArrayList<Goal>();
+            for(Goal g : goals){
+                LocalDateTime goalDate = LocalDateTime.parse(g.date(), formatter);
+                if(goalDate.getDayOfYear()==currentDate.getDayOfYear()){
+                    tmrwGoals.add(g);
+                    System.out.println(currentDate.toString());
+                }
+                //add edge case for end of year
+                System.out.println("Goal doesn't match"+currentDate.toString());
+            }
+            incompleteAdapter.clear();
+            incompleteAdapter.addAll(tmrwGoals); // remember the mutable copy here!
+            incompleteAdapter.notifyDataSetChanged();
+        });
 
         // Set the adapter on the ListView
         view.uncompletedGoalList.setAdapter(incompleteAdapter);
-
 
         return view.getRoot();
     }
