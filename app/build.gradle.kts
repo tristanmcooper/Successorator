@@ -37,6 +37,7 @@ android {
 }
 
 dependencies {
+    implementation("androidx.test:core:1.5.0")
     val room_version = "2.6.1"
     implementation(project(":lib"))
     project(":lib")

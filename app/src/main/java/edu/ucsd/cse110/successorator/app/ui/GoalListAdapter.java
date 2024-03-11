@@ -94,5 +94,9 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
 
         return id;
     }
+
+    public int getItemCount() {
+        return super.getCount();
+    }
 }
 

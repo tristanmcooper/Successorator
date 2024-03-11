@@ -38,9 +38,12 @@ public class TomorrowListFragment extends Fragment {
         return fragment;
     }
 
+
+    @Nullable
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        FragmentTomorrowListBinding binding = FragmentTomorrowListBinding.inflate(inflater, container, false);
+        this.view = binding;
 
         // Initialize the Model
         var modelOwner = requireActivity();
@@ -62,27 +65,18 @@ public class TomorrowListFragment extends Fragment {
                 LocalDateTime goalDate = LocalDateTime.parse(g.date(), formatter);
                 if(goalDate.getDayOfYear()==currentDate.getDayOfYear()){
                     tmrwGoals.add(g);
-                    System.out.println(currentDate.toString());
                 }
                 //add edge case for end of year
                 System.out.println("Goal doesn't match"+currentDate.toString());
             }
             incompleteAdapter.clear();
             incompleteAdapter.addAll(tmrwGoals); // remember the mutable copy here!
+            activityModel.setDisplayedTomorrowGoals(tmrwGoals);
             incompleteAdapter.notifyDataSetChanged();
         });
 
-
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        this.view = FragmentTomorrowListBinding.inflate(inflater, container, false);
-
         // Set the adapter on the ListView
         view.uncompletedGoalList.setAdapter(incompleteAdapter);
-
 
         return view.getRoot();
     }

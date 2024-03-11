@@ -11,7 +11,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import java.sql.Array;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -21,7 +20,6 @@ import java.util.Locale;
 import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.app.databinding.FragmentTodayListBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
-import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 
 public class TodayListFragment extends Fragment {
     private MainViewModel activityModel;
@@ -41,9 +39,15 @@ public class TodayListFragment extends Fragment {
         return fragment;
     }
 
+
+
+    @Nullable
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        FragmentTodayListBinding binding = FragmentTodayListBinding.inflate(inflater, container, false);
+        this.view = binding;
+
         currentDate = LocalDateTime.now();
         // Initialize the Model
         var modelOwner = requireActivity();
@@ -55,6 +59,7 @@ public class TodayListFragment extends Fragment {
             activityModel.changeCompleteStatus(id);
         });
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS", Locale.getDefault());
+
         activityModel.getIncompleteGoals().registerObserver(goals -> {
             if (goals == null) return;
 
@@ -66,16 +71,21 @@ public class TodayListFragment extends Fragment {
                     Log.d("TodayListFrag", "is context here: " + g.getContextType());
                 }
             }
-/*
-            if (todaysGoals.size() == 0) {
-                view.defaultGoals.setVisibility(View.VISIBLE);
+
+            if (view.defaultGoals != null) {
+                // Set defaultGoals visibility
+                if (todaysGoals.size() == 0) {
+                    view.defaultGoals.setVisibility(View.VISIBLE);
+                } else {
+                    view.defaultGoals.setVisibility(View.INVISIBLE);
+                }
+            } else {
+                System.out.println("defaultGoals view is null");
             }
-            else {
-                view.defaultGoals.setVisibility(View.INVISIBLE);
-            }
- */
+
             incompleteAdapter.clear();
             incompleteAdapter.addAll(todaysGoals); // remember the mutable copy here!
+            activityModel.setDisplayedTodayGoals(todaysGoals);
             incompleteAdapter.notifyDataSetChanged();
         });
 
@@ -96,18 +106,12 @@ public class TodayListFragment extends Fragment {
             completeAdapter.addAll(todaysGoals);
             completeAdapter.notifyDataSetChanged();
         });
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        this.view = FragmentTodayListBinding.inflate(inflater, container, false);
 
         // Set the adapter on the ListView
         view.uncompletedGoalList.setAdapter(incompleteAdapter);
         view.completedGoalList.setAdapter(completeAdapter);
 
-        return view.getRoot();
+        return binding.getRoot();
     }
     public void updateDate(LocalDateTime date){
         this.currentDate = date;
