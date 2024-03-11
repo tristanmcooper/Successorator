@@ -111,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Find the ImageButton
         ImageButton focusModeButton = findViewById(R.id.focus_mode);
+
         focusModeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -341,7 +342,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void switchToFocusModeDialog() {
-        FocusModeDialog dialogFragment = FocusModeDialog.newInstance();
+        String context = model.getContext();
+        FocusModeDialog dialogFragment = FocusModeDialog.newInstance(context);
         dialogFragment.show(getSupportFragmentManager(), "FocusModeDialogFragment");
     }
 }

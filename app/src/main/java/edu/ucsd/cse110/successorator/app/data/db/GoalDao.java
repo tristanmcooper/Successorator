@@ -9,6 +9,9 @@ import androidx.room.Transaction;
 
 import java.util.List;
 
+import edu.ucsd.cse110.successorator.lib.domain.Goal;
+import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
+
 @Dao
 public interface GoalDao {
     // Inserting a goal
@@ -60,7 +63,6 @@ public interface GoalDao {
     LiveData<List<GoalEntity>> makeTomorrow(String completed);
 
     //Return goal context
-    @Query("SELECT * FROM goals WHERE contextType = :contextType")
-    LiveData<List<GoalEntity>> getGoalsByContext(String contextType);
-
+    @Query("SELECT * FROM goals WHERE contextType = :contextType AND completed= :completed")
+    LiveData<List<GoalEntity>> findCompleted(boolean completed, String contextType);
 }

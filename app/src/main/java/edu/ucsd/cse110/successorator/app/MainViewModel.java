@@ -1,6 +1,10 @@
 package edu.ucsd.cse110.successorator.app;
 import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY;
 
+import android.util.Log;
+
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
@@ -10,6 +14,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import edu.ucsd.cse110.successorator.app.data.db.GoalEntity;
 import edu.ucsd.cse110.successorator.app.data.db.RoomGoalRepository;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
@@ -20,10 +25,10 @@ public class MainViewModel extends ViewModel{
     private SimpleSubject<List<Goal>> incompleteGoals;
     private SimpleSubject<List<Goal>> completeGoals;
     private LocalDateTime currentDate;
-
     //For testing US1
     private ArrayList<Goal> displayedTodayGoals;
     private ArrayList<Goal> displayedTomorrowGoals;
+    private String contextType = "N/A";
 
 
 
@@ -45,29 +50,65 @@ public class MainViewModel extends ViewModel{
         this.incompleteGoals = new SimpleSubject<>();
         this.completeGoals = new SimpleSubject<>();
 
-        goalRepository.findCompleted(false).registerObserver(goals -> {
-            if (goals == null) return;
+            goalRepository.findCompleted(false).registerObserver(goals -> {
+                if (goals == null) return;
+                var newIncompleteGoals = goals.stream()
+                        .sorted(Comparator.comparingInt(Goal::id))
+                        .collect(Collectors.toList());
+                incompleteGoals.setValue(newIncompleteGoals);
+            });
 
-            var newIncompleteGoals = goals.stream()
-                    .sorted(Comparator.comparingInt(Goal::id))
-                    .collect(Collectors.toList());
-            incompleteGoals.setValue(newIncompleteGoals);
-        });
-
-        goalRepository.findCompleted(true).registerObserver(goals -> {
-            if (goals == null) return;
-
-            var newCompleteGoals = goals.stream()
-                    .sorted(Comparator.comparingInt(Goal::id))
-                    .collect(Collectors.toList());
-            completeGoals.setValue(newCompleteGoals);
-        });
-
+            goalRepository.findCompleted(true).registerObserver(goals -> {
+                if (goals == null) return;
+                var newCompleteGoals = goals.stream()
+                        .sorted(Comparator.comparingInt(Goal::id))
+                        .collect(Collectors.toList());
+                completeGoals.setValue(newCompleteGoals);
+            });
     }
 
     //Probably just for testing, might be violating SRP idk
     public void addGoal(Goal goal){
         goalRepository.add(goal);
+    }
+
+    public void setFilterContext(String contextType) {
+        this.contextType = contextType;
+        if (contextType.equals("N/A")) {
+            goalRepository.findCompleted(false).registerObserver(goals -> {
+                if (goals == null) return;
+                var newIncompleteGoals = goals.stream()
+                        .sorted(Comparator.comparingInt(Goal::id))
+                        .collect(Collectors.toList());
+                incompleteGoals.setValue(newIncompleteGoals);
+            });
+
+            goalRepository.findCompleted(true).registerObserver(goals -> {
+                if (goals == null) return;
+                var newCompleteGoals = goals.stream()
+                        .sorted(Comparator.comparingInt(Goal::id))
+                        .collect(Collectors.toList());
+                completeGoals.setValue(newCompleteGoals);
+            });
+        } else {
+            System.out.println("Focus mode");
+            goalRepository.findCompleted(false, contextType).registerObserver(goals -> {
+                if (goals == null) return;
+                var newIncompleteGoals = goals.stream()
+                        .sorted(Comparator.comparingInt(Goal::id))
+                        .collect(Collectors.toList());
+                incompleteGoals.setValue(newIncompleteGoals);
+            });
+
+            goalRepository.findCompleted(true, contextType).registerObserver(goals -> {
+                if (goals == null) return;
+                var newCompleteGoals = goals.stream()
+                        .sorted(Comparator.comparingInt(Goal::id))
+                        .collect(Collectors.toList());
+                completeGoals.setValue(newCompleteGoals);
+            });
+        }
+
     }
     public void removeSpecificGoal(int id){goalRepository.remove(id);}
 
@@ -76,9 +117,6 @@ public class MainViewModel extends ViewModel{
         goalRepository.
     }
      */
-
-
-
 
     //the getters so that other classes can watch when the db changes so they can upd UI
     public int getCount(){ 
@@ -129,5 +167,9 @@ public class MainViewModel extends ViewModel{
 
     public ArrayList<Goal> getDisplayedTomorrowGoals(){
         return displayedTomorrowGoals;
+    }
+
+    public String getContext() {
+        return this.contextType;
     }
 }

@@ -28,13 +28,14 @@ import edu.ucsd.cse110.successorator.lib.domain.Goal;
 public class FocusModeDialog extends DialogFragment {
     private DialogFocusModeBinding view;
     private MainViewModel activityModel;
+    private String context;
 
-    FocusModeDialog() {
-        //Required empty public constructor
+    FocusModeDialog(String context) {
+        this.context = context;
     }
 
-    public static FocusModeDialog newInstance() {
-        var fragment = new FocusModeDialog();
+    public static FocusModeDialog newInstance(String context) {
+        var fragment = new FocusModeDialog(context);
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -44,6 +45,23 @@ public class FocusModeDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         this.view = DialogFocusModeBinding.inflate(getLayoutInflater()); //change this
+
+        switch (context) {
+            case "H":
+                view.homeRadioButton.setChecked(true);
+                break;
+            case "S":
+                view.schoolRadioButton.setChecked(true);
+                break;
+            case "W":
+                view.workRadioButton.setChecked(true);
+                break;
+            case "E":
+                view.errandRadioButton.setChecked(true);
+                break;
+            default:
+                view.noneRadioButton.setChecked(true);
+        }
 
         return new AlertDialog.Builder(getActivity())
                 .setTitle("Focus Mode")
@@ -83,27 +101,17 @@ public class FocusModeDialog extends DialogFragment {
         RadioGroup focusOnGroup = view.focusModeRadioGroup;
         int selectedFocusTypeId = focusOnGroup.getCheckedRadioButtonId();
         RadioButton selectedFocusIdButton = view.getRoot().findViewById(selectedFocusTypeId);
-        char selectedFocusChar = selectedFocusIdButton.getText().toString().charAt(0);
-
+        String selectedFocusString = selectedFocusIdButton.getText().toString();
+        if (!selectedFocusString.equals("N/A")) {
+            activityModel.setFilterContext(selectedFocusString.substring(0, 1));
+        } else {
+            activityModel.setFilterContext(selectedFocusString);
+        }
         // Dismiss the dialog
-        LiveData<List<GoalEntity>> filteredGoalsLiveData = activityModel.getRepo().getGoalsByContextType(String.valueOf(selectedFocusChar));
+        //LiveData<List<GoalEntity>> filteredGoalsLiveData = activityModel.getRepo().getGoalsByContextType(String.valueOf(selectedFocusChar));
 
         // Observe the LiveData for changes
-
-        filteredGoalsLiveData.observe(this, new Observer<List<GoalEntity>>() {
-            @Override
-            public void onChanged(List<GoalEntity> filteredGoals) {
-                // Do something with the filtered goals
-                for (GoalEntity goal : filteredGoals) {
-                    Log.d("FilteredGoal", "Goal: " + goal.toString());
-                }
-                // Dismiss the dialog
-                dialog.dismiss();
-
-                // Remove the observer to avoid unnecessary updates
-                filteredGoalsLiveData.removeObserver(this);
-            }
-        });
+        dialog.dismiss();
 
     }
 
