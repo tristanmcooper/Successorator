@@ -31,8 +31,6 @@ public class MainViewModel extends ViewModel{
     private ArrayList<Goal> displayedTomorrowGoals;
     private String contextType = "N/A";
 
-
-
     //basically grabs the database
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
@@ -86,7 +84,6 @@ public class MainViewModel extends ViewModel{
     public void setFilterContext(String contextType) {
         this.contextType = contextType;
         if (contextType.equals("N/A")) {
-
             goalRepository.findCompleted(false).registerObserver(goals -> {
                 if (goals == null) return;
                 var newIncompleteGoals = goals.stream()
@@ -118,6 +115,9 @@ public class MainViewModel extends ViewModel{
                         .collect(Collectors.toList());
                 completeGoals.setValue(newCompleteGoals);
             });
+
+            // Update background color
+
         }
 
     }

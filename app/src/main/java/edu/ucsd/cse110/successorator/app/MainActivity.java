@@ -124,38 +124,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Set OnClickListener for the ImageButton
-
-
-
-
-
-
-    //setup the adapter for the list, so it can update it at the beginning
-
-        /*
-        this.adapter = new GoalListAdapter(getApplicationContext(), List.of(), null);
-
-
-        model.getIncompleteGoals().registerObserver(goals -> {
-            if (goals == null) {
-                view.defaultGoals.setVisibility(View.VISIBLE);
-                return;
-            }
-            if (goals.size() == 0) {
-                view.defaultGoals.setVisibility(View.VISIBLE);
-            } else {
-                view.defaultGoals.setVisibility(View.INVISIBLE);
-            }
-            adapter.clear();
-            adapter.addAll(new ArrayList<>(goals));
-            adapter.notifyDataSetChanged();
-        });
-*/
-
-
-    //show the GoalListFragment
-
 
     //show the GoalListFragment
     getSupportFragmentManager()
@@ -348,8 +316,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void switchToFocusModeDialog() {
         String context = model.getContext();
-        Log.d("context", context);
-        //WILL ONLY UPDATE WHEN THE THREE LINES BUTTON IS PRESSED AGAIN, NOT ON THE CONFIRM
+        FocusModeDialog dialogFragment = FocusModeDialog.newInstance(context);
+        dialogFragment.show(getSupportFragmentManager(), "FocusModeDialogFragment");
+    }
+
+    public void updateBackgroundColor(String context) {
         switch (context) {
             case "H":
                 this.getWindow().getDecorView().setBackgroundResource(R.color.orange);                break;
@@ -364,8 +335,5 @@ public class MainActivity extends AppCompatActivity {
             default:
                 this.getWindow().getDecorView().setBackgroundResource(R.color.white);
         }
-
-        FocusModeDialog dialogFragment = FocusModeDialog.newInstance(context);
-        dialogFragment.show(getSupportFragmentManager(), "FocusModeDialogFragment");
     }
 }

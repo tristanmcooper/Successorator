@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.ucsd.cse110.successorator.app.MainActivity;
 import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.app.R;
 import edu.ucsd.cse110.successorator.app.data.db.GoalEntity;
@@ -107,17 +108,22 @@ public class FocusModeDialog extends DialogFragment {
         } else {
             activityModel.setFilterContext(selectedFocusString);
         }
+
+        updateBackgroundColor(dialog, selectedFocusString);
+
         // Dismiss the dialog
-        //LiveData<List<GoalEntity>> filteredGoalsLiveData = activityModel.getRepo().getGoalsByContextType(String.valueOf(selectedFocusChar));
-
-        // Observe the LiveData for changes
         dialog.dismiss();
-
     }
 
     private void onNegativeButtonClick(DialogInterface dialog, int which) {
         dialog.cancel();
     }
 
-
+    private void updateBackgroundColor(DialogInterface dialog, String context) {
+        if (!context.equals("N/A")) {
+            ((MainActivity) requireActivity()).updateBackgroundColor(context.substring(0, 1));
+        } else {
+            ((MainActivity) requireActivity()).updateBackgroundColor(context);
+        }
+    }
 }
