@@ -42,8 +42,16 @@ public interface GoalDao {
     @Query("SELECT * FROM goals WHERE completed = :completed")
     LiveData<List<GoalEntity>> findCompleted(boolean completed);
 
+    // Overload to filter by context
+    @Query("SELECT * FROM goals WHERE contextType = :contextType AND completed= :completed")
+    LiveData<List<GoalEntity>> findCompleted(boolean completed, String contextType);
+
     @Query("SELECT * FROM goals WHERE repType != 'Once'")
     LiveData<List<GoalEntity>> findRecurring();
+
+    // Overload to filter by context
+    @Query("SELECT * FROM goals WHERE repType != 'Once' AND contextType = :contextType")
+    LiveData<List<GoalEntity>> findRecurring(String contextType);
 
     // Return number of goals in database
     @Query("SELECT COUNT(*) FROM goals")
@@ -64,8 +72,4 @@ public interface GoalDao {
 
     @Query("SELECT * FROM goals WHERE repType = :completed")
     LiveData<List<GoalEntity>> makeTomorrow(String completed);
-
-    //Return goal context
-    @Query("SELECT * FROM goals WHERE contextType = :contextType AND completed= :completed")
-    LiveData<List<GoalEntity>> findCompleted(boolean completed, String contextType);
 }

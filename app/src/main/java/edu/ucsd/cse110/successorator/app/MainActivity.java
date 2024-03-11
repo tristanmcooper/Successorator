@@ -296,11 +296,11 @@ public class MainActivity extends AppCompatActivity {
         TodayListFragment todayfrag = (TodayListFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         return todayfrag;
     }
-    public TomorrowListFragment getTTmrwFrag(){
+    public TomorrowListFragment getTmrwFrag(){
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if(fragment instanceof TomorrowListFragment){
-            TomorrowListFragment getTTmrwFrag = (TomorrowListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-            return getTTmrwFrag;
+            TomorrowListFragment getTmrwFrag = (TomorrowListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+            return getTmrwFrag;
         }
         return null;
     }

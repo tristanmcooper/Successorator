@@ -80,6 +80,16 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
         return new LiveDataSubjectAdapter<>(goalsLiveData);
     }
 
+    public Subject<List<Goal>> findRecurring(String contextType) {
+        var entitiesLiveData = goalDao.findRecurring(contextType);
+        var goalsLiveData = Transformations.map(entitiesLiveData, entities -> {
+            return entities.stream()
+                    .map(GoalEntity::toGoal)
+                    .collect(Collectors.toList());
+        });
+        return new LiveDataSubjectAdapter<>(goalsLiveData);
+    }
+
     @Override
     public void save(Goal goal) {
         goalDao.insert(GoalEntity.fromGoal(goal));

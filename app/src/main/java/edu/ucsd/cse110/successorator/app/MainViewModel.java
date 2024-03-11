@@ -50,21 +50,21 @@ public class MainViewModel extends ViewModel{
         this.completeGoals = new SimpleSubject<>();
         this.recurringGoals = new SimpleSubject<>();
 
-            goalRepository.findCompleted(false).registerObserver(goals -> {
-                if (goals == null) return;
-                var newIncompleteGoals = goals.stream()
-                        .sorted(Comparator.comparingInt(Goal::id))
-                        .collect(Collectors.toList());
-                incompleteGoals.setValue(newIncompleteGoals);
-            });
+        goalRepository.findCompleted(false).registerObserver(goals -> {
+            if (goals == null) return;
+            var newIncompleteGoals = goals.stream()
+                    .sorted(Comparator.comparingInt(Goal::id))
+                    .collect(Collectors.toList());
+            incompleteGoals.setValue(newIncompleteGoals);
+        });
 
-            goalRepository.findCompleted(true).registerObserver(goals -> {
-                if (goals == null) return;
-                var newCompleteGoals = goals.stream()
-                        .sorted(Comparator.comparingInt(Goal::id))
-                        .collect(Collectors.toList());
-                completeGoals.setValue(newCompleteGoals);
-            });
+        goalRepository.findCompleted(true).registerObserver(goals -> {
+            if (goals == null) return;
+            var newCompleteGoals = goals.stream()
+                    .sorted(Comparator.comparingInt(Goal::id))
+                    .collect(Collectors.toList());
+            completeGoals.setValue(newCompleteGoals);
+        });
 
         goalRepository.findRecurring().registerObserver(goals -> {
             if (goals == null) return;
@@ -98,8 +98,15 @@ public class MainViewModel extends ViewModel{
                         .collect(Collectors.toList());
                 completeGoals.setValue(newCompleteGoals);
             });
+            goalRepository.findRecurring().registerObserver(goals -> {
+                if (goals == null) return;
+
+                var newRecurringGoals = goals.stream()
+                        .sorted(Comparator.comparing(goal -> LocalDateTime.parse(goal.date())))
+                        .collect(Collectors.toList());
+                recurringGoals.setValue(newRecurringGoals);
+            });
         } else {
-            System.out.println("Focus mode");
             goalRepository.findCompleted(false, contextType).registerObserver(goals -> {
                 if (goals == null) return;
                 var newIncompleteGoals = goals.stream()
@@ -115,9 +122,14 @@ public class MainViewModel extends ViewModel{
                         .collect(Collectors.toList());
                 completeGoals.setValue(newCompleteGoals);
             });
+            goalRepository.findRecurring(contextType).registerObserver(goals -> {
+                if (goals == null) return;
 
-            // Update background color
-
+                var newRecurringGoals = goals.stream()
+                        .sorted(Comparator.comparing(goal -> LocalDateTime.parse(goal.date())))
+                        .collect(Collectors.toList());
+                recurringGoals.setValue(newRecurringGoals);
+            });
         }
 
     }
