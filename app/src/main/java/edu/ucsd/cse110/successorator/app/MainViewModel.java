@@ -19,6 +19,7 @@ public class MainViewModel extends ViewModel{
     private final RoomGoalRepository goalRepository;
     private SimpleSubject<List<Goal>> incompleteGoals;
     private SimpleSubject<List<Goal>> completeGoals;
+    private SimpleSubject<List<Goal>> recurringGoals;
     private LocalDateTime currentDate;
 
     //For testing US1
@@ -44,6 +45,7 @@ public class MainViewModel extends ViewModel{
         this.goalRepository = goalRepository;
         this.incompleteGoals = new SimpleSubject<>();
         this.completeGoals = new SimpleSubject<>();
+        this.recurringGoals = new SimpleSubject<>();
 
         goalRepository.findCompleted(false).registerObserver(goals -> {
             if (goals == null) return;
@@ -61,6 +63,15 @@ public class MainViewModel extends ViewModel{
                     .sorted(Comparator.comparingInt(Goal::id))
                     .collect(Collectors.toList());
             completeGoals.setValue(newCompleteGoals);
+        });
+
+        goalRepository.findRecurring().registerObserver(goals -> {
+            if (goals == null) return;
+
+            var newRecurringGoals = goals.stream()
+                    .sorted(Comparator.comparing(goal -> LocalDateTime.parse(goal.date())))
+                    .collect(Collectors.toList());
+            recurringGoals.setValue(newRecurringGoals);
         });
 
     }
@@ -95,6 +106,11 @@ public class MainViewModel extends ViewModel{
     public SimpleSubject<List<Goal>> getCompleteGoals(){
         return completeGoals;
     }
+
+    public SimpleSubject<List<Goal>> getRecurringGoals(){
+        return recurringGoals;
+    }
+
     public void deleteCompleted(){
         goalRepository.deleteCompleted();
     }

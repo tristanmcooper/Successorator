@@ -15,6 +15,7 @@ import java.util.List;
 
 import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.app.databinding.FragmentPendingListBinding;
+import edu.ucsd.cse110.successorator.lib.domain.Goal;
 
 public class PendingListFragment extends Fragment {
     private MainViewModel activityModel;
@@ -46,24 +47,29 @@ public class PendingListFragment extends Fragment {
         // Initialize the Adapter (with an empty list for now) for incomplete tasks
         this.incompleteAdapter = new GoalListAdapter(requireContext(), List.of(), id -> {
             activityModel.changeCompleteStatus(id);
-        });
+        }, 2);
         activityModel.getIncompleteGoals().registerObserver(goals -> {
             if (goals == null) return;
 
             incompleteAdapter.clear();
             incompleteAdapter.addAll(new ArrayList<>(goals)); // remember the mutable copy here!
             incompleteAdapter.notifyDataSetChanged();
+
+            // for each goal set onLongPressListener
         });
 
         // Initialize the adapter for completed tasks
         this.completeAdapter = new GoalListAdapter(requireContext(), List.of(), id -> {
             activityModel.changeCompleteStatus(id);
-        });
+        }, 2);
         activityModel.getCompleteGoals().registerObserver(goals -> {
             if (goals == null) return;
+
             completeAdapter.clear();
             completeAdapter.addAll(new ArrayList<>(goals));
             completeAdapter.notifyDataSetChanged();
+
+            // for each goal set onLongPressListener
         });
     }
 

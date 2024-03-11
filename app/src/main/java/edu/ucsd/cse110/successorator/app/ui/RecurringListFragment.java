@@ -19,8 +19,7 @@ import edu.ucsd.cse110.successorator.app.databinding.FragmentRecurringListBindin
 public class RecurringListFragment extends Fragment {
     private MainViewModel activityModel;
     private FragmentRecurringListBinding view;
-    private GoalListAdapter incompleteAdapter;
-    private GoalListAdapter completeAdapter;
+    private GoalListAdapter goalsAdapter;
 
     public RecurringListFragment() {
         // Required empty public constructor
@@ -44,26 +43,15 @@ public class RecurringListFragment extends Fragment {
         this.activityModel = modelProvider.get(MainViewModel.class);
 
         // Initialize the Adapter (with an empty list for now) for incomplete tasks
-        this.incompleteAdapter = new GoalListAdapter(requireContext(), List.of(), id -> {
+        this.goalsAdapter = new GoalListAdapter(requireContext(), List.of(), id -> {
             activityModel.changeCompleteStatus(id);
-        });
-        activityModel.getIncompleteGoals().registerObserver(goals -> {
+        }, 3);
+        activityModel.getRecurringGoals().registerObserver(goals -> {
             if (goals == null) return;
 
-            incompleteAdapter.clear();
-            incompleteAdapter.addAll(new ArrayList<>(goals)); // remember the mutable copy here!
-            incompleteAdapter.notifyDataSetChanged();
-        });
-
-        // Initialize the adapter for completed tasks
-        this.completeAdapter = new GoalListAdapter(requireContext(), List.of(), id -> {
-            activityModel.changeCompleteStatus(id);
-        });
-        activityModel.getCompleteGoals().registerObserver(goals -> {
-            if (goals == null) return;
-            completeAdapter.clear();
-            completeAdapter.addAll(new ArrayList<>(goals));
-            completeAdapter.notifyDataSetChanged();
+            goalsAdapter.clear();
+            goalsAdapter.addAll(new ArrayList<>(goals)); // remember the mutable copy here!
+            goalsAdapter.notifyDataSetChanged();
         });
     }
 
@@ -73,8 +61,7 @@ public class RecurringListFragment extends Fragment {
         this.view = FragmentRecurringListBinding.inflate(inflater, container, false);
 
         // Set the adapter on the ListView
-        view.uncompletedGoalList.setAdapter(incompleteAdapter);
-        view.completedGoalList.setAdapter(completeAdapter);
+        view.uncompletedGoalList.setAdapter(goalsAdapter);
 
         return view.getRoot();
     }
