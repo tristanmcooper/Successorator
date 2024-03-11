@@ -116,8 +116,6 @@ public class TomorrowAddGoalDialog extends DialogFragment{
             return;
         }
 
-        ;
-
         // Change each recurrence option back to default before storing string to database
         view.weekly.setText("Weekly");
         view.monthly.setText("Monthly");
