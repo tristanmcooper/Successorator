@@ -51,9 +51,9 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
             var layoutInflater = LayoutInflater.from(getContext());
             binding = ListGoalItemBinding.inflate(layoutInflater, parent, false);
         }
-
         //populate the view with the task's context type
             binding.contextIcon.setText(goal.getContextType());
+
 
 
         // Populate the view with the task's description.
