@@ -28,6 +28,7 @@ import edu.ucsd.cse110.successorator.app.ui.TomorrowListFragment;
 import edu.ucsd.cse110.successorator.app.ui.PendingListFragment;
 import edu.ucsd.cse110.successorator.app.ui.RecurringListFragment;
 import edu.ucsd.cse110.successorator.app.ui.dialog.AddGoalDialog;
+import edu.ucsd.cse110.successorator.app.ui.dialog.RecurringAddGoalDialog;
 import edu.ucsd.cse110.successorator.app.ui.dialog.TomorrowAddGoalDialog;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 
@@ -96,13 +97,15 @@ public class MainActivity extends AppCompatActivity {
 
         //connect the add goal button to the addGoalDialogFragment onClick
         view.addGoalButton.setOnClickListener(v -> {
-            if(fragmentType == 0){
+            if (fragmentType == 0) {
                 var dialogFragment = AddGoalDialog.newInstance();
                 dialogFragment.show(getSupportFragmentManager(), "AddGoalFragment");
-            }
-            else if(fragmentType == 1){
+            } else if (fragmentType == 1) {
                 var dialogFragment = TomorrowAddGoalDialog.newInstance();
                 dialogFragment.show(getSupportFragmentManager(), "TomorrowAddGoalFragment");
+            } else if (fragmentType == 3) {
+                var dialogFragment = RecurringAddGoalDialog.newInstance();
+                dialogFragment.show(getSupportFragmentManager(), "RecurringAddGoalFragment");
             }
         });
 

@@ -11,6 +11,8 @@ public interface GoalRepository {
 
     Subject<List<Goal>> findCompleted(Boolean completed);
 
+    Subject<List<Goal>> findRecurring();
+
     void save(Goal goal);
 
     void save(List<Goal> goals);
