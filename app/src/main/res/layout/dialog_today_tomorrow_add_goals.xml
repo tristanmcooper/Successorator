@@ -147,6 +147,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/orange"
             android:text="H"
+            android:checked="true"
             android:textColor="@color/orange"
             android:textSize="24sp"
             app:buttonTint="@color/orange"

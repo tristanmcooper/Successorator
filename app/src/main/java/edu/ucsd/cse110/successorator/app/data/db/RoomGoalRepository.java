@@ -86,7 +86,7 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
     @Override
     public void changeCompleted(int id) {
         var goal = goalDao.find(id).toGoal();
-        goalDao.insert(new GoalEntity(goal.id(), goal.description(), !goal.completed(), goal.date(), goal.repType(), goal.contextType()));
+        goalDao.insert(new GoalEntity(goal.id(), goal.description(), !goal.completed(), goal.date(), goal.repType(), goal.getContextType()));
         this.notifyObservers();
     }
 
@@ -119,8 +119,13 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
         String tmrwDate = temp.date();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS", Locale.getDefault());
         LocalDateTime goalDate = LocalDateTime.parse(tmrwDate, formatter).minusDays(1);
-        Goal copy = new Goal(temp.id(), temp.description(), true, goalDate.toString(), temp.repType(), temp.contextType());
+        Goal copy = new Goal(temp.id(), temp.description(), true, goalDate.toString(), temp.repType(), temp.getContextType());
         remove(id);
         add(copy);
+    }
+
+    //For contextType
+    public LiveData<List<GoalEntity>> getGoalsByContextType(String contextType) {
+        return goalDao.getGoalsByContext(contextType);
     }
 }

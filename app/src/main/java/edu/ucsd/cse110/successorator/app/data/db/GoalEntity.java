@@ -1,6 +1,7 @@
 package edu.ucsd.cse110.successorator.app.data.db;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -33,7 +34,7 @@ public class GoalEntity {
 
 
     // Constructor for GoalEntity
-    GoalEntity(@NonNull int id, @NonNull String description, @NonNull boolean completed, String date, String repType, String contextType) {
+    GoalEntity(@NonNull Integer id, @NonNull String description, @NonNull boolean completed, String date, String repType, String contextType) {
         this.id = id;
         this.description = description;
         this.completed = completed;
@@ -44,13 +45,13 @@ public class GoalEntity {
 
     // Change Goal object into GoalEntity object
     public static GoalEntity fromGoal(@NonNull Goal goal) {
-        var goalEntity = new GoalEntity(goal.id(), goal.description(), goal.completed(), goal.date(), goal.repType(), goal.contextType());
+        var goalEntity = new GoalEntity(goal.id(), goal.description(), goal.completed(), goal.date(), goal.repType(), goal.getContextType());
         return goalEntity;
     }
 
+
     // Change GoalEntity object into Goal object
     public @NonNull Goal toGoal() {
-        return new Goal(id, description, completed, date, "", "");
+        return new Goal(id, description, completed, date, repType, contextType);
     }
 }
-

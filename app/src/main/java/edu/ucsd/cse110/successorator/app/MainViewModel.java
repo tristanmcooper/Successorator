@@ -26,6 +26,7 @@ public class MainViewModel extends ViewModel{
     private ArrayList<Goal> displayedTomorrowGoals;
 
 
+
     //basically grabs the database
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(

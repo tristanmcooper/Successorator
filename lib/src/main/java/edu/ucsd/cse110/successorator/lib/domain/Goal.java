@@ -2,6 +2,7 @@ package edu.ucsd.cse110.successorator.lib.domain;
 
 import androidx.annotation.NonNull;
 
+
 import java.util.Objects;
 
 /**
@@ -21,7 +22,8 @@ public class Goal {
             @NonNull String description,
             boolean completed,
             String date,
-            String repType, String contextType) {
+            String repType,
+            String contextType) {
         this.id = id;
         this.description = description;
         this.completed = completed;
@@ -50,21 +52,25 @@ public class Goal {
         return Objects.equals(id, goal.id)
                 && Objects.equals(description, goal.description)
                 && Objects.equals(completed, goal.completed)
-                && Objects.equals(date, goal.date);
+                && Objects.equals(date, goal.date)
+                && Objects.equals(contextType, goal.contextType);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, description, completed, date);
+        return Objects.hash(id, description, completed, date, contextType);
     }
 
     public String repType() {
         return repType;
     }
 
-    public String contextType() {
+    public String getContextType() {
         return contextType;
     }
+
+
+
 }
 
 
