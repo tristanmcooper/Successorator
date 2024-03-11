@@ -83,8 +83,8 @@ public class TomorrowAddGoalDialog extends DialogFragment{
         view.yearly.setText(String.format(yearlyFormat, month, date.getDayOfMonth()));
 
         return new AlertDialog.Builder(getActivity())
-                .setTitle("New Goal for tmrw")
-                .setMessage("Please provide the new card text for tmrw.")
+                .setTitle("New Goal for Tomorrow")
+                .setMessage("Please provide the goal description.")
                 .setView(view.getRoot())
                 .setPositiveButton("Create", this::onPositiveButtonClick)
                 .setNegativeButton("Cancel", this::onNegativeButtonClick)
@@ -117,7 +117,13 @@ public class TomorrowAddGoalDialog extends DialogFragment{
         }
 
         ;
-        // Create the new Goal object with user input as the description
+
+        // Change each recurrence option back to default before storing string to database
+        view.weekly.setText("Weekly");
+        view.monthly.setText("Monthly");
+        view.yearly.setText("Yearly");
+
+        // Get selected recurrence frequency
         LocalDateTime curtime = activityModel.getCurrentDate();
         curtime = curtime.plusDays(1);
         RadioGroup repTypeGroup = view.repTypeRadio;
@@ -125,10 +131,14 @@ public class TomorrowAddGoalDialog extends DialogFragment{
         RadioButton selectedRepTypeRadioButton = view.getRoot().findViewById(selectedRepTypeId);
         String repType = selectedRepTypeRadioButton.getText().toString();
 
+        // Get selected context
         RadioGroup contextTypeGroup = view.contextRadioGroup;
         int selectedContextTypeId = contextTypeGroup.getCheckedRadioButtonId();
+        System.out.println(selectedContextTypeId);
         RadioButton selectedContextTypeRadioButton = view.getRoot().findViewById(selectedContextTypeId);
         String contextType = selectedContextTypeRadioButton.getText().toString();
+
+        // Create new goal
         Goal newGoal = new Goal(currCount+1, description, false,curtime.toString(), repType, contextType);
 
         // Add the new goal to your model

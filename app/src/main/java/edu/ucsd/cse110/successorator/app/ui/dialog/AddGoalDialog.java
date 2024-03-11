@@ -118,19 +118,22 @@ public class AddGoalDialog extends DialogFragment{
             return;
         }
 
+        // Change each recurrence option back to default before storing string to database
+        view.weekly.setText("Weekly");
+        view.monthly.setText("Monthly");
+        view.yearly.setText("Yearly");
+
+        // Get selected recurrence frequency
         RadioGroup repTypeGroup = view.repTypeRadio;
         int selectedRepTypeId = repTypeGroup.getCheckedRadioButtonId();
         RadioButton selectedRepTypeRadioButton = view.getRoot().findViewById(selectedRepTypeId);
         String repType = selectedRepTypeRadioButton.getText().toString();
 
+        // Get selected context
         RadioGroup contextTypeGroup = view.contextRadioGroup;
         int selectedContextTypeId = contextTypeGroup.getCheckedRadioButtonId();
         RadioButton selectedContextTypeRadioButton = view.getRoot().findViewById(selectedContextTypeId);
         String contextType = selectedContextTypeRadioButton.getText().toString();
-
-
-
-
 
         // Create the new Goal object with user input as the description
         Goal newGoal = new Goal(currCount + 1,
