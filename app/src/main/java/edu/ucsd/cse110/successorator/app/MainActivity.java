@@ -323,12 +323,14 @@ public class MainActivity extends AppCompatActivity {
     public void updateBackgroundColor(String context) {
         switch (context) {
             case "H":
-                this.getWindow().getDecorView().setBackgroundResource(R.color.orange);                break;
+                this.getWindow().getDecorView().setBackgroundResource(R.color.orange);
+                break;
             case "W":
                 this.getWindow().getDecorView().setBackgroundResource(R.color.blue);
                 break;
             case "S":
-                this.getWindow().getDecorView().setBackgroundResource(R.color.purple);                break;
+                this.getWindow().getDecorView().setBackgroundResource(R.color.purple);
+                break;
             case "E":
                 this.getWindow().getDecorView().setBackgroundResource(R.color.green);
                 break;
