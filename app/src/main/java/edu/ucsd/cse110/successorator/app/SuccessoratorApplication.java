@@ -38,10 +38,10 @@ public class SuccessoratorApplication extends Application {
 
         // Default goals for testing purposes
         List<Goal> DEFAULT_GOALS = List.of(
-            new Goal(1, "Goal 1", false, LocalDateTime.now().toString(), "", "H"),
-            new Goal(2, "Goal 2", false, LocalDateTime.now().toString(), "", "W"),
-            new Goal(3, "Goal 3", false, LocalDateTime.now().toString(), "", "S"),
-            new Goal(4, "Goal 4", false, LocalDateTime.now().toString(), "", "E")
+            new Goal(1, "Goal 1", false, LocalDateTime.now().toString(), "Daily", "H"),
+            new Goal(2, "Goal 2", false, LocalDateTime.now().toString(), "Weekly", "W"),
+            new Goal(3, "Goal 3", false, LocalDateTime.now().toString(), "Monthly", "S"),
+            new Goal(4, "Goal 4", false, LocalDateTime.now().toString(), "Yearly", "E")
         );
 
         // Populate database with default values
