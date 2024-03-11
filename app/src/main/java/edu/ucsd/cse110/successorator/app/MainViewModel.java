@@ -112,7 +112,7 @@ public class MainViewModel extends ViewModel{
     }
 
 
-    public GoalRepository getRepo(){ return this.goalRepository;}
+    public RoomGoalRepository getRepo(){ return this.goalRepository;}
 
     //For testing us1
     public void setDisplayedTodayGoals(ArrayList<Goal> temp) {

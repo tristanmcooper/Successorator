@@ -113,6 +113,7 @@ public class TodayListFragment extends Fragment {
 
         return binding.getRoot();
     }
+
     public void updateDate(LocalDateTime date){
         this.currentDate = date;
     }

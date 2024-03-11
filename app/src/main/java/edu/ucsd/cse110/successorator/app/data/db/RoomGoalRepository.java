@@ -124,6 +124,8 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
         add(copy);
     }
 
+
+
     //For contextType
     public LiveData<List<GoalEntity>> getGoalsByContextType(String contextType) {
         return goalDao.getGoalsByContext(contextType);
