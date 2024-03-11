@@ -74,60 +74,6 @@
             android:textSize="24sp" />
     </RadioGroup>
 
-<!--    <com.google.android.material.button.MaterialButton-->
-<!--        android:id="@+id/homeButton"-->
-<!--        android:layout_width="57dp"-->
-<!--        android:layout_height="64dp"-->
-<!--        android:layout_marginStart="16dp"-->
-<!--        android:layout_marginTop="16dp"-->
-<!--        android:text="H"-->
-<!--        app:backgroundTint="@color/orange"-->
-<!--        app:cornerRadius="999dp"-->
-<!--        app:layout_constraintEnd_toStartOf="@+id/workButton"-->
-<!--        app:layout_constraintHorizontal_bias="0.5"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/editText" />-->
-
-<!--    <com.google.android.material.button.MaterialButton-->
-<!--        android:id="@+id/workButton"-->
-<!--        android:layout_width="57dp"-->
-<!--        android:layout_height="64dp"-->
-<!--        android:layout_marginTop="16dp"-->
-<!--        android:text="W"-->
-<!--        app:backgroundTint="@color/blue"-->
-<!--        app:cornerRadius="999dp"-->
-<!--        app:layout_constraintEnd_toStartOf="@+id/schoolButton"-->
-<!--        app:layout_constraintHorizontal_bias="0.5"-->
-<!--        app:layout_constraintStart_toEndOf="@+id/homeButton"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/editText" />-->
-
-<!--    <com.google.android.material.button.MaterialButton-->
-<!--        android:id="@+id/schoolButton"-->
-<!--        android:layout_width="57dp"-->
-<!--        android:layout_height="64dp"-->
-<!--        android:layout_marginTop="16dp"-->
-<!--        android:text="S"-->
-<!--        app:backgroundTint="@color/purple"-->
-<!--        app:cornerRadius="999dp"-->
-<!--        app:layout_constraintEnd_toStartOf="@+id/errandButton"-->
-<!--        app:layout_constraintHorizontal_bias="0.5"-->
-<!--        app:layout_constraintStart_toEndOf="@+id/workButton"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/editText" />-->
-
-<!--    <com.google.android.material.button.MaterialButton-->
-<!--        android:id="@+id/errandButton"-->
-<!--        android:layout_width="57dp"-->
-<!--        android:layout_height="64dp"-->
-<!--        android:layout_marginTop="16dp"-->
-<!--        android:layout_marginEnd="16dp"-->
-<!--        android:text="E"-->
-<!--        app:backgroundTint="@color/green"-->
-<!--        app:cornerRadius="999dp"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.5"-->
-<!--        app:layout_constraintStart_toEndOf="@+id/schoolButton"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/editText" />-->
-
     <RadioGroup
         android:id="@+id/contextRadioGroup"
         android:layout_width="wrap_content"

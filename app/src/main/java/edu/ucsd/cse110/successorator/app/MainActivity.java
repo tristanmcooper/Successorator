@@ -9,13 +9,15 @@ import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.DialogFragment;
 
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import androidx.appcompat.widget.AppCompatImageButton;
@@ -28,6 +30,7 @@ import edu.ucsd.cse110.successorator.app.ui.TomorrowListFragment;
 import edu.ucsd.cse110.successorator.app.ui.PendingListFragment;
 import edu.ucsd.cse110.successorator.app.ui.RecurringListFragment;
 import edu.ucsd.cse110.successorator.app.ui.dialog.AddGoalDialog;
+import edu.ucsd.cse110.successorator.app.ui.dialog.FocusModeDialog;
 import edu.ucsd.cse110.successorator.app.ui.dialog.TomorrowAddGoalDialog;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 
@@ -94,21 +97,35 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         //connect the add goal button to the addGoalDialogFragment onClick
         view.addGoalButton.setOnClickListener(v -> {
-            if(fragmentType == 0){
+            if (fragmentType == 0) {
                 var dialogFragment = AddGoalDialog.newInstance();
                 dialogFragment.show(getSupportFragmentManager(), "AddGoalFragment");
-            }
-            else if(fragmentType == 1){
+            } else if (fragmentType == 1) {
                 var dialogFragment = TomorrowAddGoalDialog.newInstance();
                 dialogFragment.show(getSupportFragmentManager(), "TomorrowAddGoalFragment");
             }
         });
 
+        // Find the ImageButton
+        ImageButton focusModeButton = findViewById(R.id.focus_mode);
+        focusModeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchToFocusModeDialog();
+            }
+        });
+
+        // Set OnClickListener for the ImageButton
 
 
-        //setup the adapter for the list, so it can update it at the beginning
+
+
+
+
+    //setup the adapter for the list, so it can update it at the beginning
 
         /*
         this.adapter = new GoalListAdapter(getApplicationContext(), List.of(), null);
@@ -128,20 +145,23 @@ public class MainActivity extends AppCompatActivity {
             adapter.addAll(new ArrayList<>(goals));
             adapter.notifyDataSetChanged();
         });
-         */
+*/
 
 
-        //show the GoalListFragment
-        getSupportFragmentManager()
+    //show the GoalListFragment
+
+
+    //show the GoalListFragment
+    getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, TodayListFragment.newInstance())
-                .commit();
+            .commit();
 
-        setTitle("Today's Goals");
+    setTitle("Today's Goals");
 
-        //set the current view this main activity that we just set up
-        setContentView(view.getRoot());
-    }
+    //set the current view this main activity that we just set up
+    setContentView(view.getRoot());
+}
 
 
     @Override
@@ -318,5 +338,10 @@ public class MainActivity extends AppCompatActivity {
     }
     public void switchToTodayFrag(){
         swapFragments(0);
+    }
+
+    private void switchToFocusModeDialog() {
+        FocusModeDialog dialogFragment = FocusModeDialog.newInstance();
+        dialogFragment.show(getSupportFragmentManager(), "FocusModeDialogFragment");
     }
 }
