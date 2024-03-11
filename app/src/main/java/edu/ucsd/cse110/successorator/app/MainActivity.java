@@ -31,6 +31,7 @@ import edu.ucsd.cse110.successorator.app.ui.PendingListFragment;
 import edu.ucsd.cse110.successorator.app.ui.RecurringListFragment;
 import edu.ucsd.cse110.successorator.app.ui.dialog.AddGoalDialog;
 import edu.ucsd.cse110.successorator.app.ui.dialog.FocusModeDialog;
+import edu.ucsd.cse110.successorator.app.ui.dialog.RecurringAddGoalDialog;
 import edu.ucsd.cse110.successorator.app.ui.dialog.TomorrowAddGoalDialog;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 
@@ -106,6 +107,9 @@ public class MainActivity extends AppCompatActivity {
             } else if (fragmentType == 1) {
                 var dialogFragment = TomorrowAddGoalDialog.newInstance();
                 dialogFragment.show(getSupportFragmentManager(), "TomorrowAddGoalFragment");
+            } else if (fragmentType == 3) {
+                var dialogFragment = RecurringAddGoalDialog.newInstance();
+                dialogFragment.show(getSupportFragmentManager(), "RecurringAddGoalFragment");
             }
         });
 

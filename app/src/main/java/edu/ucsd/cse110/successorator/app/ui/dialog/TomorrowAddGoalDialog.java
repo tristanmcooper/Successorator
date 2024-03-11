@@ -40,9 +40,51 @@ public class TomorrowAddGoalDialog extends DialogFragment{
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         this.view = DialogTodayTomorrowAddGoalsBinding.inflate(getLayoutInflater());
 
+        LocalDateTime date = LocalDateTime.now();
+        String dayOfWeek = date.getDayOfWeek().toString().toLowerCase();
+        dayOfWeek = dayOfWeek.substring(0, 1).toUpperCase() + dayOfWeek.substring(1);
+
+        // Set weekly option text
+        String weeklyFormat = "Weekly on %s";
+        view.weekly.setText(String.format(weeklyFormat, dayOfWeek));
+
+        // Set monthly option text
+        String monthlyFormat = "Monthly on the %s %s";
+        int dayOfWeekOccurrenceNum = date.getDayOfMonth() / 7;
+        if (date.getDayOfMonth() % 7 != 0) {
+            dayOfWeekOccurrenceNum += 1;
+        }
+        String dayOfWeekOccurrenceString;
+        switch (dayOfWeekOccurrenceNum) {
+            case 1:
+                dayOfWeekOccurrenceString = "First";
+                break;
+            case 2:
+                dayOfWeekOccurrenceString = "Second";
+                break;
+            case 3:
+                dayOfWeekOccurrenceString = "Third";
+                break;
+            case 4:
+                dayOfWeekOccurrenceString = "Fourth";
+                break;
+            case 5:
+                dayOfWeekOccurrenceString = "Fifth";
+                break;
+            default:
+                dayOfWeekOccurrenceString = "None";
+        }
+        view.monthly.setText(String.format(monthlyFormat, dayOfWeekOccurrenceString, dayOfWeek));
+
+        // Set yearly option text
+        String yearlyFormat = "Yearly on %s %d";
+        String month = date.getMonth().toString().toLowerCase();
+        month = month.substring(0, 1).toUpperCase() + month.substring(1);
+        view.yearly.setText(String.format(yearlyFormat, month, date.getDayOfMonth()));
+
         return new AlertDialog.Builder(getActivity())
-                .setTitle("New Goal for tmrw")
-                .setMessage("Please provide the new card text for tmrw.")
+                .setTitle("New Goal for Tomorrow")
+                .setMessage("Please provide the goal description.")
                 .setView(view.getRoot())
                 .setPositiveButton("Create", this::onPositiveButtonClick)
                 .setNegativeButton("Cancel", this::onNegativeButtonClick)
@@ -75,7 +117,13 @@ public class TomorrowAddGoalDialog extends DialogFragment{
         }
 
         ;
-        // Create the new Goal object with user input as the description
+
+        // Change each recurrence option back to default before storing string to database
+        view.weekly.setText("Weekly");
+        view.monthly.setText("Monthly");
+        view.yearly.setText("Yearly");
+
+        // Get selected recurrence frequency
         LocalDateTime curtime = activityModel.getCurrentDate();
         curtime = curtime.plusDays(1);
         RadioGroup repTypeGroup = view.repTypeRadio;
@@ -83,10 +131,14 @@ public class TomorrowAddGoalDialog extends DialogFragment{
         RadioButton selectedRepTypeRadioButton = view.getRoot().findViewById(selectedRepTypeId);
         String repType = selectedRepTypeRadioButton.getText().toString();
 
+        // Get selected context
         RadioGroup contextTypeGroup = view.contextRadioGroup;
         int selectedContextTypeId = contextTypeGroup.getCheckedRadioButtonId();
+        System.out.println(selectedContextTypeId);
         RadioButton selectedContextTypeRadioButton = view.getRoot().findViewById(selectedContextTypeId);
         String contextType = selectedContextTypeRadioButton.getText().toString();
+
+        // Create new goal
         Goal newGoal = new Goal(currCount+1, description, false,curtime.toString(), repType, contextType);
 
         // Add the new goal to your model

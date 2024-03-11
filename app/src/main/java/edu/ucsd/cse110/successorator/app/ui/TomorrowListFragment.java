@@ -55,7 +55,7 @@ public class TomorrowListFragment extends Fragment {
         // Initialize the Adapter (with an empty list for now) for incomplete tasks
         this.incompleteAdapter = new GoalListAdapter(requireContext(), List.of(), id -> {
             activityModel.changeToTodayViewComplete(id);
-        });
+        }, 1);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS", Locale.getDefault());
         activityModel.getIncompleteGoals().registerObserver(goals -> {
             if (goals == null) return;

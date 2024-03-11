@@ -24,6 +24,7 @@ public class MainViewModel extends ViewModel{
     private final RoomGoalRepository goalRepository;
     private SimpleSubject<List<Goal>> incompleteGoals;
     private SimpleSubject<List<Goal>> completeGoals;
+    private SimpleSubject<List<Goal>> recurringGoals;
     private LocalDateTime currentDate;
     //For testing US1
     private ArrayList<Goal> displayedTodayGoals;
@@ -49,6 +50,7 @@ public class MainViewModel extends ViewModel{
         this.goalRepository = goalRepository;
         this.incompleteGoals = new SimpleSubject<>();
         this.completeGoals = new SimpleSubject<>();
+        this.recurringGoals = new SimpleSubject<>();
 
             goalRepository.findCompleted(false).registerObserver(goals -> {
                 if (goals == null) return;
@@ -65,6 +67,15 @@ public class MainViewModel extends ViewModel{
                         .collect(Collectors.toList());
                 completeGoals.setValue(newCompleteGoals);
             });
+
+        goalRepository.findRecurring().registerObserver(goals -> {
+            if (goals == null) return;
+
+            var newRecurringGoals = goals.stream()
+                    .sorted(Comparator.comparing(goal -> LocalDateTime.parse(goal.date())))
+                    .collect(Collectors.toList());
+            recurringGoals.setValue(newRecurringGoals);
+        });
     }
 
     //Probably just for testing, might be violating SRP idk
@@ -133,6 +144,11 @@ public class MainViewModel extends ViewModel{
     public SimpleSubject<List<Goal>> getCompleteGoals(){
         return completeGoals;
     }
+
+    public SimpleSubject<List<Goal>> getRecurringGoals(){
+        return recurringGoals;
+    }
+
     public void deleteCompleted(){
         goalRepository.deleteCompleted();
     }

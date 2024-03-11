@@ -25,9 +25,9 @@
 
     <RadioGroup
         android:id="@+id/repTypeRadio"
-        android:layout_width="323dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="64dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
@@ -39,19 +39,12 @@
         app:layout_constraintVertical_bias="0.0">
 
         <RadioButton
-            android:id="@+id/once"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Once"
-            android:textSize="24sp"
-            android:checked="true" />
-
-        <RadioButton
             android:id="@+id/daily"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Daily"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            android:checked="true" />
 
         <RadioButton
             android:id="@+id/weekly"
@@ -74,6 +67,60 @@
             android:text="Yearly"
             android:textSize="24sp" />
     </RadioGroup>
+
+<!--    <com.google.android.material.button.MaterialButton-->
+<!--        android:id="@+id/homeButton"-->
+<!--        android:layout_width="57dp"-->
+<!--        android:layout_height="64dp"-->
+<!--        android:layout_marginStart="16dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:text="H"-->
+<!--        app:backgroundTint="@color/orange"-->
+<!--        app:cornerRadius="999dp"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/workButton"-->
+<!--        app:layout_constraintHorizontal_bias="0.5"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/editText" />-->
+
+<!--    <com.google.android.material.button.MaterialButton-->
+<!--        android:id="@+id/workButton"-->
+<!--        android:layout_width="57dp"-->
+<!--        android:layout_height="64dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:text="W"-->
+<!--        app:backgroundTint="@color/blue"-->
+<!--        app:cornerRadius="999dp"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/schoolButton"-->
+<!--        app:layout_constraintHorizontal_bias="0.5"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/homeButton"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/editText" />-->
+
+<!--    <com.google.android.material.button.MaterialButton-->
+<!--        android:id="@+id/schoolButton"-->
+<!--        android:layout_width="57dp"-->
+<!--        android:layout_height="64dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:text="S"-->
+<!--        app:backgroundTint="@color/purple"-->
+<!--        app:cornerRadius="999dp"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/errandButton"-->
+<!--        app:layout_constraintHorizontal_bias="0.5"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/workButton"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/editText" />-->
+
+<!--    <com.google.android.material.button.MaterialButton-->
+<!--        android:id="@+id/errandButton"-->
+<!--        android:layout_width="57dp"-->
+<!--        android:layout_height="64dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:layout_marginEnd="16dp"-->
+<!--        android:text="E"-->
+<!--        app:backgroundTint="@color/green"-->
+<!--        app:cornerRadius="999dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.5"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/schoolButton"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/editText" />-->
 
     <RadioGroup
         android:id="@+id/contextRadioGroup"
@@ -132,10 +179,40 @@
             android:textSize="24sp"
             app:buttonTint="@color/green"
             tools:ignore="UselessParent" />
+
     </RadioGroup>
 
+    <TextView
+        android:id="@+id/start_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_weight="1"
+        android:text="Starting Date:"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/repTypeRadio" />
 
+    <EditText
+        android:id="@+id/editTextDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:ems="10"
+        android:inputType="date"
+        android:hint="yyyy/MM/dd"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/start_date" />
 
+    <Button
+        android:id="@+id/date_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextDate" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -42,6 +42,9 @@ public interface GoalDao {
     @Query("SELECT * FROM goals WHERE completed = :completed")
     LiveData<List<GoalEntity>> findCompleted(boolean completed);
 
+    @Query("SELECT * FROM goals WHERE repType != 'Once'")
+    LiveData<List<GoalEntity>> findRecurring();
+
     // Return number of goals in database
     @Query("SELECT COUNT(*) FROM goals")
     int count();

@@ -1,4 +1,5 @@
 package edu.ucsd.cse110.successorator.app.ui.dialog;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -6,32 +7,30 @@ import android.os.Bundle;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import java.time.LocalDateTime;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import edu.ucsd.cse110.successorator.app.MainViewModel;
-import edu.ucsd.cse110.successorator.app.databinding.DialogAddGoalsBinding;
-
-
-import edu.ucsd.cse110.successorator.app.databinding.DialogTodayTomorrowAddGoalsBinding;
+import edu.ucsd.cse110.successorator.app.databinding.DialogRecurringAddGoalsBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 
 //dialog pop up thing
-public class AddGoalDialog extends DialogFragment{
-    private DialogTodayTomorrowAddGoalsBinding view;
+public class RecurringAddGoalDialog extends DialogFragment{
+    private @NonNull DialogRecurringAddGoalsBinding view;
     private MainViewModel activityModel;
 
-    AddGoalDialog() {
+    RecurringAddGoalDialog() {
         //Required empty public constructor
     }
 
-    public static AddGoalDialog newInstance() {
-        var fragment = new AddGoalDialog();
+    public static RecurringAddGoalDialog newInstance() {
+        var fragment = new RecurringAddGoalDialog();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -40,53 +39,11 @@ public class AddGoalDialog extends DialogFragment{
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        this.view = DialogTodayTomorrowAddGoalsBinding.inflate(getLayoutInflater());
-
-        LocalDateTime date = LocalDateTime.now();
-        String dayOfWeek = date.getDayOfWeek().toString().toLowerCase();
-        dayOfWeek = dayOfWeek.substring(0, 1).toUpperCase() + dayOfWeek.substring(1);
-
-        // Set weekly option text
-        String weeklyFormat = "Weekly on %s";
-        view.weekly.setText(String.format(weeklyFormat, dayOfWeek));
-
-        // Set monthly option text
-        String monthlyFormat = "Monthly on the %s %s";
-        int dayOfWeekOccurrenceNum = date.getDayOfMonth() / 7;
-        if (date.getDayOfMonth() % 7 != 0) {
-            dayOfWeekOccurrenceNum += 1;
-        }
-        String dayOfWeekOccurrenceString;
-        switch (dayOfWeekOccurrenceNum) {
-            case 1:
-                dayOfWeekOccurrenceString = "First";
-                break;
-            case 2:
-                dayOfWeekOccurrenceString = "Second";
-                break;
-            case 3:
-                dayOfWeekOccurrenceString = "Third";
-                break;
-            case 4:
-                dayOfWeekOccurrenceString = "Fourth";
-                break;
-            case 5:
-                dayOfWeekOccurrenceString = "Fifth";
-                break;
-            default:
-                dayOfWeekOccurrenceString = "None";
-        }
-        view.monthly.setText(String.format(monthlyFormat, dayOfWeekOccurrenceString, dayOfWeek));
-
-        // Set yearly option text
-        String yearlyFormat = "Yearly on %s %d";
-        String month = date.getMonth().toString().toLowerCase();
-        month = month.substring(0, 1).toUpperCase() + month.substring(1);
-        view.yearly.setText(String.format(yearlyFormat, month, date.getDayOfMonth()));
+        this.view = DialogRecurringAddGoalsBinding.inflate(getLayoutInflater());
 
         return new AlertDialog.Builder(getActivity())
-                .setTitle("New Goal")
-                .setMessage("Enter new goal with option to select context and recurring.")
+                .setTitle("New Recurring Goal")
+                .setMessage("Please provide the goal description.")
                 .setView(view.getRoot())
                 .setPositiveButton("Create", this::onPositiveButtonClick)
                 .setNegativeButton("Cancel", this::onNegativeButtonClick)
@@ -118,36 +75,26 @@ public class AddGoalDialog extends DialogFragment{
             return;
         }
 
-        // Change each recurrence option back to default before storing string to database
-        view.weekly.setText("Weekly");
-        view.monthly.setText("Monthly");
-        view.yearly.setText("Yearly");
-
-        // Get selected recurrence frequency
+        ;
+        // Create the new Goal object with user input as the description
+        LocalDate currDate = LocalDate.parse(view.editTextDate.getText(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        LocalDateTime currTime = currDate.atTime(2, 0, 0, 0);
         RadioGroup repTypeGroup = view.repTypeRadio;
         int selectedRepTypeId = repTypeGroup.getCheckedRadioButtonId();
         RadioButton selectedRepTypeRadioButton = view.getRoot().findViewById(selectedRepTypeId);
         String repType = selectedRepTypeRadioButton.getText().toString();
 
-        // Get selected context
         RadioGroup contextTypeGroup = view.contextRadioGroup;
         int selectedContextTypeId = contextTypeGroup.getCheckedRadioButtonId();
         RadioButton selectedContextTypeRadioButton = view.getRoot().findViewById(selectedContextTypeId);
         String contextType = selectedContextTypeRadioButton.getText().toString();
-
-        // Create the new Goal object with user input as the description
-        Goal newGoal = new Goal(currCount + 1,
-                description,
-                false,
-                LocalDateTime.now().toString(),
-                repType,
-                contextType);
+        Goal newGoal = new Goal(currCount+1, description, false,currTime.toString(), repType, contextType);
 
         // Add the new goal to your model
         activityModel.addGoal(newGoal);
 
         // Dismiss the dialog
-            dialog.dismiss();
+        dialog.dismiss();
     }
 
     private void onNegativeButtonClick(DialogInterface dialog, int which) {
