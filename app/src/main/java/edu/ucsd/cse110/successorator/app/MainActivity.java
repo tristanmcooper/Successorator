@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import android.os.Handler;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -347,6 +348,23 @@ public class MainActivity extends AppCompatActivity {
 
     private void switchToFocusModeDialog() {
         String context = model.getContext();
+        Log.d("context", context);
+        //WILL ONLY UPDATE WHEN THE THREE LINES BUTTON IS PRESSED AGAIN, NOT ON THE CONFIRM
+        switch (context) {
+            case "H":
+                this.getWindow().getDecorView().setBackgroundResource(R.color.orange);                break;
+            case "W":
+                this.getWindow().getDecorView().setBackgroundResource(R.color.blue);
+                break;
+            case "S":
+                this.getWindow().getDecorView().setBackgroundResource(R.color.purple);                break;
+            case "E":
+                this.getWindow().getDecorView().setBackgroundResource(R.color.green);
+                break;
+            default:
+                this.getWindow().getDecorView().setBackgroundResource(R.color.white);
+        }
+
         FocusModeDialog dialogFragment = FocusModeDialog.newInstance(context);
         dialogFragment.show(getSupportFragmentManager(), "FocusModeDialogFragment");
     }

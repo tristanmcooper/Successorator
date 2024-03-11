@@ -150,8 +150,7 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
     }
 
 
-    //For contextType
-    /*
+/*
     public SimpleSubject<List<Goal>> getGoalsByContextType(String contextType) {
         return goalDao.getGoalsByContext(contextType);
     }

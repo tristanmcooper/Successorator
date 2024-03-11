@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.ucsd.cse110.successorator.app.MainViewModel;
+import edu.ucsd.cse110.successorator.app.R;
 import edu.ucsd.cse110.successorator.app.data.db.GoalEntity;
 import edu.ucsd.cse110.successorator.app.databinding.DialogFocusModeBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
@@ -62,7 +63,6 @@ public class FocusModeDialog extends DialogFragment {
             default:
                 view.noneRadioButton.setChecked(true);
         }
-
         return new AlertDialog.Builder(getActivity())
                 .setTitle("Focus Mode")
                 .setMessage("Select a focus.")
