@@ -123,7 +123,7 @@ public class TomorrowAddGoalDialog extends DialogFragment{
 
         // Get selected recurrence frequency
         LocalDateTime curtime = activityModel.getCurrentDate();
-        curtime = curtime.plusDays(1);
+        curtime = curtime.plusDays(1).withHour(2).withMinute(0).withSecond(0).withNano(0);
         RadioGroup repTypeGroup = view.repTypeRadio;
         int selectedRepTypeId = repTypeGroup.getCheckedRadioButtonId();
         RadioButton selectedRepTypeRadioButton = view.getRoot().findViewById(selectedRepTypeId);
