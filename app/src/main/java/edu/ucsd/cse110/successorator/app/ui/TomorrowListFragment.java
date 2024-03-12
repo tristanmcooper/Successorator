@@ -24,7 +24,6 @@ public class TomorrowListFragment extends Fragment {
     private MainViewModel activityModel;
     private FragmentTomorrowListBinding view;
     private GoalListAdapter incompleteAdapter;
-    private GoalListAdapter completeAdapter;
     private LocalDateTime currentDate;
 
     public TomorrowListFragment() {

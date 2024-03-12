@@ -70,6 +70,7 @@ public class MainViewModel extends ViewModel{
             if (goals == null) return;
 
             var newRecurringGoals = goals.stream()
+                    .filter(goal -> !goal.date().isEmpty())
                     .sorted(Comparator.comparing(goal -> LocalDateTime.parse(goal.date())))
                     .collect(Collectors.toList());
             recurringGoals.setValue(newRecurringGoals);
