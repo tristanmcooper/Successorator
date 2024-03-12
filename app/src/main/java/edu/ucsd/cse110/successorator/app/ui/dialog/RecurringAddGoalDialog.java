@@ -12,6 +12,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.datepicker.CalendarConstraints;
+import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
 
 import java.time.Instant;
@@ -168,6 +170,10 @@ public class RecurringAddGoalDialog extends DialogFragment{
     }
 
     private void showDatePicker() {
+        // Makes only dates from today forward selectable.
+        var constraintsBuilder = new CalendarConstraints.Builder()
+                .setValidator(DateValidatorPointForward.now());
+
         // Create new datePicker instance
         MaterialDatePicker<Long> datePicker;
 
@@ -175,11 +181,13 @@ public class RecurringAddGoalDialog extends DialogFragment{
             datePicker = MaterialDatePicker.Builder.datePicker()
                     .setTitleText("Select Starting Date")
                     .setSelection(this.selectedDateLong)
+                    .setCalendarConstraints(constraintsBuilder.build())
                     .build();
         } else {
             datePicker = MaterialDatePicker.Builder.datePicker()
                     .setTitleText("Select Starting Date")
                     .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                    .setCalendarConstraints(constraintsBuilder.build())
                     .build();
         }
 
