@@ -30,7 +30,7 @@ public class RecurringAddGoalDialog extends DialogFragment{
     private @NonNull DialogRecurringAddGoalsBinding view;
     private MainViewModel activityModel;
     private Long selectedDateLong;
-    private LocalDateTime selectedDate = LocalDateTime.now();
+    private LocalDateTime selectedDate = LocalDateTime.now().withHour(2).withMinute(0).withSecond(0).withNano(0);
     private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(("E, M/d"), Locale.getDefault());
 
     RecurringAddGoalDialog() {
@@ -194,7 +194,6 @@ public class RecurringAddGoalDialog extends DialogFragment{
             updateRecurrenceOptions();
             datePicker.dismiss();
         });
-
 
         // Set up negativeClick behavior
         datePicker.addOnNegativeButtonClickListener(v -> {
