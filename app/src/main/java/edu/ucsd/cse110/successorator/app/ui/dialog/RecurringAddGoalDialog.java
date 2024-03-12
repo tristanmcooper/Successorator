@@ -170,6 +170,10 @@ public class RecurringAddGoalDialog extends DialogFragment{
     }
 
     private void showDatePicker() {
+        /*
+         * MaterialDatePicker from: https://github.com/material-components/material-components-android/blob/master/docs/components/DatePicker.md
+         */
+
         // Makes only dates from today forward selectable.
         var constraintsBuilder = new CalendarConstraints.Builder()
                 .setValidator(DateValidatorPointForward.now());
