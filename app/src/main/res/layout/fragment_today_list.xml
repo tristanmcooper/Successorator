@@ -5,8 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-
     <TextView
         android:id="@+id/default_goals"
         android:layout_width="321dp"
@@ -18,8 +16,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.261"
         tools:visibility="visible" />
-
     <ListView
         android:id="@+id/uncompleted_goal_list"
         android:layout_width="0dp"
@@ -30,7 +28,6 @@
         app:layout_constraintBottom_toTopOf="@+id/completed_goal_list"
         tools:listitem="@layout/list_goal_item">
     </ListView>
-
     <ListView
         android:id="@+id/completed_goal_list"
         android:layout_width="0dp"
@@ -43,4 +40,3 @@
         tools:listitem="@layout/list_goal_item" >
     </ListView>
 </androidx.constraintlayout.widget.ConstraintLayout>
-

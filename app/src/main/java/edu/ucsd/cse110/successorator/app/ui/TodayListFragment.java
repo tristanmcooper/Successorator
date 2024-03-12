@@ -69,6 +69,7 @@ public class TodayListFragment extends Fragment {
                 if(goalDate.getDayOfYear()<=currentDate.getDayOfYear()){
                     todaysGoals.add(g);
                     Log.d("TodayListFrag", "is context here: " + g.getContextType());
+
                 }
             }
 
@@ -110,9 +111,9 @@ public class TodayListFragment extends Fragment {
         // Set the adapter on the ListView
         view.uncompletedGoalList.setAdapter(incompleteAdapter);
         view.completedGoalList.setAdapter(completeAdapter);
-
         return binding.getRoot();
     }
+
     public void updateDate(LocalDateTime date){
         this.currentDate = date;
     }

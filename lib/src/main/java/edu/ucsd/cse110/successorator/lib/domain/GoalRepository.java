@@ -33,4 +33,5 @@ public interface GoalRepository {
     void generateTomorrow();
 
     void changeToTodayViewComplete(int id);
+
 }

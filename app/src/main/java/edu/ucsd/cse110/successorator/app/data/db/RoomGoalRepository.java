@@ -14,10 +14,12 @@ import edu.ucsd.cse110.successorator.app.util.*;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 import edu.ucsd.cse110.successorator.lib.util.RepositorySubject;
+import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
 
 public class RoomGoalRepository extends RepositorySubject implements GoalRepository {
     private final GoalDao goalDao;
+
     public RoomGoalRepository(GoalDao goalDao) {
         this.goalDao = goalDao;
     }
@@ -41,7 +43,7 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
     }
 
     @Override
-    public Goal tempFind(int id){
+    public Goal tempFind(int id) {
         var goalEntity = goalDao.find(id);
         return goalEntity.toGoal();
     }
@@ -57,9 +59,29 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
         return new LiveDataSubjectAdapter<>(goalsLiveData);
     }
 
+    public Subject<List<Goal>> findCompleted(Boolean completed, String contextType) {
+        var entitiesLiveData = goalDao.findCompleted(completed,contextType);
+        var goalsLiveData = Transformations.map(entitiesLiveData, entities -> {
+            return entities.stream()
+                    .map(GoalEntity::toGoal)
+                    .collect(Collectors.toList());
+        });
+        return new LiveDataSubjectAdapter<>(goalsLiveData);
+    }
+
     @Override
     public Subject<List<Goal>> findRecurring() {
         var entitiesLiveData = goalDao.findRecurring();
+        var goalsLiveData = Transformations.map(entitiesLiveData, entities -> {
+            return entities.stream()
+                    .map(GoalEntity::toGoal)
+                    .collect(Collectors.toList());
+        });
+        return new LiveDataSubjectAdapter<>(goalsLiveData);
+    }
+
+    public Subject<List<Goal>> findRecurring(String contextType) {
+        var entitiesLiveData = goalDao.findRecurring(contextType);
         var goalsLiveData = Transformations.map(entitiesLiveData, entities -> {
             return entities.stream()
                     .map(GoalEntity::toGoal)
@@ -86,7 +108,7 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
         goalDao.insert(GoalEntity.fromGoal(goal));
         var goalEntities = goalDao.findAll();
         ArrayList<Goal> goals = new ArrayList<>();
-        for(GoalEntity entity: goalEntities){
+        for (GoalEntity entity : goalEntities) {
             goals.add(entity.toGoal());
         }
         this.setValue(goals);
@@ -102,7 +124,7 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
     }
 
     @Override
-    public int count(){
+    public int count() {
         return goalDao.count();
     }
 
@@ -110,6 +132,7 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
     public void deleteCompleted() {
         goalDao.deleteComplete();
     }
+
     @Override
     public void clear() {
         goalDao.clear();
@@ -121,9 +144,10 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
     }
 
     @Override
-    public void generateTomorrow(){
-        LiveData<List<GoalEntity>> list =  goalDao.makeTomorrow("Daily");
+    public void generateTomorrow() {
+        LiveData<List<GoalEntity>> list = goalDao.makeTomorrow("Daily");
     }
+
     @Override
     public void changeToTodayViewComplete(int id) {
         Goal temp = goalDao.find(id).toGoal();
@@ -135,8 +159,10 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
         add(copy);
     }
 
-    //For contextType
-    public LiveData<List<GoalEntity>> getGoalsByContextType(String contextType) {
+
+/*
+    public SimpleSubject<List<Goal>> getGoalsByContextType(String contextType) {
         return goalDao.getGoalsByContext(contextType);
     }
+     */
 }

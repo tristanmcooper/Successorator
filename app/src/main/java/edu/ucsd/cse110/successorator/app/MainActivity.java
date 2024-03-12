@@ -6,16 +6,19 @@ import android.os.Bundle;
 
 import android.os.Handler;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.DialogFragment;
 
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import androidx.appcompat.widget.AppCompatImageButton;
@@ -28,6 +31,7 @@ import edu.ucsd.cse110.successorator.app.ui.TomorrowListFragment;
 import edu.ucsd.cse110.successorator.app.ui.PendingListFragment;
 import edu.ucsd.cse110.successorator.app.ui.RecurringListFragment;
 import edu.ucsd.cse110.successorator.app.ui.dialog.AddGoalDialog;
+import edu.ucsd.cse110.successorator.app.ui.dialog.FocusModeDialog;
 import edu.ucsd.cse110.successorator.app.ui.dialog.RecurringAddGoalDialog;
 import edu.ucsd.cse110.successorator.app.ui.dialog.TomorrowAddGoalDialog;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
@@ -95,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         //connect the add goal button to the addGoalDialogFragment onClick
         view.addGoalButton.setOnClickListener(v -> {
             if (fragmentType == 0) {
@@ -109,42 +114,28 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Find the ImageButton
+        ImageButton focusModeButton = findViewById(R.id.focus_mode);
 
-
-        //setup the adapter for the list, so it can update it at the beginning
-
-        /*
-        this.adapter = new GoalListAdapter(getApplicationContext(), List.of(), null);
-
-
-        model.getIncompleteGoals().registerObserver(goals -> {
-            if (goals == null) {
-                view.defaultGoals.setVisibility(View.VISIBLE);
-                return;
+        focusModeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchToFocusModeDialog();
             }
-            if (goals.size() == 0) {
-                view.defaultGoals.setVisibility(View.VISIBLE);
-            } else {
-                view.defaultGoals.setVisibility(View.INVISIBLE);
-            }
-            adapter.clear();
-            adapter.addAll(new ArrayList<>(goals));
-            adapter.notifyDataSetChanged();
         });
-         */
 
 
-        //show the GoalListFragment
-        getSupportFragmentManager()
+    //show the GoalListFragment
+    getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, TodayListFragment.newInstance())
-                .commit();
+            .commit();
 
-        setTitle("Today's Goals");
+    setTitle("Today's Goals");
 
-        //set the current view this main activity that we just set up
-        setContentView(view.getRoot());
-    }
+    //set the current view this main activity that we just set up
+    setContentView(view.getRoot());
+}
 
 
     @Override
@@ -305,11 +296,11 @@ public class MainActivity extends AppCompatActivity {
         TodayListFragment todayfrag = (TodayListFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         return todayfrag;
     }
-    public TomorrowListFragment getTTmrwFrag(){
+    public TomorrowListFragment getTmrwFrag(){
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if(fragment instanceof TomorrowListFragment){
-            TomorrowListFragment getTTmrwFrag = (TomorrowListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-            return getTTmrwFrag;
+            TomorrowListFragment getTmrwFrag = (TomorrowListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+            return getTmrwFrag;
         }
         return null;
     }
@@ -321,5 +312,30 @@ public class MainActivity extends AppCompatActivity {
     }
     public void switchToTodayFrag(){
         swapFragments(0);
+    }
+
+    private void switchToFocusModeDialog() {
+        String context = model.getContext();
+        FocusModeDialog dialogFragment = FocusModeDialog.newInstance(context);
+        dialogFragment.show(getSupportFragmentManager(), "FocusModeDialogFragment");
+    }
+
+    public void updateBackgroundColor(String context) {
+        switch (context) {
+            case "H":
+                this.getWindow().getDecorView().setBackgroundResource(R.color.orange);
+                break;
+            case "W":
+                this.getWindow().getDecorView().setBackgroundResource(R.color.blue);
+                break;
+            case "S":
+                this.getWindow().getDecorView().setBackgroundResource(R.color.purple);
+                break;
+            case "E":
+                this.getWindow().getDecorView().setBackgroundResource(R.color.green);
+                break;
+            default:
+                this.getWindow().getDecorView().setBackgroundResource(R.color.white);
+        }
     }
 }
