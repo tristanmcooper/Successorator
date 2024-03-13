@@ -105,7 +105,7 @@ public class TodayListFragment extends Fragment {
                 if (!g.date().equals("")){
                     goalDate = LocalDateTime.parse(g.date(), formatter);
                 }
-                if(!(goalDate==null) && goalDate.getDayOfYear()==currentDate.getDayOfYear()){
+                if(!(goalDate==null) && goalDate.getDayOfYear()<=currentDate.getDayOfYear()){
                     todaysGoals.add(g);
                 }
             }
