@@ -12,9 +12,16 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.datepicker.CalendarConstraints;
+import com.google.android.material.datepicker.DateValidatorPointForward;
+import com.google.android.material.datepicker.MaterialDatePicker;
+
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.app.databinding.DialogRecurringAddGoalsBinding;
@@ -24,6 +31,9 @@ import edu.ucsd.cse110.successorator.lib.domain.Goal;
 public class RecurringAddGoalDialog extends DialogFragment{
     private @NonNull DialogRecurringAddGoalsBinding view;
     private MainViewModel activityModel;
+    private Long selectedDateLong;
+    private LocalDateTime selectedDate = LocalDateTime.now().withHour(2).withMinute(0).withSecond(0).withNano(0);
+    private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(("E, M/d"), Locale.getDefault());
 
     RecurringAddGoalDialog() {
         //Required empty public constructor
@@ -40,6 +50,13 @@ public class RecurringAddGoalDialog extends DialogFragment{
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         this.view = DialogRecurringAddGoalsBinding.inflate(getLayoutInflater());
+
+        view.datePicker.setOnClickListener(v -> {
+            showDatePicker();
+        });
+
+        updateDisplayDate();
+        updateRecurrenceOptions();
 
         return new AlertDialog.Builder(getActivity())
                 .setTitle("New Recurring Goal")
@@ -75,20 +92,24 @@ public class RecurringAddGoalDialog extends DialogFragment{
             return;
         }
 
-        ;
-        // Create the new Goal object with user input as the description
-        LocalDate currDate = LocalDate.parse(view.editTextDate.getText(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        LocalDateTime currTime = currDate.atTime(2, 0, 0, 0);
+        view.weekly.setText("Weekly");
+        view.monthly.setText("Monthly");
+        view.yearly.setText("Yearly");
+
+        // Get recurrence type
         RadioGroup repTypeGroup = view.repTypeRadio;
         int selectedRepTypeId = repTypeGroup.getCheckedRadioButtonId();
         RadioButton selectedRepTypeRadioButton = view.getRoot().findViewById(selectedRepTypeId);
         String repType = selectedRepTypeRadioButton.getText().toString();
 
+        // Get context type
         RadioGroup contextTypeGroup = view.contextRadioGroup;
         int selectedContextTypeId = contextTypeGroup.getCheckedRadioButtonId();
         RadioButton selectedContextTypeRadioButton = view.getRoot().findViewById(selectedContextTypeId);
         String contextType = selectedContextTypeRadioButton.getText().toString();
-        Goal newGoal = new Goal(currCount+1, description, false,currTime.toString(), repType, contextType);
+
+        // Create new goal based on user input
+        Goal newGoal = new Goal(currCount+1, description, false, this.selectedDate.toString(), repType, contextType);
 
         // Add the new goal to your model
         activityModel.addGoal(newGoal);
@@ -99,5 +120,104 @@ public class RecurringAddGoalDialog extends DialogFragment{
 
     private void onNegativeButtonClick(DialogInterface dialog, int which) {
         dialog.cancel();
+    }
+
+    private void updateDisplayDate() {
+        view.datePicker.setText(this.selectedDate.format(this.dateTimeFormatter));
+    }
+
+    private void updateRecurrenceOptions() {
+        String dayOfWeek = this.selectedDate.getDayOfWeek().toString().toLowerCase();
+        dayOfWeek = dayOfWeek.substring(0, 1).toUpperCase() + dayOfWeek.substring(1);
+
+        // Set weekly option text
+        String weeklyFormat = "Weekly on %s";
+        view.weekly.setText(String.format(weeklyFormat, dayOfWeek));
+
+        // Set monthly option text
+        String monthlyFormat = "Monthly on the %s %s";
+        int dayOfWeekOccurrenceNum = this.selectedDate.getDayOfMonth() / 7;
+        if (this.selectedDate.getDayOfMonth() % 7 != 0) {
+            dayOfWeekOccurrenceNum += 1;
+        }
+        String dayOfWeekOccurrenceString;
+        switch (dayOfWeekOccurrenceNum) {
+            case 1:
+                dayOfWeekOccurrenceString = "First";
+                break;
+            case 2:
+                dayOfWeekOccurrenceString = "Second";
+                break;
+            case 3:
+                dayOfWeekOccurrenceString = "Third";
+                break;
+            case 4:
+                dayOfWeekOccurrenceString = "Fourth";
+                break;
+            case 5:
+                dayOfWeekOccurrenceString = "Fifth";
+                break;
+            default:
+                dayOfWeekOccurrenceString = "None";
+        }
+        view.monthly.setText(String.format(monthlyFormat, dayOfWeekOccurrenceString, dayOfWeek));
+
+        // Set yearly option text
+        String yearlyFormat = "Yearly on %s %d";
+        String month = this.selectedDate.getMonth().toString().toLowerCase();
+        month = month.substring(0, 1).toUpperCase() + month.substring(1);
+        view.yearly.setText(String.format(yearlyFormat, month, this.selectedDate.getDayOfMonth()));
+    }
+
+    private void showDatePicker() {
+        /*
+         * MaterialDatePicker from: https://github.com/material-components/material-components-android/blob/master/docs/components/DatePicker.md
+         */
+
+        // Makes only dates from today forward selectable.
+        var constraintsBuilder = new CalendarConstraints.Builder()
+                .setValidator(DateValidatorPointForward.now());
+
+        // Create new datePicker instance
+        MaterialDatePicker<Long> datePicker;
+
+        if (this.selectedDateLong != null) {
+            datePicker = MaterialDatePicker.Builder.datePicker()
+                    .setTitleText("Select Starting Date")
+                    .setSelection(this.selectedDateLong)
+                    .setCalendarConstraints(constraintsBuilder.build())
+                    .build();
+        } else {
+            datePicker = MaterialDatePicker.Builder.datePicker()
+                    .setTitleText("Select Starting Date")
+                    .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                    .setCalendarConstraints(constraintsBuilder.build())
+                    .build();
+        }
+
+        // Set up positiveClick behavior
+        datePicker.addOnPositiveButtonClickListener(v -> {
+            this.selectedDateLong = datePicker.getSelection();
+            LocalDateTime selectedDate = LocalDateTime.ofInstant(
+                    Instant.ofEpochMilli(datePicker.getSelection()),
+                    TimeZone.getTimeZone("Pacific").toZoneId()).plusHours(2);
+            this.selectedDate = selectedDate;
+            updateDisplayDate();
+            updateRecurrenceOptions();
+            datePicker.dismiss();
+        });
+
+        // Set up negativeClick behavior
+        datePicker.addOnNegativeButtonClickListener(v -> {
+            datePicker.dismiss();
+        });
+
+        // Set up cancel behavior
+        datePicker.addOnCancelListener(v -> {
+            datePicker.dismiss();
+        });
+
+        // Display
+        datePicker.show(getActivity().getSupportFragmentManager(), "datePicker");
     }
 }
