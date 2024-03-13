@@ -58,7 +58,7 @@ public class TodayListFragment extends Fragment {
         this.incompleteAdapter = new GoalListAdapter(requireContext(), List.of(), id -> {
             activityModel.changeCompleteStatus(id);
         }, 0);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS", Locale.getDefault());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm", Locale.getDefault());
 
         activityModel.getIncompleteGoals().registerObserver(goals -> {
             if (goals == null) return;
@@ -66,10 +66,11 @@ public class TodayListFragment extends Fragment {
             var todaysGoals = new ArrayList<Goal>();
             for(Goal g : goals){
                 LocalDateTime goalDate = LocalDateTime.parse(g.date(), formatter);
-                if(goalDate.getDayOfYear()<=currentDate.getDayOfYear()){
+                if (goalDate.getDayOfYear() <= currentDate.getDayOfYear() && activityModel.getContext().equals("N/A")){
                     todaysGoals.add(g);
-                    Log.d("TodayListFrag", "is context here: " + g.getContextType());
-
+                }
+                else if (goalDate.getDayOfYear()<=currentDate.getDayOfYear() && activityModel.getContext().equals(g.getContextType())){
+                    todaysGoals.add(g);
                 }
             }
 

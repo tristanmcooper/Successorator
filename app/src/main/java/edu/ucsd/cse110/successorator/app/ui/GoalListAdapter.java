@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import org.xml.sax.helpers.AttributeListImpl;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -70,7 +71,15 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
 
             switch (recurrenceType) {
                 case "Daily":
-                    binding.goalRecurrence.setText("Daily");
+                    LocalDateTime tmrDate = LocalDateTime.now().withHour(1).withMinute(59).withSecond(0).withNano(0).plusDays(1);
+                    if (date.isAfter(tmrDate)) {
+                        String month = date.getMonth().toString().toLowerCase();
+                        month = month.substring(0, 1).toUpperCase() + month.substring(1);
+                        String dailyFormat = "Daily starting on %s %d, %d";
+                        binding.goalRecurrence.setText(String.format(dailyFormat, month, date.getDayOfMonth(), date.getYear()));
+                    } else {
+                        binding.goalRecurrence.setText("Daily");
+                    }
                     break;
                 case "Weekly":
                     String weeklyFormat = "Weekly on %s";
