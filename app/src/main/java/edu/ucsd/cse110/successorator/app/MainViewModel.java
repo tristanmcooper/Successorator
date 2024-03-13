@@ -123,12 +123,13 @@ public class MainViewModel extends ViewModel{
                         .collect(Collectors.toList());
                 completeGoals.setValue(newCompleteGoals);
             });
-            goalRepository.findRecurring(contextType).registerObserver(goals -> {
+            goalRepository.findRecurring().registerObserver(goals -> {
                 if (goals == null) return;
 
                 var newRecurringGoals = goals.stream()
                         .sorted(Comparator.comparing(goal -> LocalDateTime.parse(goal.date())))
                         .collect(Collectors.toList());
+
                 recurringGoals.setValue(newRecurringGoals);
             });
         }
