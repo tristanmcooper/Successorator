@@ -4,17 +4,14 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.successorator.app.util.*;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 import edu.ucsd.cse110.successorator.lib.util.RepositorySubject;
-import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
 
 public class RoomGoalRepository extends RepositorySubject implements GoalRepository {
@@ -149,16 +146,15 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
     }
 
     @Override
-    public void changeToTodayViewComplete(int id) {
+    public void changeToTodayView(int id, boolean isComplete, LocalDateTime currentDate) {
         Goal temp = goalDao.find(id).toGoal();
-        String tmrwDate = temp.date();
+        /*String tmrwDate = temp.date();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS", Locale.getDefault());
-        LocalDateTime goalDate = LocalDateTime.parse(tmrwDate, formatter).minusDays(1);
-        Goal copy = new Goal(temp.id(), temp.description(), true, goalDate.toString(), temp.repType(), temp.getContextType());
+        LocalDateTime goalDate = LocalDateTime.parse(tmrwDate, formatter).minusDays(1);*/
+        Goal copy = new Goal(temp.id(), temp.description(), isComplete, currentDate.toString(), temp.repType(), temp.getContextType());
         remove(id);
         add(copy);
     }
-
 
 /*
     public SimpleSubject<List<Goal>> getGoalsByContextType(String contextType) {

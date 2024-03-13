@@ -50,15 +50,15 @@ public class PendingListFragment extends Fragment {
 
         // Initialize the Adapter (with an empty list for now) for incomplete tasks
         this.incompleteAdapter = new GoalListAdapter(requireContext(), List.of(), id -> {
-            activityModel.changeToTodayViewComplete(id);
-        }, 2);
+            activityModel.changeToTodayView(id, true);
+        }, 2, activityModel);
 
         activityModel.getIncompleteGoals().registerObserver(goals -> {
             if (goals == null) return;
 
             var pendingGoals = new ArrayList<Goal>();
             for(Goal g : goals){
-                if(g.repType().equals("pending")){
+                if(g.repType().equals("pending") && g.date().isEmpty()){
                     pendingGoals.add(g);
                 }
 

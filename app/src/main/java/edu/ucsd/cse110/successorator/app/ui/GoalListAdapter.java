@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.app.R;
 import edu.ucsd.cse110.successorator.app.databinding.ListGoalItemBinding;
 import edu.ucsd.cse110.successorator.app.databinding.RecurringListGoalItemBinding;
@@ -30,6 +31,8 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
 
     Context context;
 
+    MainViewModel activityModel;
+
     public GoalListAdapter(Context context, List<Goal> goals, Consumer<Integer> onDeleteClick, int fragmentType) {
         // This sets a bunch of stuff internally, which we can access
         // with getContext() and getItem() for example.
@@ -40,6 +43,19 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
         this.onDeleteClick = onDeleteClick;
         this.fragmentType = fragmentType;
         this.context = context;
+    }
+
+    public GoalListAdapter(Context context, List<Goal> goals, Consumer<Integer> onDeleteClick, int fragmentType, MainViewModel model) {
+        // This sets a bunch of stuff internally, which we can access
+        // with getContext() and getItem() for example.
+        //
+        // Also note that ArrayAdapter NEEDS a mutable List (ArrayList),
+        // or it will crash!
+        super(context, 0, new ArrayList<>(goals));
+        this.onDeleteClick = onDeleteClick;
+        this.fragmentType = fragmentType;
+        this.context = context;
+        this.activityModel = model;
     }
 
     //get the view for each goal item
@@ -158,8 +174,28 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
                     Log.d("GoalListAdapter", "Long press detected");
                     PopupMenu popupMenu = new PopupMenu(context, v);
                     popupMenu.inflate(R.menu.pending_long_press_context_menu);
+
+                    popupMenu.setOnMenuItemClickListener(item -> {
+                        String title = item.getTitle().toString(); // Get the title of the clicked item
+                        switch (title) {
+                            case "Today":
+                                // Move to today view
+                                activityModel.changeToTodayView(goal.id(), false);
+                                return true;
+                            case "Tomorrow":
+                                return true;
+                            case "Finished":
+                                activityModel.changeToTodayView(goal.id(), true);
+                                return true;
+
+                            default:
+                                return false;
+                        }
+                    });
+
+
                     popupMenu.show();
-                    return true; // Consume the long click eventreturn false;
+                    return true; // Consume the long click event
                 });
             }
 

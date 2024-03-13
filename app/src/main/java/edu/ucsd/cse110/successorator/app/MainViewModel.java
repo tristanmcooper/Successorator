@@ -174,8 +174,8 @@ public class MainViewModel extends ViewModel{
         return this.currentDate;
     }
 
-    public void changeToTodayViewComplete(int id){
-        goalRepository.changeToTodayViewComplete(id);
+    public void changeToTodayView(int id, boolean isComplete){
+        goalRepository.changeToTodayView(id, isComplete, currentDate);
     }
 
 
@@ -201,5 +201,8 @@ public class MainViewModel extends ViewModel{
     public String getContext() {
         return this.contextType;
     }
+
+    //Pending Context Menu methods
+
 
 }
