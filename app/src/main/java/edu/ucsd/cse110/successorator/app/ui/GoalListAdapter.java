@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.PopupMenu;
 
 import androidx.annotation.NonNull;
 
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import edu.ucsd.cse110.successorator.app.R;
 import edu.ucsd.cse110.successorator.app.databinding.ListGoalItemBinding;
 import edu.ucsd.cse110.successorator.app.databinding.RecurringListGoalItemBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
@@ -25,6 +27,8 @@ import edu.ucsd.cse110.successorator.lib.domain.Goal;
 public class GoalListAdapter extends ArrayAdapter<Goal> {
     Consumer<Integer> onDeleteClick;
     int fragmentType;
+
+    Context context;
 
     public GoalListAdapter(Context context, List<Goal> goals, Consumer<Integer> onDeleteClick, int fragmentType) {
         // This sets a bunch of stuff internally, which we can access
@@ -35,6 +39,7 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
         super(context, 0, new ArrayList<>(goals));
         this.onDeleteClick = onDeleteClick;
         this.fragmentType = fragmentType;
+        this.context = context;
     }
 
     //get the view for each goal item
@@ -140,12 +145,23 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
                 binding.goalDescription.setPaintFlags(binding.goalDescription.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             }
 
-            // Don't want this functionality for recurring goals
-            binding.goalDescription.setOnClickListener(v -> {
-                var id = goal.id();
-                assert id != null;
-                onDeleteClick.accept(id);
-            });
+            if (fragmentType == 0 || fragmentType == 1){
+                // Don't want this functionality for pending or recurring view
+                binding.goalDescription.setOnClickListener(v -> {
+                    var id = goal.id();
+                    assert id != null;
+                    onDeleteClick.accept(id);
+                });
+            }
+            if (fragmentType == 2){
+                binding.goalDescription.setOnLongClickListener(v-> {
+                    Log.d("GoalListAdapter", "Long press detected");
+                    PopupMenu popupMenu = new PopupMenu(context, v);
+                    popupMenu.inflate(R.menu.pending_long_press_context_menu);
+                    popupMenu.show();
+                    return true; // Consume the long click eventreturn false;
+                });
+            }
 
             return binding.getRoot();
         }
