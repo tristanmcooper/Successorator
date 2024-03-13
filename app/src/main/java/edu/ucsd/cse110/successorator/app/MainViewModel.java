@@ -178,6 +178,10 @@ public class MainViewModel extends ViewModel{
         goalRepository.changeToTodayView(id, isComplete, currentDate);
     }
 
+    public void changeToTomorrowView(int id, boolean isComplete){
+        goalRepository.changeToTodayView(id, isComplete, currentDate.plusDays(1));
+    }
+
 
     public RoomGoalRepository getRepo(){ return this.goalRepository;}
 
@@ -202,7 +206,7 @@ public class MainViewModel extends ViewModel{
         return this.contextType;
     }
 
-    //Pending Context Menu methods
+
 
 
 }

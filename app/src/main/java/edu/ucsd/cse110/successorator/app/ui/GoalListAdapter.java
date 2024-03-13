@@ -183,9 +183,13 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
                                 activityModel.changeToTodayView(goal.id(), false);
                                 return true;
                             case "Tomorrow":
+                                activityModel.changeToTomorrowView(goal.id(), false);
                                 return true;
                             case "Finished":
                                 activityModel.changeToTodayView(goal.id(), true);
+                                return true;
+                            case "Delete":
+                                activityModel.removeSpecificGoal(goal.id());
                                 return true;
 
                             default:
