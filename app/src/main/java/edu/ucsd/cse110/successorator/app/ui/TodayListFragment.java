@@ -69,7 +69,7 @@ public class TodayListFragment extends Fragment {
                 if (!g.date().equals("")){
                     goalDate = LocalDateTime.parse(g.date(), formatter);
                 }
-                if(!(goalDate ==null) && goalDate.getDayOfYear()<=currentDate.getDayOfYear()){
+                if(!(goalDate ==null) && goalDate.getDayOfYear()<=currentDate.getDayOfYear() && (activityModel.getContext().equals("N/A") || g.getContextType().equals(activityModel.getContext()))){
                     todaysGoals.add(g);
                     Log.d("TodayListFrag", "is context here: " + g.getContextType());
 
@@ -105,7 +105,7 @@ public class TodayListFragment extends Fragment {
                 if (!g.date().equals("")){
                     goalDate = LocalDateTime.parse(g.date(), formatter);
                 }
-                if(!(goalDate==null) && goalDate.getDayOfYear()<=currentDate.getDayOfYear()){
+                if(!(goalDate==null) && goalDate.getDayOfYear()<=currentDate.getDayOfYear() && (activityModel.getContext().equals("N/A") || g.getContextType().equals(activityModel.getContext()))){
                     todaysGoals.add(g);
                 }
             }

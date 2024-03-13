@@ -1,6 +1,7 @@
 package edu.ucsd.cse110.successorator.app.ui;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +11,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.app.databinding.FragmentRecurringListBinding;
+import edu.ucsd.cse110.successorator.lib.domain.Goal;
 
 public class RecurringListFragment extends Fragment {
     private MainViewModel activityModel;
@@ -50,8 +53,14 @@ public class RecurringListFragment extends Fragment {
         activityModel.getRecurringGoals().registerObserver(goals -> {
             if (goals == null) return;
 
+            var recurringGoals = new ArrayList<Goal>();
+            for(Goal g : goals){
+                if((activityModel.getContext().equals("N/A") || g.getContextType().equals(activityModel.getContext()))){
+                    recurringGoals.add(g);
+                }
+            }
             goalsAdapter.clear();
-            goalsAdapter.addAll(new ArrayList<>(goals)); // remember the mutable copy here!
+            goalsAdapter.addAll(recurringGoals); // remember the mutable copy here!
             goalsAdapter.notifyDataSetChanged();
         });
         // Set the adapter on the ListView

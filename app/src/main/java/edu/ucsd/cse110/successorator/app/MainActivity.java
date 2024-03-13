@@ -157,11 +157,11 @@ public class MainActivity extends AppCompatActivity {
         if (itemId == R.id.today_view) {
             swapFragments(0);
             fragmentType = 0;
-            refreshDatabase();
+            //model.refreshDatabase();
         } else if (itemId == R.id.tomorrow_view) {
             swapFragments(1);
             fragmentType = 1;
-            refreshDatabase();
+            //model.refreshDatabase();
         } else if (itemId == R.id.pending_view) {
             swapFragments(2);
             fragmentType = 2;
@@ -223,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
                     tmrwfrag.updateDate(currentDateTime);
                 }
             }
-            refreshDatabase();
+            model.refreshDatabase();
         }
 
         model.updateModelCurrentDate(currentDateTime);
@@ -236,15 +236,7 @@ public class MainActivity extends AppCompatActivity {
         advButtonClicked = true;
         updateDate();
     }
-    public void refreshDatabase(){
-        model.addGoal(new Goal(-1,
-                "",
-                false,
-                LocalDateTime.now().toString(),
-                "Once",
-                "Work"));
-        model.removeSpecificGoal(-1);
-    }
+
 
     @Override
     public void onResume(){
@@ -269,6 +261,7 @@ public class MainActivity extends AppCompatActivity {
                         .commit();
                 setTitle("Today's Goals");
                 updateDate();
+                model.refreshDatabase();
                 return;
             case 1:
                 getSupportFragmentManager()
@@ -277,6 +270,7 @@ public class MainActivity extends AppCompatActivity {
                         .commit();
                 setTitle("Tomorrow's Goals");
                 updateDate();
+                model.refreshDatabase();
                 return;
             case 2:
                 getSupportFragmentManager()
@@ -284,6 +278,7 @@ public class MainActivity extends AppCompatActivity {
                         .replace(R.id.fragment_container, PendingListFragment.newInstance())
                         .commit();
                 setTitle("Pending Goals");
+                model.refreshDatabase();
                 return;
             case 3:
                 getSupportFragmentManager()
@@ -291,6 +286,7 @@ public class MainActivity extends AppCompatActivity {
                         .replace(R.id.fragment_container, RecurringListFragment.newInstance())
                         .commit();
                 setTitle("Recurring Goals");
+                model.refreshDatabase();
                 return;
             default:
                 return;

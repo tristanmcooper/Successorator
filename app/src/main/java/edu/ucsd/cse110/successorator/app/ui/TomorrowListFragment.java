@@ -66,7 +66,7 @@ public class TomorrowListFragment extends Fragment {
                 if(!g.date().equals("")){
                     goalDate = LocalDateTime.parse(g.date(), formatter);
                 }
-                if(!(goalDate ==null) && goalDate.getDayOfYear()==currentDate.getDayOfYear()){
+                if(!(goalDate ==null) && goalDate.getDayOfYear()==currentDate.getDayOfYear() && (activityModel.getContext().equals("N/A") || g.getContextType().equals(activityModel.getContext()))){
                     tmrwGoals.add(g);
                 }
                 //add edge case for end of year
