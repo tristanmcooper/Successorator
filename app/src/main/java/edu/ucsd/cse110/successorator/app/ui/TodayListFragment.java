@@ -58,19 +58,21 @@ public class TodayListFragment extends Fragment {
         this.incompleteAdapter = new GoalListAdapter(requireContext(), List.of(), id -> {
             activityModel.changeCompleteStatus(id);
         }, 0);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm", Locale.getDefault());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS", Locale.getDefault());
 
         activityModel.getIncompleteGoals().registerObserver(goals -> {
             if (goals == null) return;
 
             var todaysGoals = new ArrayList<Goal>();
             for(Goal g : goals){
-                LocalDateTime goalDate = LocalDateTime.parse(g.date(), formatter);
-                if (goalDate.getDayOfYear() <= currentDate.getDayOfYear() && activityModel.getContext().equals("N/A")){
-                    todaysGoals.add(g);
+                LocalDateTime goalDate = null;
+                if (!g.date().equals("")){
+                    goalDate = LocalDateTime.parse(g.date(), formatter);
                 }
-                else if (goalDate.getDayOfYear()<=currentDate.getDayOfYear() && activityModel.getContext().equals(g.getContextType())){
+                if(!(goalDate ==null) && goalDate.getDayOfYear()<=currentDate.getDayOfYear()){
                     todaysGoals.add(g);
+                    Log.d("TodayListFrag", "is context here: " + g.getContextType());
+
                 }
             }
 
@@ -99,8 +101,11 @@ public class TodayListFragment extends Fragment {
             if (goals == null) return;
             var todaysGoals = new ArrayList<Goal>();
             for(Goal g : goals){
-                LocalDateTime goalDate = LocalDateTime.parse(g.date(), formatter);
-                if(goalDate.getDayOfYear()==currentDate.getDayOfYear()){
+                LocalDateTime goalDate = null;
+                if (!g.date().equals("")){
+                    goalDate = LocalDateTime.parse(g.date(), formatter);
+                }
+                if(!(goalDate==null) && goalDate.getDayOfYear()<=currentDate.getDayOfYear()){
                     todaysGoals.add(g);
                 }
             }

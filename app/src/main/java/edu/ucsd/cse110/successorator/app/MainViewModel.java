@@ -70,6 +70,7 @@ public class MainViewModel extends ViewModel{
             if (goals == null) return;
 
             var newRecurringGoals = goals.stream()
+                    .filter(goal -> !goal.date().isEmpty())
                     .sorted(Comparator.comparing(goal -> LocalDateTime.parse(goal.date())))
                     .collect(Collectors.toList());
             recurringGoals.setValue(newRecurringGoals);
@@ -173,8 +174,12 @@ public class MainViewModel extends ViewModel{
         return this.currentDate;
     }
 
-    public void changeToTodayViewComplete(int id){
-        goalRepository.changeToTodayViewComplete(id);
+    public void changeToTodayView(int id, boolean isComplete){
+        goalRepository.changeToTodayView(id, isComplete, currentDate);
+    }
+
+    public void changeToTomorrowView(int id, boolean isComplete){
+        goalRepository.changeToTodayView(id, isComplete, currentDate.plusDays(1));
     }
 
 
@@ -200,5 +205,8 @@ public class MainViewModel extends ViewModel{
     public String getContext() {
         return this.contextType;
     }
+
+
+
 
 }

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.PopupMenu;
 
 import androidx.annotation.NonNull;
 
@@ -19,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import edu.ucsd.cse110.successorator.app.MainViewModel;
+import edu.ucsd.cse110.successorator.app.R;
 import edu.ucsd.cse110.successorator.app.databinding.ListGoalItemBinding;
 import edu.ucsd.cse110.successorator.app.databinding.RecurringListGoalItemBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
@@ -26,6 +29,10 @@ import edu.ucsd.cse110.successorator.lib.domain.Goal;
 public class GoalListAdapter extends ArrayAdapter<Goal> {
     Consumer<Integer> onDeleteClick;
     int fragmentType;
+
+    Context context;
+
+    MainViewModel activityModel;
 
     public GoalListAdapter(Context context, List<Goal> goals, Consumer<Integer> onDeleteClick, int fragmentType) {
         // This sets a bunch of stuff internally, which we can access
@@ -36,6 +43,20 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
         super(context, 0, new ArrayList<>(goals));
         this.onDeleteClick = onDeleteClick;
         this.fragmentType = fragmentType;
+        this.context = context;
+    }
+
+    public GoalListAdapter(Context context, List<Goal> goals, Consumer<Integer> onDeleteClick, int fragmentType, MainViewModel model) {
+        // This sets a bunch of stuff internally, which we can access
+        // with getContext() and getItem() for example.
+        //
+        // Also note that ArrayAdapter NEEDS a mutable List (ArrayList),
+        // or it will crash!
+        super(context, 0, new ArrayList<>(goals));
+        this.onDeleteClick = onDeleteClick;
+        this.fragmentType = fragmentType;
+        this.context = context;
+        this.activityModel = model;
     }
 
     //get the view for each goal item
@@ -149,12 +170,47 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
                 binding.goalDescription.setPaintFlags(binding.goalDescription.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             }
 
-            // Don't want this functionality for recurring goals
-            binding.goalDescription.setOnClickListener(v -> {
-                var id = goal.id();
-                assert id != null;
-                onDeleteClick.accept(id);
-            });
+            if (fragmentType == 0 || fragmentType == 1){
+                // Don't want this functionality for pending or recurring view
+                binding.goalDescription.setOnClickListener(v -> {
+                    var id = goal.id();
+                    assert id != null;
+                    onDeleteClick.accept(id);
+                });
+            }
+            if (fragmentType == 2){
+                binding.goalDescription.setOnLongClickListener(v-> {
+                    Log.d("GoalListAdapter", "Long press detected");
+                    PopupMenu popupMenu = new PopupMenu(context, v);
+                    popupMenu.inflate(R.menu.pending_long_press_context_menu);
+
+                    popupMenu.setOnMenuItemClickListener(item -> {
+                        String title = item.getTitle().toString(); // Get the title of the clicked item
+                        switch (title) {
+                            case "Today":
+                                // Move to today view
+                                activityModel.changeToTodayView(goal.id(), false);
+                                return true;
+                            case "Tomorrow":
+                                activityModel.changeToTomorrowView(goal.id(), false);
+                                return true;
+                            case "Finished":
+                                activityModel.changeToTodayView(goal.id(), true);
+                                return true;
+                            case "Delete":
+                                activityModel.removeSpecificGoal(goal.id());
+                                return true;
+
+                            default:
+                                return false;
+                        }
+                    });
+
+
+                    popupMenu.show();
+                    return true; // Consume the long click event
+                });
+            }
 
             return binding.getRoot();
         }

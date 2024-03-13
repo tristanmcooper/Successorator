@@ -1,6 +1,7 @@
 package edu.ucsd.cse110.successorator.app.ui;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +25,6 @@ public class TomorrowListFragment extends Fragment {
     private MainViewModel activityModel;
     private FragmentTomorrowListBinding view;
     private GoalListAdapter incompleteAdapter;
-    private GoalListAdapter completeAdapter;
     private LocalDateTime currentDate;
 
     public TomorrowListFragment() {
@@ -54,22 +54,22 @@ public class TomorrowListFragment extends Fragment {
 
         // Initialize the Adapter (with an empty list for now) for incomplete tasks
         this.incompleteAdapter = new GoalListAdapter(requireContext(), List.of(), id -> {
-            activityModel.changeToTodayViewComplete(id);
+            activityModel.changeToTodayView(id,true);
         }, 1);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm", Locale.getDefault());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS", Locale.getDefault());
         activityModel.getIncompleteGoals().registerObserver(goals -> {
             if (goals == null) return;
 
             var tmrwGoals = new ArrayList<Goal>();
             for(Goal g : goals){
-                LocalDateTime goalDate = LocalDateTime.parse(g.date(), formatter);
-                if (goalDate.getDayOfYear() == currentDate.getDayOfYear() && g.getContextType().equals("N/A")){
-                    tmrwGoals.add(g);
-                } else if (goalDate.getDayOfYear() == currentDate.getDayOfYear() && g.getContextType().equals(activityModel.getContext())) {
+                LocalDateTime goalDate = null;
+                if(!g.date().equals("")){
+                    goalDate = LocalDateTime.parse(g.date(), formatter);
+                }
+                if(!(goalDate ==null) && goalDate.getDayOfYear()==currentDate.getDayOfYear()){
                     tmrwGoals.add(g);
                 }
                 //add edge case for end of year
-                System.out.println("Goal doesn't match"+currentDate.toString());
             }
             incompleteAdapter.clear();
             incompleteAdapter.addAll(tmrwGoals); // remember the mutable copy here!
