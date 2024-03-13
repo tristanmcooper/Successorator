@@ -21,7 +21,7 @@ import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 
 public class MainViewModel extends ViewModel{
-    private final RoomGoalRepository goalRepository;
+    private final GoalRepository goalRepository;
     private SimpleSubject<List<Goal>> incompleteGoals;
     private SimpleSubject<List<Goal>> completeGoals;
     private SimpleSubject<List<Goal>> recurringGoals;
@@ -42,7 +42,7 @@ public class MainViewModel extends ViewModel{
                     });
 
     //when making a new mainviewmodel ^ called up there
-    public MainViewModel(RoomGoalRepository goalRepository) {
+    public MainViewModel(GoalRepository goalRepository) {
          
         //creating simple subjects here so that we can observe them
         this.goalRepository = goalRepository;
@@ -178,7 +178,7 @@ public class MainViewModel extends ViewModel{
     }
 
 
-    public RoomGoalRepository getRepo(){ return this.goalRepository;}
+    public GoalRepository getRepo(){ return this.goalRepository;}
 
     //For testing us1
     public void setDisplayedTodayGoals(ArrayList<Goal> temp) {

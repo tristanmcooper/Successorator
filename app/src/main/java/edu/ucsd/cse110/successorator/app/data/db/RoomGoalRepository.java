@@ -1,6 +1,5 @@
 package edu.ucsd.cse110.successorator.app.data.db;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 
 import java.time.LocalDateTime;
@@ -14,7 +13,6 @@ import edu.ucsd.cse110.successorator.app.util.*;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 import edu.ucsd.cse110.successorator.lib.util.RepositorySubject;
-import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
 
 public class RoomGoalRepository extends RepositorySubject implements GoalRepository {
@@ -43,12 +41,6 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
     }
 
     @Override
-    public Goal tempFind(int id) {
-        var goalEntity = goalDao.find(id);
-        return goalEntity.toGoal();
-    }
-
-    @Override
     public Subject<List<Goal>> findCompleted(Boolean completed) {
         var entitiesLiveData = goalDao.findCompleted(completed);
         var goalsLiveData = Transformations.map(entitiesLiveData, entities -> {
@@ -59,6 +51,7 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
         return new LiveDataSubjectAdapter<>(goalsLiveData);
     }
 
+    @Override
     public Subject<List<Goal>> findCompleted(Boolean completed, String contextType) {
         var entitiesLiveData = goalDao.findCompleted(completed,contextType);
         var goalsLiveData = Transformations.map(entitiesLiveData, entities -> {
@@ -80,6 +73,7 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
         return new LiveDataSubjectAdapter<>(goalsLiveData);
     }
 
+    @Override
     public Subject<List<Goal>> findRecurring(String contextType) {
         var entitiesLiveData = goalDao.findRecurring(contextType);
         var goalsLiveData = Transformations.map(entitiesLiveData, entities -> {
@@ -119,7 +113,7 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
     @Override
     public void changeCompleted(int id) {
         var goal = goalDao.find(id).toGoal();
-        goalDao.insert(new GoalEntity(goal.id(), goal.description(), !goal.completed(), goal.date(), goal.repType(), goal.getContextType()));
+        goalDao.insert(new GoalEntity(goal.id(), goal.description(), !goal.completed(), goal.date(), goal.repType(), goal.contextType()));
         this.notifyObservers();
     }
 
@@ -144,25 +138,13 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
     }
 
     @Override
-    public void generateTomorrow() {
-        LiveData<List<GoalEntity>> list = goalDao.makeTomorrow("Daily");
-    }
-
-    @Override
     public void changeToTodayViewComplete(int id) {
         Goal temp = goalDao.find(id).toGoal();
         String tmrwDate = temp.date();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS", Locale.getDefault());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm", Locale.getDefault());
         LocalDateTime goalDate = LocalDateTime.parse(tmrwDate, formatter).minusDays(1);
-        Goal copy = new Goal(temp.id(), temp.description(), true, goalDate.toString(), temp.repType(), temp.getContextType());
+        Goal copy = new Goal(temp.id(), temp.description(), true, goalDate.toString(), temp.repType(), temp.contextType());
         remove(id);
         add(copy);
     }
-
-
-/*
-    public SimpleSubject<List<Goal>> getGoalsByContextType(String contextType) {
-        return goalDao.getGoalsByContext(contextType);
-    }
-     */
 }

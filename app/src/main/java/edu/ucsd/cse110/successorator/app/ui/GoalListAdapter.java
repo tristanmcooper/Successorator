@@ -3,7 +3,6 @@ package edu.ucsd.cse110.successorator.app.ui;
 
 import android.content.Context;
 import android.graphics.Paint;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +10,7 @@ import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 
-import org.xml.sax.helpers.AttributeListImpl;
-
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -59,7 +55,7 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
             }
 
             // Set contextIcon
-            binding.contextIcon.setText(goal.getContextType());
+            binding.contextIcon.setText(goal.contextType());
 
             // Set description
             binding.goalDescription.setText(goal.description());
@@ -139,7 +135,7 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
             }
 
             //populate the view with the task's context type
-            binding.contextIcon.setText(goal.getContextType());
+            binding.contextIcon.setText(goal.contextType());
 
             // Populate the view with the task's description.
             if (!goal.completed()) {

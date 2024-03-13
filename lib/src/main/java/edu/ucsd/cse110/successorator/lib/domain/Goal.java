@@ -42,6 +42,8 @@ public class Goal {
 
     public boolean completed() { return completed; }
 
+    public void changeCompleted() { this.completed = !this.completed; }
+
     public String date() {return date;}
 
     @Override
@@ -65,7 +67,7 @@ public class Goal {
         return repType;
     }
 
-    public String getContextType() {
+    public String contextType() {
         return contextType;
     }
 

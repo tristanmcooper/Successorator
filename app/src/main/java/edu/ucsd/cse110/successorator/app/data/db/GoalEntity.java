@@ -1,12 +1,9 @@
 package edu.ucsd.cse110.successorator.app.data.db;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-
-import java.time.LocalDateTime;
 
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 
@@ -45,7 +42,7 @@ public class GoalEntity {
 
     // Change Goal object into GoalEntity object
     public static GoalEntity fromGoal(@NonNull Goal goal) {
-        var goalEntity = new GoalEntity(goal.id(), goal.description(), goal.completed(), goal.date(), goal.repType(), goal.getContextType());
+        var goalEntity = new GoalEntity(goal.id(), goal.description(), goal.completed(), goal.date(), goal.repType(), goal.contextType());
         return goalEntity;
     }
 

@@ -1,7 +1,6 @@
 package edu.ucsd.cse110.successorator.app.ui;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,7 +68,7 @@ public class TodayListFragment extends Fragment {
                 if (goalDate.getDayOfYear() <= currentDate.getDayOfYear() && activityModel.getContext().equals("N/A")){
                     todaysGoals.add(g);
                 }
-                else if (goalDate.getDayOfYear()<=currentDate.getDayOfYear() && activityModel.getContext().equals(g.getContextType())){
+                else if (goalDate.getDayOfYear()<=currentDate.getDayOfYear() && activityModel.getContext().equals(g.contextType())){
                     todaysGoals.add(g);
                 }
             }

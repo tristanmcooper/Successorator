@@ -41,16 +41,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
-    private ActivityMainBinding binding;
     private ActivityMainBinding view;
-
     private MainViewModel model; // won't need later when we do fragments
-
     private TextView textViewDate;
     private Handler handler;// won't need later when we do fragments
-
     private AppCompatImageButton buttonAdvanceDate;
-
     private Runnable dateUpdater;
     private LocalDateTime currentDateTime;
     private GoalListAdapter adapter;

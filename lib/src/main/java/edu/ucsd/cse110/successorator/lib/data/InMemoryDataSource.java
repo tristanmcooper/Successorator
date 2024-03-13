@@ -3,6 +3,7 @@ package edu.ucsd.cse110.successorator.lib.data;
 
 // Import Java data structures
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,11 +17,11 @@ import edu.ucsd.cse110.successorator.lib.util.SimpleSubject; // to be replaced w
  */
 public class InMemoryDataSource {
 
-    private final Map<Integer, Goal> goals
+    private Map<Integer, Goal> goals
             = new HashMap<>();
-    private final Map<Integer, SimpleSubject<Goal>> goalSubjects
+    private Map<Integer, SimpleSubject<Goal>> goalSubjects
             = new HashMap<>();
-    private final SimpleSubject<List<Goal>> allGoalsSubjects
+    private SimpleSubject<List<Goal>> allGoalsSubjects
             = new SimpleSubject<>();
 
     public InMemoryDataSource() {
@@ -47,6 +48,79 @@ public class InMemoryDataSource {
         return allGoalsSubjects;
     }
 
+    public SimpleSubject<List<Goal>> getCompleted(Boolean completed) {
+        SimpleSubject<List<Goal>> ret = new SimpleSubject<>();
+        List<Goal> retList = new ArrayList<>();
+        for (Map.Entry<Integer, SimpleSubject<Goal>> entry : goalSubjects.entrySet()) {
+            if (entry.getValue().getValue().completed() == completed) {
+                retList.add(entry.getValue().getValue());
+            }
+        }
+        ret.setValue(retList);
+        return ret;
+    }
+
+    public SimpleSubject<List<Goal>> getCompleted(Boolean completed, String context) {
+        SimpleSubject<List<Goal>> ret = new SimpleSubject<>();
+        List<Goal> retList = new ArrayList<>();
+        for (Map.Entry<Integer, SimpleSubject<Goal>> entry : goalSubjects.entrySet()) {
+            Goal g = entry.getValue().getValue();
+            if (g.completed() == completed && g.contextType().equals(context)) {
+                retList.add(g);
+            }
+        }
+        ret.setValue(retList);
+        return ret;
+    }
+
+    public SimpleSubject<List<Goal>> getRecurring() {
+        SimpleSubject<List<Goal>> ret = new SimpleSubject<>();
+        List<Goal> retList = new ArrayList<>();
+        for (Map.Entry<Integer, SimpleSubject<Goal>> entry : goalSubjects.entrySet()) {
+            if (!entry.getValue().getValue().repType().equals("Once")) {
+                retList.add(entry.getValue().getValue());
+            }
+        }
+        ret.setValue(retList);
+        return ret;
+    }
+
+    public SimpleSubject<List<Goal>> getRecurring(String context) {
+        SimpleSubject<List<Goal>> ret = new SimpleSubject<>();
+        List<Goal> retList = new ArrayList<>();
+        for (Map.Entry<Integer, SimpleSubject<Goal>> entry : goalSubjects.entrySet()) {
+            Goal g = entry.getValue().getValue();
+            if (!g.repType().equals("Once") && g.contextType().equals(context)) {
+                retList.add(g);
+            }
+        }
+        ret.setValue(retList);
+        return ret;
+    }
+
+    public void changeCompleted(int id) {
+        Goal g = goalSubjects.get(id).getValue();
+        g.changeCompleted();
+        SimpleSubject<Goal> updatedGoal = new SimpleSubject<>();
+        updatedGoal.setValue(g);
+        goalSubjects.put(g.id(), updatedGoal);
+
+        g = goals.get(id);
+        g.changeCompleted();
+        goals.put(g.id(), g);
+        allGoalsSubjects.setValue(getGoals());
+    }
+
+    public void deleteCompleted() {
+        for (Map.Entry<Integer, SimpleSubject<Goal>> entry : goalSubjects.entrySet()) {
+            Goal g = entry.getValue().getValue();
+            if (g.completed()) {
+                goalSubjects.remove(entry.getValue());
+            }
+        }
+        allGoalsSubjects.setValue(getGoals());
+    }
+
     public void putGoal(Goal goal) {
         goals.put(goal.id(), goal);
         if (goalSubjects.containsKey(goal.id())) {
@@ -56,21 +130,25 @@ public class InMemoryDataSource {
     }
 
     public void putGoals(List<Goal> goals) {
-        goals.forEach(goal -> goals.add(goal.id(), goal));
+        goals.forEach(goal -> {
+            this.goals.put(goal.id(), goal);
+            SimpleSubject<Goal> goalSubject = new SimpleSubject<>();
+            goalSubject.setValue(goal);
+            goalSubjects.put(goal.id(), goalSubject);
+        });
         allGoalsSubjects.setValue(getGoals());
     }
 
-    public final static List<Goal> DEFAULT_GOALS = List.of(
-            new Goal(0, "Goal 0: Get Lettuce", false, LocalDateTime.now().toString(), "", ""),
-            new Goal(1, "Goal 1: Get Tomato", false, LocalDateTime.now().toString(), "", ""),
-            new Goal(2, "Goal 2: Finish Project PLEASE", false, LocalDateTime.now().toString(), "", "")
-    );
+    public void clear() {
+        goals.clear();
+        goalSubjects.clear();
+        allGoalsSubjects.setValue(getGoals());
+    }
 
-    public static InMemoryDataSource fromDefault() {
-        var data = new InMemoryDataSource();
-        for (Goal goal : DEFAULT_GOALS) {
-            data.putGoal(goal);
-        }
-        return data;
+    public void changeToTodayComplete(int id) {
+        Goal g = goals.get(id);
+        LocalDateTime date = LocalDateTime.parse(g.date());
+        Goal copyOfGoal = new Goal(g.id(), g.description(), true, date.minusDays(1).toString(), g.repType(), g.contextType());
+        putGoal(copyOfGoal);
     }
 }

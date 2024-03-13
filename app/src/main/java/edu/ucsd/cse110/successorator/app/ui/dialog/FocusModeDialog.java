@@ -4,25 +4,19 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import edu.ucsd.cse110.successorator.app.MainActivity;
 import edu.ucsd.cse110.successorator.app.MainViewModel;
-import edu.ucsd.cse110.successorator.app.R;
-import edu.ucsd.cse110.successorator.app.data.db.GoalEntity;
 import edu.ucsd.cse110.successorator.app.databinding.DialogFocusModeBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 
@@ -87,7 +81,7 @@ public class FocusModeDialog extends DialogFragment {
 
         for (Goal goal : allGoals) {
             // Assuming your Goal class has a method to get the context type (replace with your actual method)
-            String goalFocusType = goal.getContextType();
+            String goalFocusType = goal.contextType();
 
             if (selectedFocusString == goalFocusType.charAt(0)) {
                 filteredGoals.add(goal);

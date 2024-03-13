@@ -11,7 +11,11 @@ public interface GoalRepository {
 
     Subject<List<Goal>> findCompleted(Boolean completed);
 
+    Subject<List<Goal>> findCompleted(Boolean completed, String contextType);
+
     Subject<List<Goal>> findRecurring();
+
+    Subject<List<Goal>> findRecurring(String contextType);
 
     void save(Goal goal);
 
@@ -24,13 +28,10 @@ public interface GoalRepository {
     int count();
 
     void deleteCompleted();
-    Goal tempFind(int id);
 
     void clear();
 
     void remove(int id);
-
-    void generateTomorrow();
 
     void changeToTodayViewComplete(int id);
 
