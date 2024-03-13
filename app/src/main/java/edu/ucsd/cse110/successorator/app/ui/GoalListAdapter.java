@@ -2,6 +2,7 @@
 package edu.ucsd.cse110.successorator.app.ui;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -81,6 +82,20 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
 
             // Set contextIcon
             binding.contextIcon.setText(goal.getContextType());
+            switch (goal.getContextType()){
+                case "H":
+                    binding.contextIcon.setBackgroundColor(Color.parseColor("#E9C46A"));
+                    break;
+                case "W":
+                    binding.contextIcon.setBackgroundColor(Color.parseColor("#5D8AA8"));
+                    break;
+                case "S":
+                    binding.contextIcon.setBackgroundColor(Color.parseColor("#CDB4DB"));
+                    break;
+                case "E":
+                    binding.contextIcon.setBackgroundColor(Color.parseColor("#8CBF99"));
+                    break;
+            }
 
             // Set description
             binding.goalDescription.setText(goal.description());
@@ -182,6 +197,20 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
 
             //populate the view with the task's context type
             binding.contextIcon.setText(goal.getContextType());
+            switch (goal.getContextType()){
+                case "H":
+                    binding.contextIcon.setBackgroundColor(Color.parseColor("#E9C46A"));
+                    break;
+                case "W":
+                    binding.contextIcon.setBackgroundColor(Color.parseColor("#5D8AA8"));
+                    break;
+                case "S":
+                    binding.contextIcon.setBackgroundColor(Color.parseColor("#CDB4DB"));
+                    break;
+                case "E":
+                    binding.contextIcon.setBackgroundColor(Color.parseColor("#8CBF99"));
+                    break;
+            }
 
             // Populate the view with the task's description.
             if (!goal.completed()) {
