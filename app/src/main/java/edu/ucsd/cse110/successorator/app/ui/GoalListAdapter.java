@@ -145,6 +145,27 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
                     binding.goalRecurrence.setText("None");
             }
 
+
+                binding.goalDescription.setOnLongClickListener(v-> {
+                    Log.d("GoalListAdapter", "Long press detected");
+                    PopupMenu popupMenu = new PopupMenu(context, v);
+                    popupMenu.inflate(R.menu.recurring_long_press_context_menu);
+
+                    popupMenu.setOnMenuItemClickListener(item -> {
+                        String title = item.getTitle().toString(); // Get the title of the clicked item
+                        switch (title) {
+                            case "Delete":
+                                activityModel.removeSpecificGoal(goal.id());
+                                return true;
+
+                            default:
+                                return false;
+                        }
+                    });
+                    popupMenu.show();
+                    return true; // Consume the long click event
+                });
+
             return binding.getRoot();
 
         } else {
@@ -211,6 +232,7 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
                     return true; // Consume the long click event
                 });
             }
+
 
             return binding.getRoot();
         }

@@ -49,7 +49,7 @@ public class RecurringListFragment extends Fragment {
         // Initialize the Adapter (with an empty list for now) for incomplete tasks
         this.goalsAdapter = new GoalListAdapter(requireContext(), List.of(), id -> {
             activityModel.changeCompleteStatus(id);
-        }, 3);
+        }, 3, activityModel);
         activityModel.getRecurringGoals().registerObserver(goals -> {
             if (goals == null) return;
 
