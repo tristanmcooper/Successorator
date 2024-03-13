@@ -66,10 +66,11 @@ public class TodayListFragment extends Fragment {
             var todaysGoals = new ArrayList<Goal>();
             for(Goal g : goals){
                 LocalDateTime goalDate = LocalDateTime.parse(g.date(), formatter);
-                if(goalDate.getDayOfYear()<=currentDate.getDayOfYear()){
+                if (goalDate.getDayOfYear() <= currentDate.getDayOfYear() && activityModel.getContext().equals("N/A")){
                     todaysGoals.add(g);
-                    Log.d("TodayListFrag", "is context here: " + g.getContextType());
-
+                }
+                else if (goalDate.getDayOfYear()<=currentDate.getDayOfYear() && activityModel.getContext().equals(g.getContextType())){
+                    todaysGoals.add(g);
                 }
             }
 
