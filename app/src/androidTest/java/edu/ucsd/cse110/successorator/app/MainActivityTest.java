@@ -1,8 +1,15 @@
 package edu.ucsd.cse110.successorator.app;
 
+// ESPRESSO IMPORTS
 import static androidx.test.core.app.ActivityScenario.launch;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
 import static junit.framework.TestCase.assertEquals;
 
@@ -11,12 +18,20 @@ import static org.junit.Assert.assertNotNull;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.filters.LargeTest;
 
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Locale;
+import java.text.SimpleDateFormat;
 
 import edu.ucsd.cse110.successorator.app.databinding.ActivityMainBinding;
 import edu.ucsd.cse110.successorator.app.ui.TodayListFragment;
@@ -29,9 +44,30 @@ import edu.ucsd.cse110.successorator.lib.domain.Goal;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 @RunWith(AndroidJUnit4.class)
+@LargeTest
 public class MainActivityTest {
 
     private MainViewModel model;
+
+    @Rule
+    public ActivityScenarioRule<MainActivity> activityRule =
+            new ActivityScenarioRule<>(MainActivity.class);
+
+    @Test
+    public void testAdvanceDateButtonChangesDate() {
+        // reproduce date format from MainActivity
+        SimpleDateFormat formatter = new SimpleDateFormat("E, M/d", Locale.getDefault());
+        // Calculate expected date by adding 1
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
+        String expectedDate = formatter.format(calendar.getTime());
+
+        // Click advance date button
+        onView(withId(R.id.button_advance_date)).perform(click());
+
+        // Check expected matches actual
+        onView(withId(R.id.dateTextView)).check(matches(withText(expectedDate)));
+    }
 
 
     @Test
