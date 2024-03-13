@@ -32,9 +32,10 @@ public class RecurringListFragment extends Fragment {
         return fragment;
     }
 
+    @Nullable
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        this.view = FragmentRecurringListBinding.inflate(inflater, container, false);
 
         // Initialize the Model
         var modelOwner = requireActivity();
@@ -53,13 +54,6 @@ public class RecurringListFragment extends Fragment {
             goalsAdapter.addAll(new ArrayList<>(goals)); // remember the mutable copy here!
             goalsAdapter.notifyDataSetChanged();
         });
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        this.view = FragmentRecurringListBinding.inflate(inflater, container, false);
-
         // Set the adapter on the ListView
         view.uncompletedGoalList.setAdapter(goalsAdapter);
 
