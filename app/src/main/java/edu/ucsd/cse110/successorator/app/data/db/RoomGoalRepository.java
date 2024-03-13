@@ -148,17 +148,9 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
     @Override
     public void changeToTodayView(int id, boolean isComplete, LocalDateTime currentDate) {
         Goal temp = goalDao.find(id).toGoal();
-        /*String tmrwDate = temp.date();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS", Locale.getDefault());
-        LocalDateTime goalDate = LocalDateTime.parse(tmrwDate, formatter).minusDays(1);*/
-        Goal copy = new Goal(temp.id(), temp.description(), isComplete, currentDate.toString(), temp.repType(), temp.getContextType());
+        Goal copy = new Goal(temp.id(), temp.description(), isComplete, currentDate.withHour(2).withMinute(0).withSecond(0).withNano(0).toString(), temp.repType(), temp.getContextType());
         remove(id);
         add(copy);
     }
 
-/*
-    public SimpleSubject<List<Goal>> getGoalsByContextType(String contextType) {
-        return goalDao.getGoalsByContext(contextType);
-    }
-     */
 }
