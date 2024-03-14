@@ -1,6 +1,7 @@
 package edu.ucsd.cse110.successorator.app.ui;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +11,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.app.databinding.FragmentRecurringListBinding;
+import edu.ucsd.cse110.successorator.lib.domain.Goal;
 
 public class RecurringListFragment extends Fragment {
     private MainViewModel activityModel;
@@ -32,9 +35,10 @@ public class RecurringListFragment extends Fragment {
         return fragment;
     }
 
+    @Nullable
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        this.view = FragmentRecurringListBinding.inflate(inflater, container, false);
 
         // Initialize the Model
         var modelOwner = requireActivity();
@@ -45,21 +49,20 @@ public class RecurringListFragment extends Fragment {
         // Initialize the Adapter (with an empty list for now) for incomplete tasks
         this.goalsAdapter = new GoalListAdapter(requireContext(), List.of(), id -> {
             activityModel.changeCompleteStatus(id);
-        }, 3);
+        }, 3, activityModel);
         activityModel.getRecurringGoals().registerObserver(goals -> {
             if (goals == null) return;
 
+            var recurringGoals = new ArrayList<Goal>();
+            for(Goal g : goals){
+                if((activityModel.getContext().equals("N/A") || g.getContextType().equals(activityModel.getContext()))){
+                    recurringGoals.add(g);
+                }
+            }
             goalsAdapter.clear();
-            goalsAdapter.addAll(new ArrayList<>(goals)); // remember the mutable copy here!
+            goalsAdapter.addAll(recurringGoals); // remember the mutable copy here!
             goalsAdapter.notifyDataSetChanged();
         });
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        this.view = FragmentRecurringListBinding.inflate(inflater, container, false);
-
         // Set the adapter on the ListView
         view.uncompletedGoalList.setAdapter(goalsAdapter);
 

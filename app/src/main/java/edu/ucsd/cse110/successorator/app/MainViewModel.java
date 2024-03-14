@@ -81,7 +81,11 @@ public class MainViewModel extends ViewModel{
     public void addGoal(Goal goal){
         goalRepository.add(goal);
     }
-
+    public void setContextFilterType(String contextType){
+        this.contextType = contextType;
+        refreshDatabase();
+    }
+/*
     public void setFilterContext(String contextType) {
         this.contextType = contextType;
         if (contextType.equals("N/A")) {
@@ -123,24 +127,22 @@ public class MainViewModel extends ViewModel{
                         .collect(Collectors.toList());
                 completeGoals.setValue(newCompleteGoals);
             });
-            goalRepository.findRecurring(contextType).registerObserver(goals -> {
+            goalRepository.findRecurring().registerObserver(goals -> {
                 if (goals == null) return;
 
                 var newRecurringGoals = goals.stream()
                         .sorted(Comparator.comparing(goal -> LocalDateTime.parse(goal.date())))
                         .collect(Collectors.toList());
+
                 recurringGoals.setValue(newRecurringGoals);
             });
         }
 
     }
+
+ */
     public void removeSpecificGoal(int id){goalRepository.remove(id);}
 
-    /*
-    public void updateTomorrow(){
-        goalRepository.
-    }
-     */
 
     //the getters so that other classes can watch when the db changes so they can upd UI
     public int getCount(){ 
@@ -181,7 +183,15 @@ public class MainViewModel extends ViewModel{
     public void changeToTomorrowView(int id, boolean isComplete){
         goalRepository.changeToTodayView(id, isComplete, currentDate.plusDays(1));
     }
-
+    public void refreshDatabase(){
+        addGoal(new Goal(-1,
+                "",
+                false,
+                LocalDateTime.now().withHour(2).withMinute(0).withSecond(0).withNano(0).toString(),
+                "Once",
+                "Work"));
+        removeSpecificGoal(-1);
+    }
 
     public RoomGoalRepository getRepo(){ return this.goalRepository;}
 

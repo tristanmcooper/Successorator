@@ -56,7 +56,7 @@ public class TomorrowListFragment extends Fragment {
         this.incompleteAdapter = new GoalListAdapter(requireContext(), List.of(), id -> {
             activityModel.changeToTodayView(id,true);
         }, 1);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS", Locale.getDefault());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm", Locale.getDefault());
         activityModel.getIncompleteGoals().registerObserver(goals -> {
             if (goals == null) return;
 
@@ -66,7 +66,7 @@ public class TomorrowListFragment extends Fragment {
                 if(!g.date().equals("")){
                     goalDate = LocalDateTime.parse(g.date(), formatter);
                 }
-                if(!(goalDate ==null) && goalDate.getDayOfYear()==currentDate.getDayOfYear()){
+                if(!(goalDate ==null) && goalDate.getDayOfYear()==currentDate.getDayOfYear() && (activityModel.getContext().equals("N/A") || g.getContextType().equals(activityModel.getContext()))){
                     tmrwGoals.add(g);
                 }
                 //add edge case for end of year

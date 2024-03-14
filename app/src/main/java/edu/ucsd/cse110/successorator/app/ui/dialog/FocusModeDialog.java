@@ -104,9 +104,9 @@ public class FocusModeDialog extends DialogFragment {
         RadioButton selectedFocusIdButton = view.getRoot().findViewById(selectedFocusTypeId);
         String selectedFocusString = selectedFocusIdButton.getText().toString();
         if (!selectedFocusString.equals("N/A")) {
-            activityModel.setFilterContext(selectedFocusString.substring(0, 1));
+            activityModel.setContextFilterType(selectedFocusString.substring(0, 1));
         } else {
-            activityModel.setFilterContext(selectedFocusString);
+            activityModel.setContextFilterType(selectedFocusString);
         }
 
         updateBackgroundColor(dialog, selectedFocusString);

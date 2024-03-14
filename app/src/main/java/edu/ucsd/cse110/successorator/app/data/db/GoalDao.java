@@ -46,11 +46,11 @@ public interface GoalDao {
     @Query("SELECT * FROM goals WHERE contextType = :contextType AND completed= :completed")
     LiveData<List<GoalEntity>> findCompleted(boolean completed, String contextType);
 
-    @Query("SELECT * FROM goals WHERE repType != 'Once'")
+    @Query("SELECT * FROM goals WHERE repType <> 'Once' AND reptype <> 'pending'")
     LiveData<List<GoalEntity>> findRecurring();
 
     // Overload to filter by context
-    @Query("SELECT * FROM goals WHERE repType != 'Once' AND contextType = :contextType")
+    @Query("SELECT * FROM goals WHERE repType <> 'Once' AND contextType = :contextType")
     LiveData<List<GoalEntity>> findRecurring(String contextType);
 
     // Return number of goals in database
