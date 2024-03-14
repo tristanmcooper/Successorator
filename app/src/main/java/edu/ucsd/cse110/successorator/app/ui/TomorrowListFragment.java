@@ -71,6 +71,18 @@ public class TomorrowListFragment extends Fragment {
                 }
                 //add edge case for end of year
             }
+
+            if (view.defaultGoals != null) {
+                // Set defaultGoals visibility
+                if (tmrwGoals.size() == 0) {
+                    view.defaultGoals.setVisibility(View.VISIBLE);
+                } else {
+                    view.defaultGoals.setVisibility(View.INVISIBLE);
+                }
+            } else {
+                System.out.println("defaultGoals view is null");
+            }
+
             incompleteAdapter.clear();
             incompleteAdapter.addAll(tmrwGoals); // remember the mutable copy here!
             activityModel.setDisplayedTomorrowGoals(tmrwGoals);

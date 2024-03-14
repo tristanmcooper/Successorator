@@ -30,6 +30,7 @@ public class MainViewModel extends ViewModel{
     private ArrayList<Goal> displayedTodayGoals;
     private ArrayList<Goal> displayedTomorrowGoals;
     private String contextType = "N/A";
+    private int idCount = 0;
 
     //basically grabs the database
     public static final ViewModelInitializer<MainViewModel> initializer =
@@ -49,6 +50,8 @@ public class MainViewModel extends ViewModel{
         this.incompleteGoals = new SimpleSubject<>();
         this.completeGoals = new SimpleSubject<>();
         this.recurringGoals = new SimpleSubject<>();
+
+        this.idCount = getCount();
 
         goalRepository.findCompleted(false).registerObserver(goals -> {
             if (goals == null) return;
@@ -79,74 +82,24 @@ public class MainViewModel extends ViewModel{
 
     //Probably just for testing, might be violating SRP idk
     public void addGoal(Goal goal){
+        this.idCount += 1;
         goalRepository.add(goal);
     }
     public void setContextFilterType(String contextType){
         this.contextType = contextType;
         refreshDatabase();
     }
-/*
-    public void setFilterContext(String contextType) {
-        this.contextType = contextType;
-        if (contextType.equals("N/A")) {
-            goalRepository.findCompleted(false).registerObserver(goals -> {
-                if (goals == null) return;
-                var newIncompleteGoals = goals.stream()
-                        .sorted(Comparator.comparingInt(Goal::id))
-                        .collect(Collectors.toList());
-                incompleteGoals.setValue(newIncompleteGoals);
-            });
-            goalRepository.findCompleted(true).registerObserver(goals -> {
-                if (goals == null) return;
-                var newCompleteGoals = goals.stream()
-                        .sorted(Comparator.comparingInt(Goal::id))
-                        .collect(Collectors.toList());
-                completeGoals.setValue(newCompleteGoals);
-            });
-            goalRepository.findRecurring().registerObserver(goals -> {
-                if (goals == null) return;
 
-                var newRecurringGoals = goals.stream()
-                        .sorted(Comparator.comparing(goal -> LocalDateTime.parse(goal.date())))
-                        .collect(Collectors.toList());
-                recurringGoals.setValue(newRecurringGoals);
-            });
-        } else {
-            goalRepository.findCompleted(false, contextType).registerObserver(goals -> {
-                if (goals == null) return;
-                var newIncompleteGoals = goals.stream()
-                        .sorted(Comparator.comparingInt(Goal::id))
-                        .collect(Collectors.toList());
-                incompleteGoals.setValue(newIncompleteGoals);
-            });
-
-            goalRepository.findCompleted(true, contextType).registerObserver(goals -> {
-                if (goals == null) return;
-                var newCompleteGoals = goals.stream()
-                        .sorted(Comparator.comparingInt(Goal::id))
-                        .collect(Collectors.toList());
-                completeGoals.setValue(newCompleteGoals);
-            });
-            goalRepository.findRecurring().registerObserver(goals -> {
-                if (goals == null) return;
-
-                var newRecurringGoals = goals.stream()
-                        .sorted(Comparator.comparing(goal -> LocalDateTime.parse(goal.date())))
-                        .collect(Collectors.toList());
-
-                recurringGoals.setValue(newRecurringGoals);
-            });
-        }
-
-    }
-
- */
     public void removeSpecificGoal(int id){goalRepository.remove(id);}
 
 
     //the getters so that other classes can watch when the db changes so they can upd UI
     public int getCount(){ 
         return goalRepository.count(); 
+    }
+
+    public int getMaxId() {
+        return this.idCount;
     }
 
     public void changeCompleteStatus(int id){

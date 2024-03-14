@@ -20,6 +20,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -80,7 +81,7 @@ public class RecurringAddGoalDialog extends DialogFragment{
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
         // Get user input from the EditText
         String description = view.editText.getText().toString();
-        int currCount = activityModel.getCount();
+        int currCount = activityModel.getMaxId();
 
         if (description.length() == 0) {
             new AlertDialog.Builder(requireContext())
@@ -113,6 +114,9 @@ public class RecurringAddGoalDialog extends DialogFragment{
 
         // Add the new goal to your model
         activityModel.addGoal(newGoal);
+
+        // Add 'instances' of recurring goals as needed
+        createInstances(currCount+1);
 
         // Dismiss the dialog
         dialog.dismiss();
@@ -219,5 +223,63 @@ public class RecurringAddGoalDialog extends DialogFragment{
 
         // Display
         datePicker.show(getActivity().getSupportFragmentManager(), "datePicker");
+    }
+
+    private void createInstances(int id) {
+        Goal recurringGoal = activityModel.getRepo().find(id).getValue(); // TODO Code this function in activityModel
+        if (recurringGoal == null) { return; }
+        int currCount = activityModel.getMaxId();
+        switch (recurringGoal.repType()) {
+            case "Daily":
+                // Create instance for today and tomorrow
+                Goal todayGoal = new Goal(currCount+1, recurringGoal.description(), false, selectedDate.plusDays(1).toString(), "Once", recurringGoal.getContextType());
+                activityModel.addGoal(todayGoal);
+                Goal tmrGoal = new Goal(currCount+2, recurringGoal.description(), false, selectedDate.plusDays(2).toString(), "Once", recurringGoal.getContextType());
+                activityModel.addGoal(tmrGoal);
+                break;
+            case "Weekly":
+                Goal weeklyGoal = new Goal(currCount+1, recurringGoal.description(), false, selectedDate.plusDays(7).toString(), "Once", recurringGoal.getContextType());
+                activityModel.addGoal(weeklyGoal);
+                break;
+            case "Monthly":
+                // If 5th some day doesn't exist, create 1st that day next month
+                Goal monthlyGoal;
+                int weekNum = this.selectedDate.getDayOfMonth() / 7;
+                if (this.selectedDate.getDayOfMonth() % 7 != 0) {
+                    weekNum += 1;
+                }
+
+                // Calculate date of next month's occurrence
+                LocalDateTime firstDayOfNextMonth = LocalDateTime.of(selectedDate.getYear(), selectedDate.getMonthValue() + 1, 1, 2, 0, 0);
+                String dayOfWeek = firstDayOfNextMonth.getDayOfWeek().toString();
+                LocalDateTime nextRecurrenceDate = LocalDateTime.of(selectedDate.getYear(), selectedDate.getMonthValue() + 1, weekNum * 7, 2, 0, 0);
+                HashMap<String, Integer> valueOfWeekDays = new HashMap<>() {{
+                    put("Monday", 1);
+                    put("Tuesday", 2);
+                    put("Wednesday", 3);
+                    put("Thursday", 4);
+                    put("Friday", 5);
+                    put("Saturday", 6);
+                    put("Sunday", 7);
+                }};
+                nextRecurrenceDate.plusDays(Math.abs(valueOfWeekDays.get(selectedDate.getDayOfWeek().toString()) - valueOfWeekDays.get(dayOfWeek)));
+
+                // nextRecurrenceDate already set to following month if exceeds next month
+                monthlyGoal = new Goal(currCount+1, recurringGoal.description(), false, nextRecurrenceDate.toString(), "Once", recurringGoal.getContextType());
+                activityModel.addGoal(monthlyGoal);
+                break;
+            case "Yearly":
+                // If Feb 29 is selected, selected year is leap year, next instance is March 1 next year
+                Goal yearlyGoal;
+                if (selectedDate.getMonthValue() == 2 && selectedDate.getDayOfMonth() == 29) {
+                    yearlyGoal = new Goal(currCount+1, recurringGoal.description(), false, selectedDate.plusYears(1).plusDays(1).toString(), "Once", recurringGoal.getContextType());
+                } else {
+                    yearlyGoal = new Goal(currCount+1, recurringGoal.description(), false, selectedDate.plusYears(1).toString(), "Once", recurringGoal.getContextType());
+                }
+                activityModel.addGoal(yearlyGoal);
+                break;
+            default:
+
+        }
     }
 }

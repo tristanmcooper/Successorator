@@ -61,7 +61,17 @@ public class PendingListFragment extends Fragment {
                 if(g.repType().equals("pending") && g.date().isEmpty() && (activityModel.getContext().equals("N/A") || g.getContextType().equals(activityModel.getContext()))){
                     pendingGoals.add(g);
                 }
+            }
 
+            if (view.defaultGoals != null) {
+                // Set defaultGoals visibility
+                if (pendingGoals.size() == 0) {
+                    view.defaultGoals.setVisibility(View.VISIBLE);
+                } else {
+                    view.defaultGoals.setVisibility(View.INVISIBLE);
+                }
+            } else {
+                System.out.println("defaultGoals view is null");
             }
             incompleteAdapter.clear();
             incompleteAdapter.addAll(pendingGoals); // remember the mutable copy here!

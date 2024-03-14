@@ -59,6 +59,18 @@ public class RecurringListFragment extends Fragment {
                     recurringGoals.add(g);
                 }
             }
+
+            if (view.defaultGoals != null) {
+                // Set defaultGoals visibility
+                if (recurringGoals.size() == 0) {
+                    view.defaultGoals.setVisibility(View.VISIBLE);
+                } else {
+                    view.defaultGoals.setVisibility(View.INVISIBLE);
+                }
+            } else {
+                System.out.println("defaultGoals view is null");
+            }
+
             goalsAdapter.clear();
             goalsAdapter.addAll(recurringGoals); // remember the mutable copy here!
             goalsAdapter.notifyDataSetChanged();
