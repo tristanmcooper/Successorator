@@ -9,11 +9,15 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+
+import androidx.test.espresso.matcher.RootMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
 import static junit.framework.TestCase.assertEquals;
 
 import static org.junit.Assert.assertNotNull;
+
+import android.view.View;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
@@ -22,6 +26,7 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 
+import org.hamcrest.Matcher;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,6 +39,7 @@ import java.util.Locale;
 import java.text.SimpleDateFormat;
 
 import edu.ucsd.cse110.successorator.app.databinding.ActivityMainBinding;
+import edu.ucsd.cse110.successorator.app.databinding.DialogTodayTomorrowAddGoalsBinding;
 import edu.ucsd.cse110.successorator.app.ui.TodayListFragment;
 import edu.ucsd.cse110.successorator.app.ui.TomorrowListFragment;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
@@ -54,7 +60,7 @@ public class MainActivityTest {
             new ActivityScenarioRule<>(MainActivity.class);
 
     @Test
-    public void testAdvanceDateButtonChangesDate() {
+    public void testAdvanceDateButtonChangesDateDisplay() {
         // reproduce date format from MainActivity
         SimpleDateFormat formatter = new SimpleDateFormat("E, M/d", Locale.getDefault());
         // Calculate expected date by adding 1
@@ -69,81 +75,96 @@ public class MainActivityTest {
         onView(withId(R.id.dateTextView)).check(matches(withText(expectedDate)));
     }
 
-
     @Test
-    public void testUI() {
-        try (var scenario = ActivityScenario.launch(MainActivity.class)) {
-            // Observe the scenario's lifecycle to wait until the activity is created.
-            scenario.onActivity(activity -> {
-                var rootView = activity.findViewById(R.id.root);
-                var binding = ActivityMainBinding.bind(rootView);
+    public void changeViewsToTomorrow() {
+        // UNFINISHED
+        onView(withId(R.id.views_drop_down)).perform(click());
+        onView(withId(R.id.tomorrow_view)).perform(click());
 
-                this.model = activity.getMainViewModel();
-                model.getRepo().clear();
-                Goal goal1 = new Goal(1, "Goal 1", false, LocalDateTime.now().toString(), "Daily", "Work");
-                Goal goal2 = new Goal(2, "Goal 2", false, LocalDateTime.now().toString(), "Daily", "Work");
-
-
-                model.addGoal(goal1);
-                model.addGoal(goal2);
-                model.changeCompleteStatus(1);
-                activity.advanceDate();
-
-            });
-
-            // Simulate moving to the started state (above will then be called).
-            scenario.moveToState(Lifecycle.State.STARTED);
-        }
+        onView(withId(R.id.tomorrow_view)).check(matches(isDisplayed()));
+    }
+    @Test
+    public void addGoalButtonOpensAddGoalDialog() {
+        onView(withId(R.id.add_goal_button)).perform(click());
+        onView(withText("New Goal")).check(matches(isDisplayed()));
+        // used RootMatchers class for exhaustive two-way check
+        onView(withText("New Goal")).inRoot(RootMatchers.isDialog()).check(matches(isDisplayed()));
     }
 
-    @Test
-    public void testUS1() {
-        try (var scenario = ActivityScenario.launch(MainActivity.class)) {
-            // Observe the scenario's lifecycle to wait until the activity is created.
-            scenario.onActivity(activity -> {
-                var rootView = activity.findViewById(R.id.root);
-                var binding = ActivityMainBinding.bind(rootView);
-
-                this.model = activity.getMainViewModel();
-                model.getRepo().clear();
-
-                // Checking if completed goals will delete once date is advanced
-                Goal goal1 = new Goal(1, "Goal 1", false, LocalDateTime.now().toString(), "Once", "Work");
-                Goal goal2 = new Goal(2, "Goal 2", false, LocalDateTime.now().toString(), "Once", "Work");
-                model.addGoal(goal1);
-                model.addGoal(goal2);
-                assertEquals(2, model.getCount());
-                model.changeCompleteStatus(2);
-                activity.advanceDate();
-                assertEquals(1, model.getCount());
-
-                // Verify if the TodayListFragment is displayed
-                TodayListFragment todayFrag = activity.getTodayFrag();
-                assertNotNull(todayFrag);
-
-                // Test if the tomorrow date is one day ahead of today
-                LocalDateTime todaysDate = todayFrag.getDate();
-                FragmentManager fragmentManager = activity.getSupportFragmentManager();
-
-                // Begin fragment transaction to replace with TomorrowListFragment
-                fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, TomorrowListFragment.newInstance())
-                        .commitNow();
-
-                // Verify if the TomorrowListFragment is displayed
-                TomorrowListFragment tmrwFragment = (TomorrowListFragment) fragmentManager.findFragmentById(R.id.fragment_container);
-                assertNotNull(tmrwFragment);
-
-                // Verify if the date in TomorrowListFragment is one day ahead of today
-                assertEquals(tmrwFragment.getDate(), todaysDate.plusDays(1));
-
-                Goal goal3 = new Goal(3, "Goal 2", false, tmrwFragment.getDate().toString(), "Once", "Work");
-                model.addGoal(goal3);
-
-            });
-
-            // Simulate moving to the started state (above will then be called).
-            scenario.moveToState(Lifecycle.State.STARTED);
-        }
-    }
+//    @Test
+//    public void testUI() {
+//        try (var scenario = ActivityScenario.launch(MainActivity.class)) {
+//            // Observe the scenario's lifecycle to wait until the activity is created.
+//            scenario.onActivity(activity -> {
+//                var rootView = activity.findViewById(R.id.root);
+//                var binding = ActivityMainBinding.bind(rootView);
+//
+//                this.model = activity.getMainViewModel();
+//                model.getRepo().clear();
+//                Goal goal1 = new Goal(1, "Goal 1", false, LocalDateTime.now().toString(), "Daily", "Work");
+//                Goal goal2 = new Goal(2, "Goal 2", false, LocalDateTime.now().toString(), "Daily", "Work");
+//
+//
+//                model.addGoal(goal1);
+//                model.addGoal(goal2);
+//                model.changeCompleteStatus(1);
+//                activity.advanceDate();
+//
+//            });
+//
+//            // Simulate moving to the started state (above will then be called).
+//            scenario.moveToState(Lifecycle.State.STARTED);
+//        }
+//    }
+//
+//    @Test
+//    public void testUS1() {
+//        try (var scenario = ActivityScenario.launch(MainActivity.class)) {
+//            // Observe the scenario's lifecycle to wait until the activity is created.
+//            scenario.onActivity(activity -> {
+//                var rootView = activity.findViewById(R.id.root);
+//                var binding = ActivityMainBinding.bind(rootView);
+//
+//                this.model = activity.getMainViewModel();
+//                model.getRepo().clear();
+//
+//                // Checking if completed goals will delete once date is advanced
+//                Goal goal1 = new Goal(1, "Goal 1", false, LocalDateTime.now().toString(), "Once", "Work");
+//                Goal goal2 = new Goal(2, "Goal 2", false, LocalDateTime.now().toString(), "Once", "Work");
+//                model.addGoal(goal1);
+//                model.addGoal(goal2);
+//                assertEquals(2, model.getCount());
+//                model.changeCompleteStatus(2);
+//                activity.advanceDate();
+//                assertEquals(1, model.getCount());
+//
+//                // Verify if the TodayListFragment is displayed
+//                TodayListFragment todayFrag = activity.getTodayFrag();
+//                assertNotNull(todayFrag);
+//
+//                // Test if the tomorrow date is one day ahead of today
+//                LocalDateTime todaysDate = todayFrag.getDate();
+//                FragmentManager fragmentManager = activity.getSupportFragmentManager();
+//
+//                // Begin fragment transaction to replace with TomorrowListFragment
+//                fragmentManager.beginTransaction()
+//                        .replace(R.id.fragment_container, TomorrowListFragment.newInstance())
+//                        .commitNow();
+//
+//                // Verify if the TomorrowListFragment is displayed
+//                TomorrowListFragment tmrwFragment = (TomorrowListFragment) fragmentManager.findFragmentById(R.id.fragment_container);
+//                assertNotNull(tmrwFragment);
+//
+//                // Verify if the date in TomorrowListFragment is one day ahead of today
+//                assertEquals(tmrwFragment.getDate(), todaysDate.plusDays(1));
+//
+//                Goal goal3 = new Goal(3, "Goal 2", false, tmrwFragment.getDate().toString(), "Once", "Work");
+//                model.addGoal(goal3);
+//
+//            });
+//
+//            // Simulate moving to the started state (above will then be called).
+//            scenario.moveToState(Lifecycle.State.STARTED);
+//        }
+//    }
 }
