@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
@@ -228,7 +229,6 @@ public class RecurringAddGoalDialog extends DialogFragment{
     private void createInstances(int id) {
         Goal recurringGoal = activityModel.find(id);
         int currCount = activityModel.getMaxId();
-        System.out.println(recurringGoal.repType());
         switch (recurringGoal.repType()) {
             case "Daily":
                 // Create instance for today and tomorrow
@@ -249,22 +249,31 @@ public class RecurringAddGoalDialog extends DialogFragment{
                     weekNum += 1;
                 }
 
-                // Calculate date of next month's occurrence
-                LocalDateTime firstDayOfNextMonth = LocalDateTime.of(selectedDate.getYear(), selectedDate.getMonthValue() + 1, 1, 2, 0, 0);
-                String dayOfWeek = firstDayOfNextMonth.getDayOfWeek().toString();
-                LocalDateTime nextRecurrenceDate = LocalDateTime.of(selectedDate.getYear(), selectedDate.getMonthValue() + 1, weekNum * 7, 2, 0, 0);
-                HashMap<String, Integer> valueOfWeekDays = new HashMap<>() {{
-                    put("Monday", 1);
-                    put("Tuesday", 2);
-                    put("Wednesday", 3);
-                    put("Thursday", 4);
-                    put("Friday", 5);
-                    put("Saturday", 6);
-                    put("Sunday", 7);
-                }};
-                nextRecurrenceDate.plusDays(Math.abs(valueOfWeekDays.get(selectedDate.getDayOfWeek().toString()) - valueOfWeekDays.get(dayOfWeek)));
+                LocalDateTime nextRecurrenceDate;
+                if (weekNum == 5) {
+                    nextRecurrenceDate = selectedDate.plusDays(35);
+                } else {
+                    LocalDateTime firstDayOfNextMonth = LocalDateTime.of(selectedDate.getYear(), selectedDate.getMonthValue() + 1, 1, 2, 0, 0);
+                    String dayOfFirst = firstDayOfNextMonth.getDayOfWeek().toString();
 
-                // nextRecurrenceDate already set to following month if exceeds next month
+                    // Offset to find date of first occurrence of day in next month
+                    HashMap<String, Integer> valueOfWeekDays = new HashMap<>() {{
+                        put("MONDAY", 1);
+                        put("TUESDAY", 2);
+                        put("WEDNESDAY", 3);
+                        put("THURSDAY", 4);
+                        put("FRIDAY", 5);
+                        put("SATURDAY", 6);
+                        put("SUNDAY", 7);
+                    }};
+
+                    nextRecurrenceDate = firstDayOfNextMonth.plusDays(
+                            ((weekNum - 1) * 7) //-1 because dayOfFirst is the first 'day-of-week' in the next month
+                            + Math.abs(valueOfWeekDays.get(selectedDate.getDayOfWeek().toString())
+                            - valueOfWeekDays.get(dayOfFirst))
+                    ); // use HashMap and difference in days to find date of the first 'day-of-week'
+                }
+
                 monthlyGoal = new Goal(currCount+1, recurringGoal.description(), false, nextRecurrenceDate.toString(), "Once", recurringGoal.getContextType());
                 activityModel.addGoal(monthlyGoal);
                 break;
