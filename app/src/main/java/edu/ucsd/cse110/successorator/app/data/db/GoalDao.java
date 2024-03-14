@@ -39,8 +39,11 @@ public interface GoalDao {
     LiveData<GoalEntity> findAsLiveData(int id);
 
     // Return all completed/uncompleted goals
-    @Query("SELECT * FROM goals WHERE completed = :completed")
-    LiveData<List<GoalEntity>> findCompleted(boolean completed);
+    @Query("SELECT * FROM goals WHERE completed = true")
+    LiveData<List<GoalEntity>> findCompleted();
+
+    @Query("SELECT * FROM goals WHERE completed = false")
+    LiveData<List<GoalEntity>> findIncomplete();
 
     // Overload to filter by context
     @Query("SELECT * FROM goals WHERE contextType = :contextType AND completed= :completed")

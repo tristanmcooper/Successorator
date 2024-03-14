@@ -226,9 +226,9 @@ public class RecurringAddGoalDialog extends DialogFragment{
     }
 
     private void createInstances(int id) {
-        Goal recurringGoal = activityModel.getRepo().find(id).getValue(); // TODO Code this function in activityModel
-        if (recurringGoal == null) { return; }
+        Goal recurringGoal = activityModel.find(id);
         int currCount = activityModel.getMaxId();
+        System.out.println(recurringGoal.repType());
         switch (recurringGoal.repType()) {
             case "Daily":
                 // Create instance for today and tomorrow

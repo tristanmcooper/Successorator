@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
         var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.model = modelProvider.get(MainViewModel.class);
+
         //grab view by inflating xml layout file
         textViewDate = findViewById(R.id.dateTextView);
         handler = new Handler();
@@ -156,18 +157,14 @@ public class MainActivity extends AppCompatActivity {
         // can't use switch here, need to use if statements
         if (itemId == R.id.today_view) {
             swapFragments(0);
-            fragmentType = 0;
             //model.refreshDatabase();
         } else if (itemId == R.id.tomorrow_view) {
             swapFragments(1);
-            fragmentType = 1;
             //model.refreshDatabase();
         } else if (itemId == R.id.pending_view) {
             swapFragments(2);
-            fragmentType = 2;
         } else if (itemId == R.id.recurring_view) {
             swapFragments(3);
-            fragmentType = 3;
         }
 
         return super.onOptionsItemSelected(item);
@@ -252,6 +249,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void swapFragments(int fragmentNum) {
+        this.fragmentType = fragmentNum;
         // fragmentNum: 0 = today, 1 = tomorrow, 2 = pending, 3 = recurring
         switch (fragmentNum) {
             case 0:
@@ -262,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
                 setTitle("Today's Goals");
                 updateDate();
                 model.refreshDatabase();
-                return;
+                break;
             case 1:
                 getSupportFragmentManager()
                         .beginTransaction()
@@ -271,7 +269,7 @@ public class MainActivity extends AppCompatActivity {
                 setTitle("Tomorrow's Goals");
                 updateDate();
                 model.refreshDatabase();
-                return;
+                break;
             case 2:
                 getSupportFragmentManager()
                         .beginTransaction()
@@ -279,7 +277,7 @@ public class MainActivity extends AppCompatActivity {
                         .commit();
                 setTitle("Pending Goals");
                 model.refreshDatabase();
-                return;
+                break;
             case 3:
                 getSupportFragmentManager()
                         .beginTransaction()
@@ -287,9 +285,9 @@ public class MainActivity extends AppCompatActivity {
                         .commit();
                 setTitle("Recurring Goals");
                 model.refreshDatabase();
-                return;
+                break;
             default:
-                return;
+                break;
         }
     }
 

@@ -53,7 +53,7 @@ public class MainViewModel extends ViewModel{
 
         this.idCount = getCount();
 
-        goalRepository.findCompleted(false).registerObserver(goals -> {
+        goalRepository.findIncomplete().registerObserver(goals -> {
             if (goals == null) return;
             var newIncompleteGoals = goals.stream()
                     .sorted(Comparator.comparingInt(Goal::id))
@@ -61,7 +61,7 @@ public class MainViewModel extends ViewModel{
             incompleteGoals.setValue(newIncompleteGoals);
         });
 
-        goalRepository.findCompleted(true).registerObserver(goals -> {
+        goalRepository.findCompleted().registerObserver(goals -> {
             if (goals == null) return;
             var newCompleteGoals = goals.stream()
                     .sorted(Comparator.comparingInt(Goal::id))
@@ -102,6 +102,10 @@ public class MainViewModel extends ViewModel{
         return this.idCount;
     }
 
+    public Goal find(int id) {
+        return goalRepository.findNonLive(id);
+    }
+
     public void changeCompleteStatus(int id){
         goalRepository.changeCompleted(id);
     }
@@ -137,6 +141,7 @@ public class MainViewModel extends ViewModel{
         goalRepository.changeToTodayView(id, isComplete, currentDate.plusDays(1));
     }
     public void refreshDatabase(){
+        Log.d("Database refresh", "refreshing database");
         addGoal(new Goal(-1,
                 "",
                 false,
@@ -168,8 +173,4 @@ public class MainViewModel extends ViewModel{
     public String getContext() {
         return this.contextType;
     }
-
-
-
-
 }

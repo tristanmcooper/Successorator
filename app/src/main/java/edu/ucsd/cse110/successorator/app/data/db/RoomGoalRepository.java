@@ -40,14 +40,24 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
     }
 
     @Override
-    public Goal tempFind(int id) {
+    public Goal findNonLive(int id) {
         var goalEntity = goalDao.find(id);
         return goalEntity.toGoal();
     }
 
     @Override
-    public Subject<List<Goal>> findCompleted(Boolean completed) {
-        var entitiesLiveData = goalDao.findCompleted(completed);
+    public Subject<List<Goal>> findCompleted() {
+        var entitiesLiveData = goalDao.findCompleted();
+        var goalsLiveData = Transformations.map(entitiesLiveData, entities -> {
+            return entities.stream()
+                    .map(GoalEntity::toGoal)
+                    .collect(Collectors.toList());
+        });
+        return new LiveDataSubjectAdapter<>(goalsLiveData);
+    }
+
+    public Subject<List<Goal>> findIncomplete() {
+        var entitiesLiveData = goalDao.findIncomplete();
         var goalsLiveData = Transformations.map(entitiesLiveData, entities -> {
             return entities.stream()
                     .map(GoalEntity::toGoal)

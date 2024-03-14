@@ -10,7 +10,9 @@ public interface GoalRepository {
 
     Subject<List<Goal>> findAll();
 
-    Subject<List<Goal>> findCompleted(Boolean completed);
+    Subject<List<Goal>> findCompleted();
+
+    Subject<List<Goal>> findIncomplete();
 
     Subject<List<Goal>> findRecurring();
 
@@ -25,7 +27,7 @@ public interface GoalRepository {
     int count();
 
     void deleteCompleted();
-    Goal tempFind(int id);
+    Goal findNonLive(int id);
 
     void clear();
 
