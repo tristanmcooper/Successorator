@@ -103,4 +103,7 @@ public class UnitTests {
 
     @Test
     public void removeSpecificGoal() { assertTrue(true); }
+
+    @Test
+    public void getContext() { assertTrue(true); }
 }
