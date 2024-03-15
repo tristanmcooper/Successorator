@@ -8,6 +8,7 @@ import androidx.lifecycle.Transformations;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -142,7 +143,6 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
 
     @Override
     public void deleteCompleted() {
-        goalDao.deleteCompleted();
         List<Goal> goals = goalDao.findAll().stream()
                 .map(GoalEntity::toGoal)
                 .collect(Collectors.toList());
@@ -155,14 +155,97 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
                 goalDate = LocalDateTime.parse(g.date());
             }
             if (g.completed() && currDate.isAfter(goalDate)) {
+                if (g.createdById() != null) {
+                    createNextInstance(g.createdById(), g.id());
+                }
                 goalDao.deleteGoal(g.id());
             }
         }
     }
 
-    public void deleteRecurring(){
+    public void createNextInstance(int parentId, Goal currGoal) {
+        Goal parent = goalDao.find(parentId).toGoal();
+        LocalDateTime currGoalDate = LocalDateTime.parse(currGoal.date());
+        LocalDateTime parentDate = LocalDateTime.parse(parent.date());
 
+        int maxId = getMaxId();
+        switch (parent.repType()) {
+            case "Daily":
+                Goal newDailyGoal = new Goal(maxId + 1, currGoal.description(), false, LocalDateTime.parse(currGoal.date()).plusDays(2).toString(), "Once", currGoal.getContextType(), parentId);
+                add(newDailyGoal);
+                break;
+            case "Weekly":
+                Goal newWeeklyGoal = new Goal(maxId + 1, currGoal.description(), false, LocalDateTime.parse(currGoal.date()).plusDays(7).toString(), "Once", currGoal.getContextType(), parentId);
+                add(newWeeklyGoal);
+                break;
+            case "Monthly":
+                Goal newMonthlyGoal;
+                // Get weekNum and day of week
+                int weekNum = currGoalDate.getDayOfMonth() / 7;
+                if (currGoalDate.getDayOfMonth() % 7 != 0) {
+                    weekNum += 1;
+                }
+                LocalDateTime nextRecurrenceMonthDate;
+                // If not the fifth 'day-of-week', nothing to worry about. Calculate as usual
+                if (weekNum != 5) {
+                    LocalDateTime firstDayOfNextMonth = LocalDateTime.of(currGoalDate.getYear(), currGoalDate.getMonthValue() + 1, 1, 2, 0, 0);
+                    String dayOfFirst = firstDayOfNextMonth.getDayOfWeek().toString();
+
+                    // Offset to find date of first occurrence of day in next month
+                    HashMap<String, Integer> valueOfWeekDays = new HashMap<>() {{
+                        put("MONDAY", 1);
+                        put("TUESDAY", 2);
+                        put("WEDNESDAY", 3);
+                        put("THURSDAY", 4);
+                        put("FRIDAY", 5);
+                        put("SATURDAY", 6);
+                        put("SUNDAY", 7);
+                    }};
+
+                    nextRecurrenceMonthDate = firstDayOfNextMonth.plusDays(
+                            ((weekNum - 1) * 7) //-1 because dayOfFirst is the first 'day-of-week' in the next month
+                                    + Math.abs(valueOfWeekDays.get(currGoalDate.getDayOfWeek().toString())
+                                    - valueOfWeekDays.get(dayOfFirst))
+                    );
+
+                } else { // if fifth 'day-of-week'
+                    //TODO calculate nextRecurrenceMonthDate for this
+                }
+
+                newMonthlyGoal = new Goal(maxId + 1, currGoal.description(), false, nextRecurrenceMonthDate.toString(), "Once", currGoal.getContextType(), parentId);
+                add(newMonthlyGoal);
+                break;
+            case "Yearly":
+                Goal newYearlyGoal;
+
+                // Check if selected date is Feb 29
+                if (parentDate.getMonthValue() == 2 && parentDate.getDayOfMonth() == 29) {
+                    // Is currentDate Feb 29?
+                    if (currGoalDate.getMonthValue() == 2 && currGoalDate.getDayOfMonth() == 29) {
+                        // If this one is leap year, next one is non leap year
+                        newYearlyGoal = new Goal(maxId + 1, currGoal.description(), false, currGoalDate.plusYears(1).plusDays(1).toString(), "Once", currGoal.getContextType(), parentId);
+                    } else { // Currently March 1
+                        LocalDateTime nextRecurrenceYearDate;
+                        // Is next year leap year?
+                        try {
+                            nextRecurrenceYearDate = LocalDateTime.of(currGoalDate.getYear() + 1, 2, 29, 2, 0, 0, 0);
+                        } catch (Exception e) { // Exception thrown if Feb 29 not in next year, then next year is still March 1
+                            nextRecurrenceYearDate = currGoalDate.plusYears(1);
+                        }
+                        newYearlyGoal = new Goal(maxId + 1, currGoal.description(), false, nextRecurrenceYearDate.toString(), "Once", currGoal.getContextType(), parentId);
+                    }
+                } else { // All other dates have no leap year issues
+                    newYearlyGoal = new Goal(maxId + 1, currGoal.description(), false, currGoalDate.plusYears(1).toString(), "Once", currGoal.getContextType(), parentId);
+                }
+                add(newYearlyGoal);
+                break;
+            default:
+                break;
+        }
     }
+
+    public int getMaxId() { return goalDao.getMaxId(); }
+
     @Override
     public void clear() {
         goalDao.clear();
