@@ -237,13 +237,13 @@ public class RecurringAddGoalDialog extends DialogFragment{
         switch (recurringGoal.repType()) {
             case "Daily":
                 // Create instance for today and tomorrow
-                Goal todayGoal = new Goal(currCount+1, recurringGoal.description(), false, selectedDate.toString(), "Once", recurringGoal.getContextType());
+                Goal todayGoal = new Goal(currCount+1, recurringGoal.description(), false, selectedDate.toString(), "Once", recurringGoal.getContextType(), recurringGoal.id());
                 activityModel.addGoal(todayGoal);
-                Goal tmrGoal = new Goal(currCount+2, recurringGoal.description(), false, selectedDate.plusDays(1).toString(), "Once", recurringGoal.getContextType());
+                Goal tmrGoal = new Goal(currCount+2, recurringGoal.description(), false, selectedDate.plusDays(1).toString(), "Once", recurringGoal.getContextType(), recurringGoal.id());
                 activityModel.addGoal(tmrGoal);
                 break;
             case "Weekly":
-                Goal weeklyGoal = new Goal(currCount+1, recurringGoal.description(), false, selectedDate.plusDays(7).toString(), "Once", recurringGoal.getContextType());
+                Goal weeklyGoal = new Goal(currCount+1, recurringGoal.description(), false, selectedDate.plusDays(7).toString(), "Once", recurringGoal.getContextType(), recurringGoal.id());
                 activityModel.addGoal(weeklyGoal);
                 break;
             case "Monthly":
@@ -279,16 +279,16 @@ public class RecurringAddGoalDialog extends DialogFragment{
                     ); // use HashMap and difference in days to find date of the first 'day-of-week'
                 }
 
-                monthlyGoal = new Goal(currCount+1, recurringGoal.description(), false, nextRecurrenceDate.toString(), "Once", recurringGoal.getContextType());
+                monthlyGoal = new Goal(currCount+1, recurringGoal.description(), false, nextRecurrenceDate.toString(), "Once", recurringGoal.getContextType(),recurringGoal.id());
                 activityModel.addGoal(monthlyGoal);
                 break;
             case "Yearly":
                 // If Feb 29 is selected, selected year is leap year, next instance is March 1 next year
                 Goal yearlyGoal;
                 if (selectedDate.getMonthValue() == 2 && selectedDate.getDayOfMonth() == 29) {
-                    yearlyGoal = new Goal(currCount+1, recurringGoal.description(), false, selectedDate.plusYears(1).plusDays(1).toString(), "Once", recurringGoal.getContextType());
+                    yearlyGoal = new Goal(currCount+1, recurringGoal.description(), false, selectedDate.plusYears(1).plusDays(1).toString(), "Once", recurringGoal.getContextType(), recurringGoal.id());
                 } else {
-                    yearlyGoal = new Goal(currCount+1, recurringGoal.description(), false, selectedDate.plusYears(1).toString(), "Once", recurringGoal.getContextType());
+                    yearlyGoal = new Goal(currCount+1, recurringGoal.description(), false, selectedDate.plusYears(1).toString(), "Once", recurringGoal.getContextType(), recurringGoal.id());
                 }
                 activityModel.addGoal(yearlyGoal);
                 break;

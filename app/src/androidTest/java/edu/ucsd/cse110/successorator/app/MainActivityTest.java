@@ -72,8 +72,8 @@ public class MainActivityTest {
                 model.getRepo().clear();
 
                 // Checking if completed goals will delete once date is advanced
-                Goal goal1 = new Goal(1, "Goal 1", false, LocalDateTime.now().toString(), "Once", "Work");
-                Goal goal2 = new Goal(2, "Goal 2", false, LocalDateTime.now().toString(), "Once", "Work");
+                Goal goal1 = new Goal(1, "Goal 1", false, LocalDateTime.now().toString(), "Once", "Work", null);
+                Goal goal2 = new Goal(2, "Goal 2", false, LocalDateTime.now().toString(), "Once", "Work", null);
                 model.addGoal(goal1);
                 model.addGoal(goal2);
                 assertEquals(2, model.getCount());

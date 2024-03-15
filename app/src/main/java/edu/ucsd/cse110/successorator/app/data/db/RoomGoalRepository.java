@@ -128,7 +128,7 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
     @Override
     public void changeCompleted(int id) {
         var goal = goalDao.find(id).toGoal();
-        goalDao.insert(new GoalEntity(goal.id(), goal.description(), !goal.completed(), goal.date(), goal.repType(), goal.getContextType()));
+        goalDao.insert(new GoalEntity(goal.id(), goal.description(), !goal.completed(), goal.date(), goal.repType(), goal.getContextType(), goal.getCreatedById()));
         this.notifyObservers();
     }
 
@@ -175,9 +175,21 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
     @Override
     public void changeToTodayView(int id, boolean isComplete, LocalDateTime currentDate) {
         Goal temp = goalDao.find(id).toGoal();
-        Goal copy = new Goal(temp.id(), temp.description(), isComplete, currentDate.withHour(2).withMinute(0).withSecond(0).withNano(0).toString(), temp.repType(), temp.getContextType());
+        Goal copy = new Goal(temp.id(), temp.description(), isComplete, currentDate.withHour(2).withMinute(0).withSecond(0).withNano(0).toString(), temp.repType(), temp.getContextType(),temp.getCreatedById());
         remove(id);
         add(copy);
+    }
+
+    @Override
+    public Subject<List<Goal>> findAllCreatedById(int id){
+        var entitiesLiveData = goalDao.findAllCreatedById(id);
+        var goalsLiveData = Transformations.map(entitiesLiveData, entities -> {
+            return entities.stream()
+                    .map(GoalEntity::toGoal)
+                    .collect(Collectors.toList());
+        });
+        return new LiveDataSubjectAdapter<>(goalsLiveData);
+
     }
 
 }
