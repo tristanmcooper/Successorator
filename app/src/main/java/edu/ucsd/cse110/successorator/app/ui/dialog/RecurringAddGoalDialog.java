@@ -20,6 +20,7 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Locale;
@@ -79,7 +80,7 @@ public class RecurringAddGoalDialog extends DialogFragment{
         this.activityModel = modelProvider.get(MainViewModel.class);
 
         selectedDate = activityModel.getCurrentDate();
-        System.out.println(selectedDate);
+        selectedDateLong = selectedDate.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
     }
 
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
@@ -183,8 +184,9 @@ public class RecurringAddGoalDialog extends DialogFragment{
          */
 
         // Makes only dates from today forward selectable.
+        Long dayBeforeStartDate = selectedDate.minusDays(1).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
         var constraintsBuilder = new CalendarConstraints.Builder()
-                .setValidator(DateValidatorPointForward.from(selectedDateLong));
+                .setValidator(DateValidatorPointForward.from(dayBeforeStartDate));
 
         // Create new datePicker instance
         MaterialDatePicker<Long> datePicker;
