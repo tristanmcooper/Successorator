@@ -228,12 +228,6 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
                     }
                     else {
                         int parentid = goal.getCreatedById();
-                        System.out.println("parent ID " + goal.getCreatedById() + " " + parentid);
-                        System.out.println(" ID " );
-                        //System.out.println(activityModel.find(6));
-                        System.out.println(activityModel==null);
-                        System.out.println( "weeee");
-                        System.out.println(activityModel.find(goal.getCreatedById()));
                         Goal parentGoal = activityModel.find(goal.getCreatedById());
                         if (parentGoal.repType().equals("Daily")) {
                             for (Goal g : activityModel.findAllCreatedById(parentGoal.id())) {
@@ -260,9 +254,7 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
                 });
             }
             if (fragmentType == 2){
-                binding.goalDescription.setOnLongClickListener(v-> {
-                    Log.d("GoalListAdapter", "Long press detected");
-                    PopupMenu popupMenu = new PopupMenu(context, v);
+                binding.goalDescription.setOnLongClickListener(v-> {PopupMenu popupMenu = new PopupMenu(context, v);
                     popupMenu.inflate(R.menu.pending_long_press_context_menu);
 
                     popupMenu.setOnMenuItemClickListener(item -> {
