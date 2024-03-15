@@ -47,7 +47,7 @@ public class SuccessoratorApplication extends Application {
 
         // Populate database with default values
         if (isFirstRun && database.goalDao().count() == 0) {
-            goalRepository.save(DEFAULT_GOALS);
+            //goalRepository.save(DEFAULT_GOALS);
 
             sharedPreferences.edit()
                 .putBoolean("isFirstRun", false)
