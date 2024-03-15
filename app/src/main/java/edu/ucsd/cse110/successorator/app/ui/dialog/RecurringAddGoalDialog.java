@@ -34,7 +34,7 @@ public class RecurringAddGoalDialog extends DialogFragment{
     private @NonNull DialogRecurringAddGoalsBinding view;
     private MainViewModel activityModel;
     private Long selectedDateLong;
-    private LocalDateTime selectedDate = LocalDateTime.now().withHour(2).withMinute(0).withSecond(0).withNano(0);
+    private LocalDateTime selectedDate;
     private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(("E, M/d"), Locale.getDefault());
 
     RecurringAddGoalDialog() {
@@ -77,6 +77,9 @@ public class RecurringAddGoalDialog extends DialogFragment{
         var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
         var modelProvider = new ViewModelProvider(modelOwner,modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
+
+        selectedDate = activityModel.getCurrentDate();
+        System.out.println(selectedDate);
     }
 
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
@@ -181,7 +184,7 @@ public class RecurringAddGoalDialog extends DialogFragment{
 
         // Makes only dates from today forward selectable.
         var constraintsBuilder = new CalendarConstraints.Builder()
-                .setValidator(DateValidatorPointForward.now());
+                .setValidator(DateValidatorPointForward.from(selectedDateLong));
 
         // Create new datePicker instance
         MaterialDatePicker<Long> datePicker;
@@ -232,9 +235,9 @@ public class RecurringAddGoalDialog extends DialogFragment{
         switch (recurringGoal.repType()) {
             case "Daily":
                 // Create instance for today and tomorrow
-                Goal todayGoal = new Goal(currCount+1, recurringGoal.description(), false, selectedDate.plusDays(1).toString(), "Once", recurringGoal.getContextType());
+                Goal todayGoal = new Goal(currCount+1, recurringGoal.description(), false, selectedDate.toString(), "Once", recurringGoal.getContextType());
                 activityModel.addGoal(todayGoal);
-                Goal tmrGoal = new Goal(currCount+2, recurringGoal.description(), false, selectedDate.plusDays(2).toString(), "Once", recurringGoal.getContextType());
+                Goal tmrGoal = new Goal(currCount+2, recurringGoal.description(), false, selectedDate.plusDays(1).toString(), "Once", recurringGoal.getContextType());
                 activityModel.addGoal(tmrGoal);
                 break;
             case "Weekly":

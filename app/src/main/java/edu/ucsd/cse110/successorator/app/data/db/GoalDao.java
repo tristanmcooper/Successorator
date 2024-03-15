@@ -68,7 +68,7 @@ public interface GoalDao {
     void delete(int id);
 
     @Query("DELETE FROM goals WHERE completed=true")
-    void deleteComplete();
+    void deleteCompleted();
 
     @Query("DELETE FROM goals WHERE id= :idPass")
     void deleteGoal(int idPass);

@@ -80,7 +80,8 @@ public class MainActivity extends AppCompatActivity {
         buttonAdvanceDate = findViewById(R.id.button_advance_date);
 
         // Initial update
-        currentDateTime = LocalDateTime.now();
+        currentDateTime = LocalDateTime.now().withHour(2).withMinute(0).withSecond(0).withNano(0);
+        model.updateModelCurrentDate(currentDateTime);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E, M/d", Locale.getDefault());
         prevDate = currentDateTime;
         updateDate();
@@ -173,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
     // Method to update the date
     public void updateDate() {
         if(advButtonClicked==false){
-            currentDateTime = LocalDateTime.now(); // Update currentDateTime
+            currentDateTime = LocalDateTime.now().withHour(2).withMinute(0).withSecond(0).withNano(0); // Update currentDateTime
         }
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E, M/d", Locale.getDefault());
@@ -203,9 +204,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        if(prevDate != null && prevDate.getDayOfYear()!=currentDateTime.getDayOfYear()){
+        // Rollover
+        if(prevDate != null && prevDate.getDayOfYear() != currentDateTime.getDayOfYear() && currentDateTime.getHour() >= 2){
             model.deleteCompleted();
-            //model.updateTomorrow();
             prevDate = currentDateTime;
             model.updateModelCurrentDate(currentDateTime);
             if(fragmentType==0){
@@ -305,12 +306,6 @@ public class MainActivity extends AppCompatActivity {
     }
     public MainViewModel getMainViewModel(){
         return this.model;
-    }
-    public void switchToTomorrowFrag(){
-        swapFragments(1);
-    }
-    public void switchToTodayFrag(){
-        swapFragments(0);
     }
 
     private void switchToFocusModeDialog() {

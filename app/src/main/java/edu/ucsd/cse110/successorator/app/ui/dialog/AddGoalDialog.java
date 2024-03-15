@@ -42,7 +42,7 @@ public class AddGoalDialog extends DialogFragment{
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         this.view = DialogTodayTomorrowAddGoalsBinding.inflate(getLayoutInflater());
 
-        LocalDateTime date = LocalDateTime.now();
+        LocalDateTime date = activityModel.getCurrentDate();
         String dayOfWeek = date.getDayOfWeek().toString().toLowerCase();
         dayOfWeek = dayOfWeek.substring(0, 1).toUpperCase() + dayOfWeek.substring(1);
 
@@ -106,7 +106,7 @@ public class AddGoalDialog extends DialogFragment{
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
         // Get user input from the EditText
         String description = view.editText.getText().toString();
-        int currCount = activityModel.getCount();
+        int currCount = activityModel.getMaxId();
 
         if (description.length() == 0) {
             new AlertDialog.Builder(requireContext())

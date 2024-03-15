@@ -23,6 +23,7 @@ public class RecurringListFragment extends Fragment {
     private MainViewModel activityModel;
     private FragmentRecurringListBinding view;
     private GoalListAdapter goalsAdapter;
+    private LocalDateTime currentDate;
 
     public RecurringListFragment() {
         // Required empty public constructor
@@ -50,7 +51,9 @@ public class RecurringListFragment extends Fragment {
         this.goalsAdapter = new GoalListAdapter(requireContext(), List.of(), id -> {
             activityModel.changeCompleteStatus(id);
         }, 3, activityModel);
+        activityModel.getRecurringGoals().removeAllObservers();
         activityModel.getRecurringGoals().registerObserver(goals -> {
+            System.out.println("Recurring Goals Observer");
             if (goals == null) return;
 
             var recurringGoals = new ArrayList<Goal>();
@@ -79,5 +82,19 @@ public class RecurringListFragment extends Fragment {
         view.uncompletedGoalList.setAdapter(goalsAdapter);
 
         return view.getRoot();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        activityModel.getRecurringGoals().removeAllObservers();
+    }
+
+    public void updateDate(LocalDateTime date){
+        this.currentDate = date;
+    }
+
+    public LocalDateTime getDate(){
+        return this.currentDate;
     }
 }

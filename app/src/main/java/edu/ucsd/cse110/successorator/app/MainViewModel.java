@@ -25,8 +25,7 @@ public class MainViewModel extends ViewModel{
     private SimpleSubject<List<Goal>> incompleteGoals;
     private SimpleSubject<List<Goal>> completeGoals;
     private SimpleSubject<List<Goal>> recurringGoals;
-    private LocalDateTime currentDate;
-    //For testing US1
+    private LocalDateTime currentDate = LocalDateTime.now().withHour(2).withMinute(0).withSecond(0).withNano(0);
     private ArrayList<Goal> displayedTodayGoals;
     private ArrayList<Goal> displayedTomorrowGoals;
     private String contextType = "N/A";
