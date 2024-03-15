@@ -44,8 +44,8 @@ public class MainActivityTest {
 
                 this.model = activity.getMainViewModel();
                 model.getRepo().clear();
-                Goal goal1 = new Goal(1, "Goal 1", false, LocalDateTime.now().toString(), "Daily", "Work");
-                Goal goal2 = new Goal(2, "Goal 2", false, LocalDateTime.now().toString(), "Daily", "Work");
+                Goal goal1 = new Goal(1, "Goal 1", false, LocalDateTime.now().toString(), "Daily", "W", null);
+                Goal goal2 = new Goal(2, "Goal 2", false, LocalDateTime.now().toString(), "Daily", "W", null);
 
 
                 model.addGoal(goal1);
@@ -101,7 +101,7 @@ public class MainActivityTest {
                 // Verify if the date in TomorrowListFragment is one day ahead of today
                 assertEquals(tmrwFragment.getDate(), todaysDate.plusDays(1));
 
-                Goal goal3 = new Goal(3, "Goal 2", false, tmrwFragment.getDate().toString(), "Once", "Work");
+                Goal goal3 = new Goal(3, "Goal 2", false, tmrwFragment.getDate().toString(), "Once", "W", null);
                 model.addGoal(goal3);
 
             });

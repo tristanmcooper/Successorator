@@ -1,6 +1,7 @@
 
 package edu.ucsd.cse110.successorator.app.ui;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -104,7 +105,7 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
             LocalDateTime date = LocalDateTime.parse(goal.date());
             String dayOfWeek = date.getDayOfWeek().toString().toLowerCase();
             dayOfWeek = dayOfWeek.substring(0, 1).toUpperCase() + dayOfWeek.substring(1);
-
+            //goal is recurring
             switch (recurrenceType) {
                 case "Daily":
                     LocalDateTime tmrDate = LocalDateTime.now().withHour(1).withMinute(59).withSecond(0).withNano(0).plusDays(1);
@@ -221,12 +222,44 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
                 binding.goalDescription.setPaintFlags(binding.goalDescription.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             }
 
-            if (fragmentType == 0 || fragmentType == 1){
+            if (fragmentType == 0){
                 // Don't want this functionality for pending or recurring view
                 binding.goalDescription.setOnClickListener(v -> {
                     var id = goal.id();
                     assert id != null;
                     onDeleteClick.accept(id);
+                });
+            }
+            if (fragmentType == 1){
+                // Don't want this functionality for pending or recurring view
+                binding.goalDescription.setOnClickListener(v -> {
+                    if (goal.getCreatedById() == null) {
+                        var id = goal.id();
+                        assert id != null;
+                        onDeleteClick.accept(id);
+                    }
+                    else {
+                        System.out.println("parent ID " + goal.getCreatedById());
+                        System.out.println(" ID " );
+                        System.out.println(activityModel.find(goal.getCreatedById()));
+                        Goal parentGoal = activityModel.find(goal.getCreatedById());
+                        if (parentGoal.repType().equals("Daily")) {
+                            for (Goal g : activityModel.findAllCreatedById(parentGoal.id())) {
+                                if (LocalDateTime.parse(g.date()).equals(LocalDateTime.parse(goal.date()).minusDays(1))) {
+                                    if (!g.completed()) {
+                                        new AlertDialog.Builder(context)
+                                                .setTitle("Error")
+                                                .setMessage("This goal is still active for Today. If you've finished this goal for Today, mark it finished in that view.")
+                                                .setNegativeButton("OK", null)
+                                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                                .show();
+                                        return;
+
+                                    }
+                                }
+                            }
+                        }
+                    }
                 });
             }
             if (fragmentType == 2){

@@ -114,6 +114,10 @@ public class MainViewModel extends ViewModel{
             goalRepository.remove(goal.id());
         }
     }
+
+    public List<Goal> findAllCreatedById(int id) {
+        return goalRepository.findAllCreatedById(id);
+    }
     public SimpleSubject<List<Goal>> getIncompleteGoals(){
         return incompleteGoals;
     }
