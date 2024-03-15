@@ -137,7 +137,7 @@ public class TomorrowAddGoalDialog extends DialogFragment{
         String contextType = selectedContextTypeRadioButton.getText().toString();
 
         // Create new goal
-        Goal newGoal = new Goal(currCount+1, description, false,curtime.toString(), repType, contextType);
+        Goal newGoal = new Goal(currCount+1, description, false,curtime.toString(), repType, contextType,null);
 
         // Add the new goal to your model
         activityModel.addGoal(newGoal);

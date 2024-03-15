@@ -34,7 +34,12 @@ public class GoalEntity {
 
 
     // Constructor for GoalEntity
-    GoalEntity(@NonNull Integer id, @NonNull String description, @NonNull boolean completed, String date, String repType, String contextType, Integer createdById) {
+    GoalEntity(@NonNull Integer id,
+               @NonNull String description,
+               @NonNull boolean completed,
+               String date, String repType,
+               String contextType,
+               Integer createdById) {
         this.id = id;
         this.description = description;
         this.completed = completed;

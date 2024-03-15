@@ -115,7 +115,7 @@ public class RecurringAddGoalDialog extends DialogFragment{
         String contextType = selectedContextTypeRadioButton.getText().toString();
 
         // Create new goal based on user input
-        Goal newGoal = new Goal(currCount+1, description, false, this.selectedDate.toString(), repType, contextType);
+        Goal newGoal = new Goal(currCount+1, description, false, this.selectedDate.toString(), repType, contextType,null);
 
         // Add the new goal to your model
         activityModel.addGoal(newGoal);

@@ -11,12 +11,13 @@ import java.util.Objects;
 public class Goal {
     private final @NonNull Integer id;
     private final @NonNull String description;
-    private final Integer createdById;
     private boolean completed;
     private String date;
     private String repType;
 
     private String contextType;
+
+    private Integer createdById;
 
     public Goal(
             @NonNull Integer id,

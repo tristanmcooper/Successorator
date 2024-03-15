@@ -141,7 +141,8 @@ public class AddGoalDialog extends DialogFragment{
                 false,
                 activityModel.getCurrentDate().toString(),
                 repType,
-                contextType);
+                contextType,
+                null);
 
         // Add the new goal to your model
         activityModel.addGoal(newGoal);

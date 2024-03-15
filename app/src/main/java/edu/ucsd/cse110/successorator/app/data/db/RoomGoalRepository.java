@@ -180,7 +180,7 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
         add(copy);
     }
 
-    @Override
+    
     public Subject<List<Goal>> findAllCreatedById(int id){
         var entitiesLiveData = goalDao.findAllCreatedById(id);
         var goalsLiveData = Transformations.map(entitiesLiveData, entities -> {

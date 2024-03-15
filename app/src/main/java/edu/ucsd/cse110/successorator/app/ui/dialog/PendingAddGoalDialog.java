@@ -86,7 +86,8 @@ public class PendingAddGoalDialog extends DialogFragment{
                     false,
                     "",
                     "Pending",
-                    contextType);
+                    contextType,
+                    null);
 
             // Add the new goal to your model
             activityModel.addGoal(newGoal);
