@@ -35,19 +35,7 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
     Context context;
 
     MainViewModel activityModel;
-
-    public GoalListAdapter(Context context, List<Goal> goals, Consumer<Integer> onDeleteClick, int fragmentType) {
-        // This sets a bunch of stuff internally, which we can access
-        // with getContext() and getItem() for example.
-        //
-        // Also note that ArrayAdapter NEEDS a mutable List (ArrayList),
-        // or it will crash!
-        super(context, 0, new ArrayList<>(goals));
-        this.onDeleteClick = onDeleteClick;
-        this.fragmentType = fragmentType;
-        this.context = context;
-    }
-
+    
     public GoalListAdapter(Context context, List<Goal> goals, Consumer<Integer> onDeleteClick, int fragmentType, MainViewModel model) {
         // This sets a bunch of stuff internally, which we can access
         // with getContext() and getItem() for example.
@@ -239,8 +227,12 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
                         onDeleteClick.accept(id);
                     }
                     else {
-                        System.out.println("parent ID " + goal.getCreatedById());
+                        int parentid = goal.getCreatedById();
+                        System.out.println("parent ID " + goal.getCreatedById() + " " + parentid);
                         System.out.println(" ID " );
+                        //System.out.println(activityModel.find(6));
+                        System.out.println(activityModel==null);
+                        System.out.println( "weeee");
                         System.out.println(activityModel.find(goal.getCreatedById()));
                         Goal parentGoal = activityModel.find(goal.getCreatedById());
                         if (parentGoal.repType().equals("Daily")) {

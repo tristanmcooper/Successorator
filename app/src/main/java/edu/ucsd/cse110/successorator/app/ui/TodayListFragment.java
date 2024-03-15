@@ -57,7 +57,7 @@ public class TodayListFragment extends Fragment {
         // Initialize the Adapter (with an empty list for now) for incomplete tasks
         this.incompleteAdapter = new GoalListAdapter(requireContext(), List.of(), id -> {
             activityModel.changeCompleteStatus(id);
-        }, 0);
+        }, 0, activityModel);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm", Locale.getDefault());
 
         activityModel.getIncompleteGoals().removeAllObservers();
@@ -100,7 +100,7 @@ public class TodayListFragment extends Fragment {
         // Initialize the adapter for completed tasks
         this.completeAdapter = new GoalListAdapter(requireContext(), List.of(), id -> {
             activityModel.changeCompleteStatus(id);
-        }, 0);
+        }, 0, activityModel);
 
         activityModel.getCompleteGoals().removeAllObservers();
         activityModel.getCompleteGoals().registerObserver(goals -> {
