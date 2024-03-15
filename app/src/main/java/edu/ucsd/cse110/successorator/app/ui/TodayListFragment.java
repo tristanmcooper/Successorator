@@ -48,12 +48,14 @@ public class TodayListFragment extends Fragment {
         FragmentTodayListBinding binding = FragmentTodayListBinding.inflate(inflater, container, false);
         this.view = binding;
 
-        currentDate = LocalDateTime.now().withHour(2).withMinute(0).withSecond(0).withNano(0);
         // Initialize the Model
         var modelOwner = requireActivity();
         var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
+
+        currentDate = activityModel.getCurrentDate();
+
         // Initialize the Adapter (with an empty list for now) for incomplete tasks
         this.incompleteAdapter = new GoalListAdapter(requireContext(), List.of(), id -> {
             activityModel.changeCompleteStatus(id);

@@ -132,7 +132,7 @@ public class MainViewModel extends ViewModel{
 
 
     public void deleteCompleted(){
-        goalRepository.deleteCompleted();
+        goalRepository.deleteCompleted(currentDate);
     }
     public void updateModelCurrentDate(LocalDateTime datetime){
             this.currentDate = datetime;

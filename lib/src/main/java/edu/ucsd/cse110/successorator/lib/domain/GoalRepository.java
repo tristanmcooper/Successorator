@@ -26,7 +26,7 @@ public interface GoalRepository {
 
     int count();
 
-    void deleteCompleted();
+    void deleteCompleted(LocalDateTime currDate);
     Goal findNonLive(int id);
 
     void clear();

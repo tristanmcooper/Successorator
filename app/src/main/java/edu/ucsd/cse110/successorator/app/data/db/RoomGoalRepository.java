@@ -142,22 +142,25 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
     }
 
     @Override
-    public void deleteCompleted() {
+    public void deleteCompleted(LocalDateTime currDate) {
         List<Goal> goals = goalDao.findAll().stream()
                 .map(GoalEntity::toGoal)
                 .collect(Collectors.toList());
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm", Locale.getDefault());
-        LocalDateTime currDate = LocalDateTime.now().withHour(2).withMinute(0).withSecond(0).withNano(0);
         for (Goal g : goals) {
             LocalDateTime goalDate = null;
             if (g.date() != "") {
                 goalDate = LocalDateTime.parse(g.date());
             }
-            if (g.completed() && currDate.isAfter(goalDate)) {
-                if (g.getCreatedById() != null) {
-                    createNextInstance(g.getCreatedById(), g);
-                }
+
+            // Create next instance for recurring goals, only create if current instance is for today
+            if (g.getCreatedById() != null && goalDate.equals(currDate)) {
+                createNextInstance(g.getCreatedById(), g);
+            }
+
+            // Add one minute so all completed goals with date today and earlier gets cleared
+            if (g.completed() && currDate.plusMinutes(1).isAfter(goalDate)) {
                 goalDao.deleteGoal(g.id());
             }
         }
@@ -167,6 +170,11 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
         Goal parent = goalDao.find(parentId).toGoal();
         LocalDateTime currGoalDate = LocalDateTime.parse(currGoal.date());
         LocalDateTime parentDate = LocalDateTime.parse(parent.date());
+
+        LocalDateTime todayDate = LocalDateTime.now().withHour(1).withMinute(59).withSecond(0).withNano(0);
+        if (todayDate.isAfter(currGoalDate)) {
+            return;
+        }
 
         int maxId = getMaxId();
         switch (parent.repType()) {

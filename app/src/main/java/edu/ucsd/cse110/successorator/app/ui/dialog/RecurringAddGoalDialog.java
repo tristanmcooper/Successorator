@@ -242,58 +242,10 @@ public class RecurringAddGoalDialog extends DialogFragment{
                 Goal tmrGoal = new Goal(currCount+2, recurringGoal.description(), false, selectedDate.plusDays(1).toString(), "Once", recurringGoal.getContextType(), recurringGoal.id());
                 activityModel.addGoal(tmrGoal);
                 break;
-            case "Weekly":
-                Goal weeklyGoal = new Goal(currCount+1, recurringGoal.description(), false, selectedDate.plusDays(7).toString(), "Once", recurringGoal.getContextType(), recurringGoal.id());
-                activityModel.addGoal(weeklyGoal);
-                break;
-            case "Monthly":
-                // If 5th some day doesn't exist, create 1st that day next month
-                Goal monthlyGoal;
-                int weekNum = this.selectedDate.getDayOfMonth() / 7;
-                if (this.selectedDate.getDayOfMonth() % 7 != 0) {
-                    weekNum += 1;
-                }
-
-                LocalDateTime nextRecurrenceDate;
-                if (weekNum == 5) {
-                    nextRecurrenceDate = selectedDate.plusDays(35);
-                } else {
-                    LocalDateTime firstDayOfNextMonth = LocalDateTime.of(selectedDate.getYear(), selectedDate.getMonthValue() + 1, 1, 2, 0, 0);
-                    String dayOfFirst = firstDayOfNextMonth.getDayOfWeek().toString();
-
-                    // Offset to find date of first occurrence of day in next month
-                    HashMap<String, Integer> valueOfWeekDays = new HashMap<>() {{
-                        put("MONDAY", 1);
-                        put("TUESDAY", 2);
-                        put("WEDNESDAY", 3);
-                        put("THURSDAY", 4);
-                        put("FRIDAY", 5);
-                        put("SATURDAY", 6);
-                        put("SUNDAY", 7);
-                    }};
-
-                    nextRecurrenceDate = firstDayOfNextMonth.plusDays(
-                            ((weekNum - 1) * 7) //-1 because dayOfFirst is the first 'day-of-week' in the next month
-                            + Math.abs(valueOfWeekDays.get(selectedDate.getDayOfWeek().toString())
-                            - valueOfWeekDays.get(dayOfFirst))
-                    ); // use HashMap and difference in days to find date of the first 'day-of-week'
-                }
-
-                monthlyGoal = new Goal(currCount+1, recurringGoal.description(), false, nextRecurrenceDate.toString(), "Once", recurringGoal.getContextType(),recurringGoal.id());
-                activityModel.addGoal(monthlyGoal);
-                break;
-            case "Yearly":
-                // If Feb 29 is selected, selected year is leap year, next instance is March 1 next year
-                Goal yearlyGoal;
-                if (selectedDate.getMonthValue() == 2 && selectedDate.getDayOfMonth() == 29) {
-                    yearlyGoal = new Goal(currCount+1, recurringGoal.description(), false, selectedDate.plusYears(1).plusDays(1).toString(), "Once", recurringGoal.getContextType(), recurringGoal.id());
-                } else {
-                    yearlyGoal = new Goal(currCount+1, recurringGoal.description(), false, selectedDate.plusYears(1).toString(), "Once", recurringGoal.getContextType(), recurringGoal.id());
-                }
-                activityModel.addGoal(yearlyGoal);
-                break;
             default:
-
+                Goal newGoal = new Goal(currCount+1, recurringGoal.description(), false, selectedDate.toString(), "Once", recurringGoal.getContextType(), recurringGoal.id());
+                activityModel.addGoal(newGoal);
+                break;
         }
     }
 }
