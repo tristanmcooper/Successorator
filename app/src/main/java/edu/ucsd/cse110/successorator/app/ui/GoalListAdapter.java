@@ -227,32 +227,23 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
                         onDeleteClick.accept(id);
                     }
                     else {
-                        int parentid = goal.getCreatedById();
-                        System.out.println("parent ID " + goal.getCreatedById() + " " + parentid);
-                        System.out.println(" ID " );
-                        //System.out.println(activityModel.find(6));
-                        System.out.println(activityModel==null);
-                        System.out.println( "weeee");
-                        System.out.println(activityModel.find(goal.getCreatedById()));
                         Goal parentGoal = activityModel.find(goal.getCreatedById());
-                        if (parentGoal.repType().equals("Daily")) {
-                            for (Goal g : activityModel.findAllCreatedById(parentGoal.id())) {
-                                if (LocalDateTime.parse(g.date()).equals(LocalDateTime.parse(goal.date()).minusDays(1))) {
-                                    if (!g.completed()) {
-                                        new AlertDialog.Builder(context)
-                                                .setTitle("Error")
-                                                .setMessage("This goal is still active for Today. If you've finished this goal for Today, mark it finished in that view.")
-                                                .setNegativeButton("OK", null)
-                                                .setIcon(android.R.drawable.ic_dialog_alert)
-                                                .show();
-                                        return;
+                        for (Goal g : activityModel.findAllCreatedById(parentGoal.id())) {
+                            if (LocalDateTime.parse(g.date()).equals(LocalDateTime.parse(goal.date()).minusDays(1))) {
+                                if (!g.completed()) {
+                                    new AlertDialog.Builder(context)
+                                            .setTitle("Error")
+                                            .setMessage("This goal is still active for Today. If you've finished this goal for Today, mark it finished in that view.")
+                                            .setNegativeButton("OK", null)
+                                            .setIcon(android.R.drawable.ic_dialog_alert)
+                                            .show();
+                                    return;
 
-                                    }
-                                    else {
-                                        var id = goal.id();
-                                        assert id != null;
-                                        onDeleteClick.accept(id);
-                                    }
+                                }
+                                else {
+                                    var id = goal.id();
+                                    assert id != null;
+                                    onDeleteClick.accept(id);
                                 }
                             }
                         }
