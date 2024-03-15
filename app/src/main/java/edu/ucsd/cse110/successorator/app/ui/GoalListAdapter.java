@@ -1,6 +1,7 @@
 
 package edu.ucsd.cse110.successorator.app.ui;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -34,19 +35,7 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
     Context context;
 
     MainViewModel activityModel;
-
-    public GoalListAdapter(Context context, List<Goal> goals, Consumer<Integer> onDeleteClick, int fragmentType) {
-        // This sets a bunch of stuff internally, which we can access
-        // with getContext() and getItem() for example.
-        //
-        // Also note that ArrayAdapter NEEDS a mutable List (ArrayList),
-        // or it will crash!
-        super(context, 0, new ArrayList<>(goals));
-        this.onDeleteClick = onDeleteClick;
-        this.fragmentType = fragmentType;
-        this.context = context;
-    }
-
+    
     public GoalListAdapter(Context context, List<Goal> goals, Consumer<Integer> onDeleteClick, int fragmentType, MainViewModel model) {
         // This sets a bunch of stuff internally, which we can access
         // with getContext() and getItem() for example.
@@ -104,7 +93,7 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
             LocalDateTime date = LocalDateTime.parse(goal.date());
             String dayOfWeek = date.getDayOfWeek().toString().toLowerCase();
             dayOfWeek = dayOfWeek.substring(0, 1).toUpperCase() + dayOfWeek.substring(1);
-
+            //goal is recurring
             switch (recurrenceType) {
                 case "Daily":
                     LocalDateTime tmrDate = LocalDateTime.now().withHour(1).withMinute(59).withSecond(0).withNano(0).plusDays(1);
@@ -171,6 +160,7 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
                         switch (title) {
                             case "Delete":
                                 activityModel.removeSpecificGoal(goal.id());
+                                activityModel.removeAllCreatedBy(goal.id());
                                 return true;
 
                             default:
@@ -220,12 +210,44 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
                 binding.goalDescription.setPaintFlags(binding.goalDescription.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             }
 
-            if (fragmentType == 0 || fragmentType == 1){
+            if (fragmentType == 0){
                 // Don't want this functionality for pending or recurring view
                 binding.goalDescription.setOnClickListener(v -> {
                     var id = goal.id();
                     assert id != null;
                     onDeleteClick.accept(id);
+                });
+            }
+            if (fragmentType == 1){
+                // Don't want this functionality for pending or recurring view
+                binding.goalDescription.setOnClickListener(v -> {
+                    if (goal.getCreatedById() == null) {
+                        var id = goal.id();
+                        assert id != null;
+                        onDeleteClick.accept(id);
+                    }
+                    else {
+                        Goal parentGoal = activityModel.find(goal.getCreatedById());
+                        for (Goal g : activityModel.findAllCreatedById(parentGoal.id())) {
+                            if (LocalDateTime.parse(g.date()).equals(LocalDateTime.parse(goal.date()).minusDays(1))) {
+                                if (!g.completed()) {
+                                    new AlertDialog.Builder(context)
+                                            .setTitle("Error")
+                                            .setMessage("This goal is still active for Today. If you've finished this goal for Today, mark it finished in that view.")
+                                            .setNegativeButton("OK", null)
+                                            .setIcon(android.R.drawable.ic_dialog_alert)
+                                            .show();
+                                    return;
+
+                                }
+                                else {
+                                    var id = goal.id();
+                                    assert id != null;
+                                    onDeleteClick.accept(id);
+                                }
+                            }
+                        }
+                    }
                 });
             }
             if (fragmentType == 2){

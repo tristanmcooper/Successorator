@@ -23,6 +23,7 @@ public class RecurringListFragment extends Fragment {
     private MainViewModel activityModel;
     private FragmentRecurringListBinding view;
     private GoalListAdapter goalsAdapter;
+    private LocalDateTime currentDate;
 
     public RecurringListFragment() {
         // Required empty public constructor
@@ -50,7 +51,9 @@ public class RecurringListFragment extends Fragment {
         this.goalsAdapter = new GoalListAdapter(requireContext(), List.of(), id -> {
             activityModel.changeCompleteStatus(id);
         }, 3, activityModel);
+        activityModel.getRecurringGoals().removeAllObservers();
         activityModel.getRecurringGoals().registerObserver(goals -> {
+            System.out.println("Recurring Goals Observer");
             if (goals == null) return;
 
             var recurringGoals = new ArrayList<Goal>();
@@ -59,6 +62,18 @@ public class RecurringListFragment extends Fragment {
                     recurringGoals.add(g);
                 }
             }
+
+            if (view.defaultGoals != null) {
+                // Set defaultGoals visibility
+                if (recurringGoals.size() == 0) {
+                    view.defaultGoals.setVisibility(View.VISIBLE);
+                } else {
+                    view.defaultGoals.setVisibility(View.INVISIBLE);
+                }
+            } else {
+                System.out.println("defaultGoals view is null");
+            }
+
             goalsAdapter.clear();
             goalsAdapter.addAll(recurringGoals); // remember the mutable copy here!
             goalsAdapter.notifyDataSetChanged();
@@ -67,5 +82,19 @@ public class RecurringListFragment extends Fragment {
         view.uncompletedGoalList.setAdapter(goalsAdapter);
 
         return view.getRoot();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        activityModel.getRecurringGoals().removeAllObservers();
+    }
+
+    public void updateDate(LocalDateTime date){
+        this.currentDate = date;
+    }
+
+    public LocalDateTime getDate(){
+        return this.currentDate;
     }
 }

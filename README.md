@@ -1,6 +1,15 @@
-# Team X - Successorator 
+# Team 30 - Successorator 
 
 ---
+
+Features:
+- Add goals to keep track of tasks
+- 4 different views: today, tomorrow, pending, recurring
+- Add recurring goals that repeat periodically
+- Add pending goals for goals to be completed in the future
+- Assign goals different contexts (H, W, S, E)
+- Filter your goals by context in focus mode
+
 
 MS 2 Delivery Iterations 1 & 2 Velocity Calculation
 
@@ -38,6 +47,5 @@ User Stories for iteration 2:
 - Developer Loose Task [4]
 
 Total Hours: 50
-
 
 Assigning 50 hours of work means we are capable of completing these tasks in iteration 2 to be able to deliver MS 2 on time.

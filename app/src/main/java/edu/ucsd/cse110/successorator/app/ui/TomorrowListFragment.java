@@ -25,6 +25,7 @@ public class TomorrowListFragment extends Fragment {
     private MainViewModel activityModel;
     private FragmentTomorrowListBinding view;
     private GoalListAdapter incompleteAdapter;
+    private GoalListAdapter completeAdapter;
     private LocalDateTime currentDate;
 
     public TomorrowListFragment() {
@@ -54,10 +55,16 @@ public class TomorrowListFragment extends Fragment {
 
         // Initialize the Adapter (with an empty list for now) for incomplete tasks
         this.incompleteAdapter = new GoalListAdapter(requireContext(), List.of(), id -> {
-            activityModel.changeToTodayView(id,true);
-        }, 1);
+            activityModel.changeCompleteStatus(id);
+        }, 1, activityModel);
+        this.completeAdapter = new GoalListAdapter(requireContext(), List.of(), id -> {
+            activityModel.changeCompleteStatus(id);
+        }, 1, activityModel);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm", Locale.getDefault());
+
+        activityModel.getIncompleteGoals().removeAllObservers();
         activityModel.getIncompleteGoals().registerObserver(goals -> {
+            System.out.println("Tomorrow Incomplete Goals Observer");
             if (goals == null) return;
 
             var tmrwGoals = new ArrayList<Goal>();
@@ -66,22 +73,74 @@ public class TomorrowListFragment extends Fragment {
                 if(!g.date().equals("")){
                     goalDate = LocalDateTime.parse(g.date(), formatter);
                 }
-                if(!(goalDate ==null) && goalDate.getDayOfYear()==currentDate.getDayOfYear() && (activityModel.getContext().equals("N/A") || g.getContextType().equals(activityModel.getContext()))){
+
+                if (goalDate != null
+                        && goalDate.equals(currentDate.withHour(2).withMinute(0).withSecond(0).withNano(0))
+                        && (activityModel.getContext().equals("N/A") || g.getContextType().equals(activityModel.getContext()))
+                        && !(g.repType().equals("Daily") || g.repType().equals("Weekly") || g.repType().equals("Monthly") || g.repType().equals("Yearly"))) {
                     tmrwGoals.add(g);
+                    Log.d("TomorrowListFrag", "id: " + g.id() + ", description: " + g.description() + ", repType: " + g.repType() + ", contextType: " + g.getContextType());
                 }
-                //add edge case for end of year
             }
+
+            if (view.defaultGoals != null) {
+                // Set defaultGoals visibility
+                if (tmrwGoals.size() == 0) {
+                    view.defaultGoals.setVisibility(View.VISIBLE);
+                } else {
+                    view.defaultGoals.setVisibility(View.INVISIBLE);
+                }
+            } else {
+                System.out.println("defaultGoals view is null");
+            }
+
             incompleteAdapter.clear();
             incompleteAdapter.addAll(tmrwGoals); // remember the mutable copy here!
             activityModel.setDisplayedTomorrowGoals(tmrwGoals);
             incompleteAdapter.notifyDataSetChanged();
         });
 
+        activityModel.getCompleteGoals().removeAllObservers();
+        activityModel.getCompleteGoals().registerObserver(goals -> {
+            System.out.println("Tomorrow Complete Goals Observer");
+            if (goals == null) return;
+
+            var tmrwGoals = new ArrayList<Goal>();
+            for(Goal g : goals){
+                LocalDateTime goalDate = null;
+                if(!g.date().equals("")){
+                    goalDate = LocalDateTime.parse(g.date(), formatter);
+                }
+
+                if (goalDate != null
+                        && goalDate.equals(currentDate.withHour(2).withMinute(0).withSecond(0).withNano(0))
+                        && (activityModel.getContext().equals("N/A") || g.getContextType().equals(activityModel.getContext()))
+                        && !(g.repType().equals("Daily") || g.repType().equals("Weekly") || g.repType().equals("Monthly") || g.repType().equals("Yearly"))) {
+                    tmrwGoals.add(g);
+                    Log.d("TomorrowListFrag", "id: " + g.id() + ", description: " + g.description() + ", repType: " + g.repType() + ", contextType: " + g.getContextType());
+                }
+            }
+
+            completeAdapter.clear();
+            completeAdapter.addAll(tmrwGoals); // remember the mutable copy here!
+            activityModel.setDisplayedTomorrowGoals(tmrwGoals);
+            completeAdapter.notifyDataSetChanged();
+        });
+
         // Set the adapter on the ListView
         view.uncompletedGoalList.setAdapter(incompleteAdapter);
+        view.completedGoalList.setAdapter(completeAdapter);
 
         return view.getRoot();
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        activityModel.getIncompleteGoals().removeAllObservers();
+        activityModel.getCompleteGoals().removeAllObservers();
+    }
+
     public void updateDate(LocalDateTime date){
         this.currentDate = date.plusDays(1);
     }

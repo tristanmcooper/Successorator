@@ -62,7 +62,7 @@ public class PendingAddGoalDialog extends DialogFragment{
         private void onPositiveButtonClick(DialogInterface dialog, int which) {
             // Get user input from the EditText
             String description = view.editText.getText().toString();
-            int currCount = activityModel.getCount();
+            int currCount = activityModel.getMaxId();
 
             if (description.length() == 0) {
                 new AlertDialog.Builder(requireContext())
@@ -85,8 +85,9 @@ public class PendingAddGoalDialog extends DialogFragment{
                     description,
                     false,
                     "",
-                    "pending",
-                    contextType);
+                    "Pending",
+                    contextType,
+                    null);
 
             // Add the new goal to your model
             activityModel.addGoal(newGoal);
