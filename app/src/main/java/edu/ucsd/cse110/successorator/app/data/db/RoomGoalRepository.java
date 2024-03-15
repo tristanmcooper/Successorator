@@ -154,6 +154,18 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
                 goalDate = LocalDateTime.parse(g.date());
             }
 
+            // Instance of recurring goal in tomorrow
+            if (g.getCreatedById() != null && currDate.plusDays(1).equals(goalDate)) {
+                // Check if exists instance of tomorrow's goal in today
+                for (Goal otherInstance : findAllCreatedById(g.getCreatedById())) {
+                    // If exist earlier instance, delete it
+                    if (currDate.plusMinutes(1).isAfter(LocalDateTime.parse(otherInstance.date()))) {
+                        remove(otherInstance.id());
+                    }
+                }
+            }
+                // currDate = date before switching?
+
             // Create next instance for recurring goals, only create if current instance is for today
             if (g.getCreatedById() != null && goalDate.equals(currDate)) {
                 createNextInstance(g.getCreatedById(), g);
@@ -189,8 +201,8 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
             case "Monthly":
                 Goal newMonthlyGoal;
                 // Get weekNum and day of week
-                int weekNum = currGoalDate.getDayOfMonth() / 7;
-                if (currGoalDate.getDayOfMonth() % 7 != 0) {
+                int weekNum = parentDate.getDayOfMonth() / 7;
+                if (parentDate.getDayOfMonth() % 7 != 0) {
                     weekNum += 1;
                 }
                 LocalDateTime nextRecurrenceMonthDate;
@@ -215,12 +227,11 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
                                     + Math.abs(valueOfWeekDays.get(currGoalDate.getDayOfWeek().toString())
                                     - valueOfWeekDays.get(dayOfFirst))
                     );
-
                 } else { // if fifth 'day-of-week'
                     // Currently is extended to first of next month
                     if (currGoalDate.getDayOfMonth() <= 7) {
                         // Does this month have the 5th occurrence?
-                        if (currGoalDate.plusDays(28).getMonth() != currGoalDate.getMonth()) {
+                        if (currGoalDate.plusDays(28).getMonth() == currGoalDate.getMonth()) {
                             nextRecurrenceMonthDate = currGoalDate.plusDays(28);
                         } else { // Doesn't have 5th occurrence
                             nextRecurrenceMonthDate = currGoalDate.plusDays(35);

@@ -248,6 +248,11 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
                                         return;
 
                                     }
+                                    else {
+                                        var id = goal.id();
+                                        assert id != null;
+                                        onDeleteClick.accept(id);
+                                    }
                                 }
                             }
                         }
