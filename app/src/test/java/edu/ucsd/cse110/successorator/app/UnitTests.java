@@ -107,10 +107,10 @@ public class UnitTests {
     //US3 tests in the database
     @Test
     public void getContext() {
-        assertEquals("H", viewModel.getRepo().find(0).getValue().contextType());
-        assertEquals("W", viewModel.getRepo().find(1).getValue().contextType());
-        assertEquals("S", viewModel.getRepo().find(2).getValue().contextType());
-        assertEquals("E", viewModel.getRepo().find(3).getValue().contextType());
-        assertEquals("H", viewModel.getRepo().find(4).getValue().contextType());
+        assertEquals("H", viewModel.getRepo().find(1).getValue().contextType());
+        assertEquals("W", viewModel.getRepo().find(2).getValue().contextType());
+        assertEquals("S", viewModel.getRepo().find(3).getValue().contextType());
+        assertEquals("E", viewModel.getRepo().find(4).getValue().contextType());
+        assertEquals("H", viewModel.getRepo().find(5).getValue().contextType());
     }
 }
