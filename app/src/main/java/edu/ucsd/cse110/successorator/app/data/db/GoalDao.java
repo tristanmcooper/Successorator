@@ -70,12 +70,15 @@ public interface GoalDao {
     @Query("DELETE FROM goals WHERE completed=true")
     void deleteCompleted();
 
-    @Query("DELETE FROM goals WHERE id= :idPass")
-    void deleteGoal(int idPass);
+    @Query("DELETE FROM goals WHERE id= :id")
+    void deleteGoal(int id);
 
     @Query("SELECT * FROM goals WHERE repType = :completed")
     LiveData<List<GoalEntity>> makeTomorrow(String completed);
 
     @Query("SELECT * FROM goals WHERE createdById = :id")
     LiveData<List<GoalEntity>> findAllCreatedById(int id);
+
+    @Query("SELECT MAX(id) as max_if FROM goals")
+    int getMaxId();
 }

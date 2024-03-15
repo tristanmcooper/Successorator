@@ -210,18 +210,18 @@ public class MainActivity extends AppCompatActivity {
             prevDate = currentDateTime;
             model.updateModelCurrentDate(currentDateTime);
             if(fragmentType==0){
-                TodayListFragment todayfrag = (TodayListFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-                if (todayfrag != null) {
-                    todayfrag.updateDate(currentDateTime);
+                TodayListFragment todayFrag = (TodayListFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                if (todayFrag != null) {
+                    todayFrag.updateDate(currentDateTime);
                 }
             }
             if(fragmentType==1){
-                TomorrowListFragment tmrwfrag = (TomorrowListFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-                if (tmrwfrag != null) {
-                    tmrwfrag.updateDate(currentDateTime);
+                TomorrowListFragment tmrwFrag = (TomorrowListFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                if (tmrwFrag != null) {
+                    tmrwFrag.updateDate(currentDateTime);
                 }
             }
-            //model.refreshDatabase();
+            model.refreshDatabase();
         }
 
         model.updateModelCurrentDate(currentDateTime);

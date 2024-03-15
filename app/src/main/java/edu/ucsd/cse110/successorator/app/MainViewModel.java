@@ -29,7 +29,6 @@ public class MainViewModel extends ViewModel{
     private ArrayList<Goal> displayedTodayGoals;
     private ArrayList<Goal> displayedTomorrowGoals;
     private String contextType = "N/A";
-    private int idCount = 0;
 
     //basically grabs the database
     public static final ViewModelInitializer<MainViewModel> initializer =
@@ -49,8 +48,6 @@ public class MainViewModel extends ViewModel{
         this.incompleteGoals = new SimpleSubject<>();
         this.completeGoals = new SimpleSubject<>();
         this.recurringGoals = new SimpleSubject<>();
-
-        this.idCount = getCount();
 
         goalRepository.findIncomplete().registerObserver(goals -> {
             if (goals == null) return;
@@ -81,7 +78,6 @@ public class MainViewModel extends ViewModel{
 
     //Probably just for testing, might be violating SRP idk
     public void addGoal(Goal goal){
-        this.idCount += 1;
         goalRepository.add(goal);
     }
     public void setContextFilterType(String contextType){
@@ -98,7 +94,7 @@ public class MainViewModel extends ViewModel{
     }
 
     public int getMaxId() {
-        return this.idCount;
+        return goalRepository.getMaxId();
     }
 
     public Goal find(int id) {
