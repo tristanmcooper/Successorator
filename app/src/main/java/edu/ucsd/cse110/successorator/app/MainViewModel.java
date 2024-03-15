@@ -106,13 +106,11 @@ public class MainViewModel extends ViewModel{
         goalRepository.changeCompleted(id);
     }
     public void removeAllCreatedBy(int id){
-        var goals = goalRepository.findAllCreatedById(id).getValue();
+        var goals = goalRepository.findAllCreatedById(id);
         if(goals==null){
-            Log.d("removingshit", "no remove shit");
             return;
         }
         for(Goal goal : goals){
-            Log.d("removingshit", ""+goal.id());
             goalRepository.remove(goal.id());
         }
     }

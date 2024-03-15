@@ -77,7 +77,7 @@ public interface GoalDao {
     LiveData<List<GoalEntity>> makeTomorrow(String completed);
 
     @Query("SELECT * FROM goals WHERE createdById = :id")
-    LiveData<List<GoalEntity>> findAllCreatedById(int id);
+    List<GoalEntity> findAllCreatedById(int id);
 
     @Query("SELECT MAX(id) as max_if FROM goals")
     int getMaxId();

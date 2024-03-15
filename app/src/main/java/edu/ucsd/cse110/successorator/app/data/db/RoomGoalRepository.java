@@ -155,8 +155,8 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
                 goalDate = LocalDateTime.parse(g.date());
             }
             if (g.completed() && currDate.isAfter(goalDate)) {
-                if (g.createdById() != null) {
-                    createNextInstance(g.createdById(), g.id());
+                if (g.getCreatedById() != null) {
+                    createNextInstance(g.getCreatedById(), g);
                 }
                 goalDao.deleteGoal(g.id());
             }
@@ -210,6 +210,7 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
 
                 } else { // if fifth 'day-of-week'
                     //TODO calculate nextRecurrenceMonthDate for this
+                    nextRecurrenceMonthDate = LocalDateTime.now();
                 }
 
                 newMonthlyGoal = new Goal(maxId + 1, currGoal.description(), false, nextRecurrenceMonthDate.toString(), "Once", currGoal.getContextType(), parentId);
@@ -270,14 +271,10 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
     }
 
     
-    public Subject<List<Goal>> findAllCreatedById(int id){
-        var entitiesLiveData = goalDao.findAllCreatedById(id);
-        var goalsLiveData = Transformations.map(entitiesLiveData, entities -> {
-            return entities.stream()
-                    .map(GoalEntity::toGoal)
-                    .collect(Collectors.toList());
-        });
-        return new LiveDataSubjectAdapter<>(goalsLiveData);
+    public List<Goal> findAllCreatedById(int id){
+        return goalDao.findAllCreatedById(id).stream()
+                .map(GoalEntity::toGoal)
+                .collect(Collectors.toList());
     }
 
 
