@@ -42,7 +42,8 @@ public class SuccessoratorApplication extends Application {
             new Goal(1, "Goal 1", false, currDateTime.toString(), "Once", "H", null),
             new Goal(2, "Goal 2", false, currDateTime.toString(), "Once", "W", null),
             new Goal(3, "Goal 3", false, currDateTime.toString(), "Once", "S", null),
-            new Goal(4, "Goal 4", false, currDateTime.toString(), "Once", "E", null)
+            new Goal(4, "Goal 4", false, LocalDateTime.of(2024, 2, 29, 2, 0, 0).toString(), "Yearly", "E", null),
+            new Goal(5, "Goal 4", false, LocalDateTime.of(2025, 3, 1, 2, 0, 0).toString(), "Once", "E", 4)
         );
 
         // Populate database with default values

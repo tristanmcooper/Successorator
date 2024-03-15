@@ -227,9 +227,10 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
                         onDeleteClick.accept(id);
                     }
                     else {
+                        int parentid = goal.getCreatedById();
                         Goal parentGoal = activityModel.find(goal.getCreatedById());
                         for (Goal g : activityModel.findAllCreatedById(parentGoal.id())) {
-                            if (LocalDateTime.parse(g.date()).equals(LocalDateTime.parse(goal.date()).minusDays(1))) {
+                            if (LocalDateTime.parse(g.date()).isBefore(LocalDateTime.parse(goal.date()))) {
                                 if (!g.completed()) {
                                     new AlertDialog.Builder(context)
                                             .setTitle("Error")
@@ -251,9 +252,7 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
                 });
             }
             if (fragmentType == 2){
-                binding.goalDescription.setOnLongClickListener(v-> {
-                    Log.d("GoalListAdapter", "Long press detected");
-                    PopupMenu popupMenu = new PopupMenu(context, v);
+                binding.goalDescription.setOnLongClickListener(v-> {PopupMenu popupMenu = new PopupMenu(context, v);
                     popupMenu.inflate(R.menu.pending_long_press_context_menu);
 
                     popupMenu.setOnMenuItemClickListener(item -> {

@@ -208,7 +208,7 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
                 LocalDateTime nextRecurrenceMonthDate;
                 // If not the fifth 'day-of-week', nothing to worry about. Calculate as usual
                 if (weekNum != 5) {
-                    LocalDateTime firstDayOfNextMonth = LocalDateTime.of(currGoalDate.getYear(), currGoalDate.getMonthValue() + 1, 1, 2, 0, 0);
+                    LocalDateTime firstDayOfNextMonth = LocalDateTime.of(currGoalDate.getYear(), currGoalDate.getMonthValue(), 1, 2, 0, 0).plusMonths(1);
                     String dayOfFirst = firstDayOfNextMonth.getDayOfWeek().toString();
 
                     // Offset to find date of first occurrence of day in next month
@@ -221,25 +221,44 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
                         put("SATURDAY", 6);
                         put("SUNDAY", 7);
                     }};
+                    //Off by 1 week if the first day of the month doens't correspond to the recurring goal day.
+                    //correct if the first day of the month corresponds to the recurring goal day.
+                    if (firstDayOfNextMonth.getDayOfWeek().equals(currGoalDate.getDayOfWeek())){
+                        nextRecurrenceMonthDate = firstDayOfNextMonth.plusDays(
+                                ((weekNum - 1) * 7) //-1 because dayOfFirst is the first 'day-of-week' in the next month
+                                        + (Math.abs(valueOfWeekDays.get(currGoalDate.getDayOfWeek().toString()))
+                                        - valueOfWeekDays.get(dayOfFirst))
+                        );
+                    }
+                    else {
+                        nextRecurrenceMonthDate = firstDayOfNextMonth.plusDays(
+                                ((weekNum) * 7) //-1 because dayOfFirst is the first 'day-of-week' in the next month
+                                        + (Math.abs(valueOfWeekDays.get(currGoalDate.getDayOfWeek().toString()))
+                                        - valueOfWeekDays.get(dayOfFirst))
+                        );
+                    }
 
-                    nextRecurrenceMonthDate = firstDayOfNextMonth.plusDays(
-                            ((weekNum - 1) * 7) //-1 because dayOfFirst is the first 'day-of-week' in the next month
-                                    + Math.abs(valueOfWeekDays.get(currGoalDate.getDayOfWeek().toString())
-                                    - valueOfWeekDays.get(dayOfFirst))
-                    );
+                    System.out.println(firstDayOfNextMonth);
+                    System.out.println(Math.abs(valueOfWeekDays.get(currGoalDate.getDayOfWeek().toString())));
+                    System.out.println(valueOfWeekDays.get(dayOfFirst));
                 } else { // if fifth 'day-of-week'
                     // Currently is extended to first of next month
                     if (currGoalDate.getDayOfMonth() <= 7) {
                         // Does this month have the 5th occurrence?
                         if (currGoalDate.plusDays(28).getMonth() == currGoalDate.getMonth()) {
                             nextRecurrenceMonthDate = currGoalDate.plusDays(28);
+                            System.out.println("WRONG");
                         } else { // Doesn't have 5th occurrence
                             nextRecurrenceMonthDate = currGoalDate.plusDays(35);
+                            System.out.println(false);
                         }
                     } else { // Currently not extended to next month
                         nextRecurrenceMonthDate = currGoalDate.plusDays(35);
+                        System.out.println(true);
                     }
                 }
+                System.out.println(nextRecurrenceMonthDate);
+
 
                 newMonthlyGoal = new Goal(maxId + 1, currGoal.description(), false, nextRecurrenceMonthDate.toString(), "Once", currGoal.getContextType(), parentId);
                 add(newMonthlyGoal);
