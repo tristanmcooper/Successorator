@@ -2,7 +2,10 @@ package edu.ucsd.cse110.successorator.app;
 
 // ESPRESSO IMPORTS
 import static androidx.test.core.app.ActivityScenario.launch;
+import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.Espresso.onView;
@@ -16,6 +19,9 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
 import static junit.framework.TestCase.assertEquals;
 
+import static org.hamcrest.core.AllOf.allOf;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.assertNotNull;
 
 import android.view.View;
@@ -104,6 +110,17 @@ public class MainActivityTest {
 
     @Test
     public void recurringGoalTest(){
+        onView(withId(R.id.views_drop_down)).perform(click());
+        onView(withText("Recurring Goals")).perform(click());
+        onView(withId(R.id.add_goal_button)).perform(click());
+
+        // Type text into the EditText
+        onView(withId(R.id.editText)).perform(typeText("Your Goal Description"), closeSoftKeyboard());
+
+        // Click on the radio button based on its ID
+        onView(withId(R.id.daily)).perform(click());
+        onView(withText("Create")).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("Your Goal Description"))).perform(click());
 
     }
 
