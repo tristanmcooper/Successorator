@@ -22,6 +22,7 @@ import static junit.framework.TestCase.assertEquals;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
+import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertNotNull;
 
 import android.view.View;
@@ -53,6 +54,14 @@ import edu.ucsd.cse110.successorator.app.ui.TodayListFragment;
 import edu.ucsd.cse110.successorator.app.ui.TomorrowListFragment;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import org.junit.Rule;
+import android.graphics.Paint;
+import android.view.View;
+import android.widget.TextView;
+
+import androidx.test.espresso.matcher.BoundedMatcher;
+
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -64,10 +73,12 @@ import org.junit.Rule;
 public class MainActivityTest {
 
     private MainViewModel model;
+    TextViewStrikeThroughMatcher ts;
 
     @Rule
     public ActivityScenarioRule<MainActivity> activityRule =
             new ActivityScenarioRule<>(MainActivity.class);
+
 
     @Test
     public void testAdvanceDateButtonChangesDateDisplay() {
@@ -112,16 +123,50 @@ public class MainActivityTest {
     public void recurringGoalTest(){
         onView(withId(R.id.views_drop_down)).perform(click());
         onView(withText("Recurring Goals")).perform(click());
+
         onView(withId(R.id.add_goal_button)).perform(click());
-
-        // Type text into the EditText
-        onView(withId(R.id.editText)).perform(typeText("Your Goal Description"), closeSoftKeyboard());
-
-        // Click on the radio button based on its ID
+        onView(withId(R.id.editText)).perform(typeText("Daily Goal"), closeSoftKeyboard());
         onView(withId(R.id.daily)).perform(click());
         onView(withText("Create")).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is("Your Goal Description"))).perform(click());
 
+        onView(withId(R.id.add_goal_button)).perform(click());
+        onView(withId(R.id.editText)).perform(typeText("Weekly Goal"), closeSoftKeyboard());
+        onView(withId(R.id.weekly)).perform(click());
+        onView(withText("Create")).perform(click());
+
+        onView(withId(R.id.add_goal_button)).perform(click());
+        onView(withId(R.id.editText)).perform(typeText("Monthly Goal"), closeSoftKeyboard());
+        onView(withId(R.id.monthly)).perform(click());
+        onView(withText("Create")).perform(click());
+
+        onView(withId(R.id.views_drop_down)).perform(click());
+        onView(withText("Today's Goals")).perform(click());
+
+        onView(withText("Daily Goal")).perform(click());
+        onView(withText("Weekly Goal")).perform(click());
+        onView(withText("Monthly Goal")).perform(click());
+
+        onView(withText("Daily Goal")).check(matches(TextViewStrikeThroughMatcher.withStrikeThrough()));
+        onView(withText("Weekly Goal")).check(matches((TextViewStrikeThroughMatcher.withStrikeThrough())));
+        onView(withId(R.id.button_advance_date)).perform(click());
+
+        onView(withText("Daily Goal")).check(matches(not(TextViewStrikeThroughMatcher.withStrikeThrough())));
+        for(int i = 0; i<6; i++){
+            onView(withId(R.id.button_advance_date)).perform(click());
+        }
+        for(int i = 0; i<28; i++){
+            onView(withId(R.id.button_advance_date)).perform(click());
+        }
+        onView(withText("Weekly Goal")).check(matches(not(TextViewStrikeThroughMatcher.withStrikeThrough())));
+        onView(withText("Monthly Goal")).check(matches(not(TextViewStrikeThroughMatcher.withStrikeThrough())));
+        onView(withText("Monthly Goal")).perform(click());
+        onView(withText("Monthly Goal")).check(matches((TextViewStrikeThroughMatcher.withStrikeThrough())));
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            // Handle interrupted exception
+            e.printStackTrace();
+        }
     }
 
 
