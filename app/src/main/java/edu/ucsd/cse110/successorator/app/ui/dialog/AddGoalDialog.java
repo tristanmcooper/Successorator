@@ -139,7 +139,7 @@ public class AddGoalDialog extends DialogFragment{
         Goal newGoal = new Goal(currCount + 1,
                 description,
                 false,
-                LocalDateTime.now().withHour(2).withMinute(0).withSecond(0).withNano(0).toString(),
+                activityModel.getCurrentDate().toString(),
                 repType,
                 contextType);
 
