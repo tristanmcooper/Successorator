@@ -2,19 +2,42 @@
 
 ---
 
-This is the mostly empty template for the Successorator project.
+MS 2 Delivery Iterations 1 & 2 Velocity Calculation
 
-## Getting Started
+Iteration 1 Planned:
+- US 1 Goal adding options for today and tomorrow views [8]
+- US 3 Goals can be given context [4]
+- US 4 Filter goals by context [4]
+- US 5 Pending goals view [2]
+- US 8 Views drop-down menu [4]
+- Iteration 1 Overall Test [2]
 
- - [ ] Look around the project.
-   - The `docs/` directory may be helpful, as Slack/Discord messages are easy to lose.
-     - This is a good place to put finalized user stories, standards, guidelines, meeting notes, etc
-       that you want to stick with the repository in perpetuity (e.g. after the semester ends) e.g.
-       for portfolio purposes.
-     - Google Docs is easier for collaboration, but eventually you might want to put the
-       finalized versions here for reference. (This way you can also reference them in PRs!)
- - [ ] Modify the `.github/pull_request_template.md` to suit your needs.
-   - You **do not** need to use the exact same template, but justify your changes when you 
-     PR the updated template.
- - [ ] Replace this README with something appropriate.
-   - **When you do, replace the title to replace X with your team number.**
+Total Hours: 24
+
+Iteration 1 Velocity:
+- Total hours of work put in: 8
+- Total hours of work completed: 6 (US 8 and US 5)
+- Velocity: 6/8 = 0.75
+
+We came together and agreed that we could each put in around 12 hours of work for iteration 2.
+
+This means we have 12*6 = 72 hours.
+
+Taking into account a velocity of 0.75, we can 72*0.75 = 54 hours of actual work.
+
+
+User Stories for iteration 2:
+- Iteration 1 Overall Test [2]
+- US 1 Goal adding options for today and tomorrow views [8]
+- US 2 Calendar picker for recurring events [4]
+- US 3 Goals can be given context [4]
+- US 4 Filter goals by context [4]
+- US 6 Long press menu for actions on goals in pending view [4]
+- US 7 Recurring goals view [4]
+- US 9 Update Today/Tomorrow Goal Lists based Recurring Goals [16]
+- Developer Loose Task [4]
+
+Total Hours: 50
+
+
+Assigning 50 hours of work means we are capable of completing these tasks in iteration 2 to be able to deliver MS 2 on time.
