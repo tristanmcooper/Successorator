@@ -60,7 +60,10 @@ public class PendingListFragment extends Fragment {
 
             var pendingGoals = new ArrayList<Goal>();
             for(Goal g : goals){
-                if(g.repType().equals("Pending") && g.date().isEmpty() && (activityModel.getContext().equals("N/A") || g.getContextType().equals(activityModel.getContext()))){
+                if(g.repType().equals("Pending")
+                        && g.date().isEmpty()
+                        && (activityModel.getContext().equals("N/A")
+                        || g.getContextType().equals(activityModel.getContext()))){
                     pendingGoals.add(g);
                 }
             }

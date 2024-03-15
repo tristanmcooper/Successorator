@@ -19,6 +19,7 @@ import edu.ucsd.cse110.successorator.app.data.db.RoomGoalRepository;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
+import edu.ucsd.cse110.successorator.lib.util.Subject;
 
 public class MainViewModel extends ViewModel{
     private final RoomGoalRepository goalRepository;
@@ -108,6 +109,17 @@ public class MainViewModel extends ViewModel{
     public void changeCompleteStatus(int id){
         goalRepository.changeCompleted(id);
     }
+    public void removeAllCreatedBy(int id){
+        var goals = goalRepository.findAllCreatedById(id).getValue();
+        if(goals==null){
+            Log.d("removingshit", "no remove shit");
+            return;
+        }
+        for(Goal goal : goals){
+            Log.d("removingshit", ""+goal.id());
+            goalRepository.remove(goal.id());
+        }
+    }
     public SimpleSubject<List<Goal>> getIncompleteGoals(){
         return incompleteGoals;
     }
@@ -119,6 +131,7 @@ public class MainViewModel extends ViewModel{
     public SimpleSubject<List<Goal>> getRecurringGoals(){
         return recurringGoals;
     }
+
 
     public void deleteCompleted(){
         goalRepository.deleteCompleted();
@@ -173,4 +186,6 @@ public class MainViewModel extends ViewModel{
     public String getContext() {
         return this.contextType;
     }
+
+
 }

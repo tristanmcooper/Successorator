@@ -1,5 +1,7 @@
 package edu.ucsd.cse110.successorator.app.data.db;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 
@@ -8,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.successorator.app.util.*;
@@ -157,6 +160,9 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
         }
     }
 
+    public void deleteRecurring(){
+
+    }
     @Override
     public void clear() {
         goalDao.clear();
@@ -189,7 +195,7 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
                     .collect(Collectors.toList());
         });
         return new LiveDataSubjectAdapter<>(goalsLiveData);
-
     }
+
 
 }

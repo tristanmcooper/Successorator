@@ -171,6 +171,7 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
                         switch (title) {
                             case "Delete":
                                 activityModel.removeSpecificGoal(goal.id());
+                                activityModel.removeAllCreatedBy(goal.id());
                                 return true;
 
                             default:
