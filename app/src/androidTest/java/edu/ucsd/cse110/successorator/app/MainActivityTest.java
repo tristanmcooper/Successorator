@@ -90,7 +90,7 @@ public class MainActivityTest {
         // Click on the "Tomorrow's Goals" menu item
         //onView(withId(R.id.tomorrow_view)).perform(click());
         Fragment currentFragment = getCurrentFragment();
-        //model.addGoal(new Goal(1,"trial", false, LocalDateTime.now().plusDays(1).withHour(2).withMinute(0).withSecond(0).withNano(0).toString(),"Once", "Work",null));
+
         assert(currentFragment instanceof TomorrowListFragment);
 
     }
