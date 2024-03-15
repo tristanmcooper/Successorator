@@ -209,8 +209,17 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
                     );
 
                 } else { // if fifth 'day-of-week'
-                    //TODO calculate nextRecurrenceMonthDate for this
-                    nextRecurrenceMonthDate = LocalDateTime.now();
+                    // Currently is extended to first of next month
+                    if (currGoalDate.getDayOfMonth() <= 7) {
+                        // Does this month have the 5th occurrence?
+                        if (currGoalDate.plusDays(28).getMonth() != currGoalDate.getMonth()) {
+                            nextRecurrenceMonthDate = currGoalDate.plusDays(28);
+                        } else { // Doesn't have 5th occurrence
+                            nextRecurrenceMonthDate = currGoalDate.plusDays(35);
+                        }
+                    } else { // Currently not extended to next month
+                        nextRecurrenceMonthDate = currGoalDate.plusDays(35);
+                    }
                 }
 
                 newMonthlyGoal = new Goal(maxId + 1, currGoal.description(), false, nextRecurrenceMonthDate.toString(), "Once", currGoal.getContextType(), parentId);
@@ -269,13 +278,10 @@ public class RoomGoalRepository extends RepositorySubject implements GoalReposit
         remove(id);
         add(copy);
     }
-
     
     public List<Goal> findAllCreatedById(int id){
         return goalDao.findAllCreatedById(id).stream()
                 .map(GoalEntity::toGoal)
                 .collect(Collectors.toList());
     }
-
-
 }
