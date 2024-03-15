@@ -73,13 +73,15 @@ public class MainActivity extends AppCompatActivity {
         var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.model = modelProvider.get(MainViewModel.class);
+
         //grab view by inflating xml layout file
         textViewDate = findViewById(R.id.dateTextView);
         handler = new Handler();
         buttonAdvanceDate = findViewById(R.id.button_advance_date);
 
         // Initial update
-        currentDateTime = LocalDateTime.now();
+        currentDateTime = LocalDateTime.now().withHour(2).withMinute(0).withSecond(0).withNano(0);
+        model.updateModelCurrentDate(currentDateTime);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E, M/d", Locale.getDefault());
         prevDate = currentDateTime;
         updateDate();
@@ -156,18 +158,14 @@ public class MainActivity extends AppCompatActivity {
         // can't use switch here, need to use if statements
         if (itemId == R.id.today_view) {
             swapFragments(0);
-            fragmentType = 0;
             //model.refreshDatabase();
         } else if (itemId == R.id.tomorrow_view) {
             swapFragments(1);
-            fragmentType = 1;
             //model.refreshDatabase();
         } else if (itemId == R.id.pending_view) {
             swapFragments(2);
-            fragmentType = 2;
         } else if (itemId == R.id.recurring_view) {
             swapFragments(3);
-            fragmentType = 3;
         }
 
         return super.onOptionsItemSelected(item);
@@ -176,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
     // Method to update the date
     public void updateDate() {
         if(advButtonClicked==false){
-            currentDateTime = LocalDateTime.now(); // Update currentDateTime
+            currentDateTime = LocalDateTime.now().withHour(2).withMinute(0).withSecond(0).withNano(0); // Update currentDateTime
         }
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E, M/d", Locale.getDefault());
@@ -206,21 +204,21 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        if(prevDate != null && prevDate.getDayOfYear()!=currentDateTime.getDayOfYear()){
+        // Rollover
+        if(prevDate != null && prevDate.getDayOfYear() != currentDateTime.getDayOfYear() && currentDateTime.getHour() >= 2){
             model.deleteCompleted();
-            //model.updateTomorrow();
             prevDate = currentDateTime;
             model.updateModelCurrentDate(currentDateTime);
             if(fragmentType==0){
-                TodayListFragment todayfrag = (TodayListFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-                if (todayfrag != null) {
-                    todayfrag.updateDate(currentDateTime);
+                TodayListFragment todayFrag = (TodayListFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                if (todayFrag != null) {
+                    todayFrag.updateDate(currentDateTime);
                 }
             }
             if(fragmentType==1){
-                TomorrowListFragment tmrwfrag = (TomorrowListFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-                if (tmrwfrag != null) {
-                    tmrwfrag.updateDate(currentDateTime);
+                TomorrowListFragment tmrwFrag = (TomorrowListFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                if (tmrwFrag != null) {
+                    tmrwFrag.updateDate(currentDateTime);
                 }
             }
             model.refreshDatabase();
@@ -252,6 +250,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void swapFragments(int fragmentNum) {
+        this.fragmentType = fragmentNum;
         // fragmentNum: 0 = today, 1 = tomorrow, 2 = pending, 3 = recurring
         switch (fragmentNum) {
             case 0:
@@ -261,8 +260,8 @@ public class MainActivity extends AppCompatActivity {
                         .commit();
                 setTitle("Today's Goals");
                 updateDate();
-                model.refreshDatabase();
-                return;
+                //model.refreshDatabase();
+                break;
             case 1:
                 getSupportFragmentManager()
                         .beginTransaction()
@@ -270,26 +269,26 @@ public class MainActivity extends AppCompatActivity {
                         .commit();
                 setTitle("Tomorrow's Goals");
                 updateDate();
-                model.refreshDatabase();
-                return;
+                //model.refreshDatabase();
+                break;
             case 2:
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragment_container, PendingListFragment.newInstance())
                         .commit();
                 setTitle("Pending Goals");
-                model.refreshDatabase();
-                return;
+                //model.refreshDatabase();
+                break;
             case 3:
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragment_container, RecurringListFragment.newInstance())
                         .commit();
                 setTitle("Recurring Goals");
-                model.refreshDatabase();
-                return;
+                //model.refreshDatabase();
+                break;
             default:
-                return;
+                break;
         }
     }
 
@@ -307,12 +306,6 @@ public class MainActivity extends AppCompatActivity {
     }
     public MainViewModel getMainViewModel(){
         return this.model;
-    }
-    public void switchToTomorrowFrag(){
-        swapFragments(1);
-    }
-    public void switchToTodayFrag(){
-        swapFragments(0);
     }
 
     private void switchToFocusModeDialog() {

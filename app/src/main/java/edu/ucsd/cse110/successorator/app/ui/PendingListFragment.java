@@ -53,15 +53,30 @@ public class PendingListFragment extends Fragment {
             activityModel.changeToTodayView(id, true);
         }, 2, activityModel);
 
+        activityModel.getIncompleteGoals().removeAllObservers();
         activityModel.getIncompleteGoals().registerObserver(goals -> {
+            System.out.println("Pending Goals Observer");
             if (goals == null) return;
 
             var pendingGoals = new ArrayList<Goal>();
             for(Goal g : goals){
-                if(g.repType().equals("pending") && g.date().isEmpty() && (activityModel.getContext().equals("N/A") || g.getContextType().equals(activityModel.getContext()))){
+                if(g.repType().equals("Pending")
+                        && g.date().isEmpty()
+                        && (activityModel.getContext().equals("N/A")
+                        || g.getContextType().equals(activityModel.getContext()))){
                     pendingGoals.add(g);
                 }
+            }
 
+            if (view.defaultGoals != null) {
+                // Set defaultGoals visibility
+                if (pendingGoals.size() == 0) {
+                    view.defaultGoals.setVisibility(View.VISIBLE);
+                } else {
+                    view.defaultGoals.setVisibility(View.INVISIBLE);
+                }
+            } else {
+                System.out.println("defaultGoals view is null");
             }
             incompleteAdapter.clear();
             incompleteAdapter.addAll(pendingGoals); // remember the mutable copy here!

@@ -39,8 +39,11 @@ public interface GoalDao {
     LiveData<GoalEntity> findAsLiveData(int id);
 
     // Return all completed/uncompleted goals
-    @Query("SELECT * FROM goals WHERE completed = :completed")
-    LiveData<List<GoalEntity>> findCompleted(boolean completed);
+    @Query("SELECT * FROM goals WHERE completed = true")
+    LiveData<List<GoalEntity>> findCompleted();
+
+    @Query("SELECT * FROM goals WHERE completed = false")
+    LiveData<List<GoalEntity>> findIncomplete();
 
     // Overload to filter by context
     @Query("SELECT * FROM goals WHERE contextType = :contextType AND completed= :completed")
@@ -65,11 +68,17 @@ public interface GoalDao {
     void delete(int id);
 
     @Query("DELETE FROM goals WHERE completed=true")
-    void deleteComplete();
+    void deleteCompleted();
 
-    @Query("DELETE FROM goals WHERE id= :idPass")
-    void deleteGoal(int idPass);
+    @Query("DELETE FROM goals WHERE id= :id")
+    void deleteGoal(int id);
 
     @Query("SELECT * FROM goals WHERE repType = :completed")
     LiveData<List<GoalEntity>> makeTomorrow(String completed);
+
+    @Query("SELECT * FROM goals WHERE createdById = :id")
+    List<GoalEntity> findAllCreatedById(int id);
+
+    @Query("SELECT MAX(id) as max_if FROM goals")
+    int getMaxId();
 }

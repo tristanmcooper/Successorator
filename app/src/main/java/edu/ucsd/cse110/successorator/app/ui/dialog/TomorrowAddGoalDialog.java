@@ -40,7 +40,7 @@ public class TomorrowAddGoalDialog extends DialogFragment{
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         this.view = DialogTodayTomorrowAddGoalsBinding.inflate(getLayoutInflater());
 
-        LocalDateTime date = LocalDateTime.now();
+        LocalDateTime date = activityModel.getCurrentDate().plusDays(1);
         String dayOfWeek = date.getDayOfWeek().toString().toLowerCase();
         dayOfWeek = dayOfWeek.substring(0, 1).toUpperCase() + dayOfWeek.substring(1);
 
@@ -104,7 +104,7 @@ public class TomorrowAddGoalDialog extends DialogFragment{
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
         // Get user input from the EditText
         String description = view.editText.getText().toString();
-        int currCount = activityModel.getCount();
+        int currCount = activityModel.getMaxId();
 
         if (description.length() == 0) {
             new AlertDialog.Builder(requireContext())
@@ -137,10 +137,14 @@ public class TomorrowAddGoalDialog extends DialogFragment{
         String contextType = selectedContextTypeRadioButton.getText().toString();
 
         // Create new goal
-        Goal newGoal = new Goal(currCount+1, description, false,curtime.toString(), repType, contextType);
+        Goal newGoal = new Goal(currCount+1, description, false,curtime.toString(), repType, contextType,null);
 
         // Add the new goal to your model
         activityModel.addGoal(newGoal);
+
+        if (!repType.equals("Once")) {
+            createInstances(currCount + 1);
+        }
 
         // Dismiss the dialog
         dialog.dismiss();
@@ -148,5 +152,24 @@ public class TomorrowAddGoalDialog extends DialogFragment{
 
     private void onNegativeButtonClick(DialogInterface dialog, int which) {
         dialog.cancel();
+    }
+
+    private void createInstances(int id) {
+        LocalDateTime currentDate = activityModel.getCurrentDate().plusDays(1);
+        Goal recurringGoal = activityModel.find(id);
+        int currCount = activityModel.getMaxId();
+        switch (recurringGoal.repType()) {
+            case "Daily":
+                // Create instance for today and tomorrow
+                Goal todayGoal = new Goal(currCount+1, recurringGoal.description(), false, currentDate.toString(), "Once", recurringGoal.getContextType(), recurringGoal.id());
+                activityModel.addGoal(todayGoal);
+                Goal tmrGoal = new Goal(currCount+2, recurringGoal.description(), false, currentDate.plusDays(1).toString(), "Once", recurringGoal.getContextType(), recurringGoal.id());
+                activityModel.addGoal(tmrGoal);
+                break;
+            default:
+                Goal newGoal = new Goal(currCount+1, recurringGoal.description(), false, currentDate.toString(), "Once", recurringGoal.getContextType(), recurringGoal.id());
+                activityModel.addGoal(newGoal);
+                break;
+        }
     }
 }

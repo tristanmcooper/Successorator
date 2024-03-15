@@ -39,10 +39,10 @@ public class SuccessoratorApplication extends Application {
         LocalDateTime currDateTime = LocalDateTime.now().withHour(2).withMinute(0).withSecond(0).withNano(0);
         // Default goals for testing purposes
         List<Goal> DEFAULT_GOALS = List.of(
-            new Goal(1, "Goal 1", false, currDateTime.toString(), "Daily", "H"),
-            new Goal(2, "Goal 2", false, currDateTime.toString(), "Weekly", "W"),
-            new Goal(3, "Goal 3", false, currDateTime.toString(), "Monthly", "S"),
-            new Goal(4, "Goal 4", false, currDateTime.toString(), "Yearly", "E")
+            new Goal(1, "Goal 1", false, currDateTime.toString(), "Once", "H", null),
+            new Goal(2, "Goal 2", false, currDateTime.toString(), "Once", "W", null),
+            new Goal(3, "Goal 3", false, currDateTime.toString(), "Once", "S", null),
+            new Goal(4, "Goal 4", false, currDateTime.toString(), "Once", "E", null)
         );
 
         // Populate database with default values

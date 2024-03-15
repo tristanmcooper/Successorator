@@ -17,19 +17,22 @@ public class Goal {
 
     private String contextType;
 
+    private Integer createdById;
+
     public Goal(
             @NonNull Integer id,
             @NonNull String description,
             boolean completed,
             String date,
             String repType,
-            String contextType) {
+            String contextType, Integer createdById) {
         this.id = id;
         this.description = description;
         this.completed = completed;
         this.date = date;
         this.repType = repType;
         this.contextType = contextType;
+        this.createdById = createdById;
     }
 
     public Integer id() {
@@ -53,12 +56,13 @@ public class Goal {
                 && Objects.equals(description, goal.description)
                 && Objects.equals(completed, goal.completed)
                 && Objects.equals(date, goal.date)
-                && Objects.equals(contextType, goal.contextType);
+                && Objects.equals(contextType, goal.contextType)
+                && Objects.equals(createdById, goal.createdById);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, description, completed, date, contextType);
+        return Objects.hash(id, description, completed, date, contextType, createdById);
     }
 
     public String repType() {
@@ -70,7 +74,9 @@ public class Goal {
     }
 
 
-
+    public Integer getCreatedById() {
+        return createdById;
+    }
 }
 
 

@@ -32,6 +32,8 @@ public class SimpleSubject<T> implements MutableSubject<T> {
         observers.remove(observer);
     }
 
+    public void removeAllObservers() { observers.clear(); }
+
     /**
      * Notifies all observers of the subject's new value. Used internally.
      */

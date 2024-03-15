@@ -19,14 +19,14 @@ import edu.ucsd.cse110.successorator.app.data.db.RoomGoalRepository;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
+import edu.ucsd.cse110.successorator.lib.util.Subject;
 
 public class MainViewModel extends ViewModel{
     private final RoomGoalRepository goalRepository;
     private SimpleSubject<List<Goal>> incompleteGoals;
     private SimpleSubject<List<Goal>> completeGoals;
     private SimpleSubject<List<Goal>> recurringGoals;
-    private LocalDateTime currentDate;
-    //For testing US1
+    private LocalDateTime currentDate = LocalDateTime.now().withHour(2).withMinute(0).withSecond(0).withNano(0);
     private ArrayList<Goal> displayedTodayGoals;
     private ArrayList<Goal> displayedTomorrowGoals;
     private String contextType = "N/A";
@@ -50,7 +50,7 @@ public class MainViewModel extends ViewModel{
         this.completeGoals = new SimpleSubject<>();
         this.recurringGoals = new SimpleSubject<>();
 
-        goalRepository.findCompleted(false).registerObserver(goals -> {
+        goalRepository.findIncomplete().registerObserver(goals -> {
             if (goals == null) return;
             var newIncompleteGoals = goals.stream()
                     .sorted(Comparator.comparingInt(Goal::id))
@@ -58,7 +58,7 @@ public class MainViewModel extends ViewModel{
             incompleteGoals.setValue(newIncompleteGoals);
         });
 
-        goalRepository.findCompleted(true).registerObserver(goals -> {
+        goalRepository.findCompleted().registerObserver(goals -> {
             if (goals == null) return;
             var newCompleteGoals = goals.stream()
                     .sorted(Comparator.comparingInt(Goal::id))
@@ -85,62 +85,7 @@ public class MainViewModel extends ViewModel{
         this.contextType = contextType;
         refreshDatabase();
     }
-/*
-    public void setFilterContext(String contextType) {
-        this.contextType = contextType;
-        if (contextType.equals("N/A")) {
-            goalRepository.findCompleted(false).registerObserver(goals -> {
-                if (goals == null) return;
-                var newIncompleteGoals = goals.stream()
-                        .sorted(Comparator.comparingInt(Goal::id))
-                        .collect(Collectors.toList());
-                incompleteGoals.setValue(newIncompleteGoals);
-            });
-            goalRepository.findCompleted(true).registerObserver(goals -> {
-                if (goals == null) return;
-                var newCompleteGoals = goals.stream()
-                        .sorted(Comparator.comparingInt(Goal::id))
-                        .collect(Collectors.toList());
-                completeGoals.setValue(newCompleteGoals);
-            });
-            goalRepository.findRecurring().registerObserver(goals -> {
-                if (goals == null) return;
 
-                var newRecurringGoals = goals.stream()
-                        .sorted(Comparator.comparing(goal -> LocalDateTime.parse(goal.date())))
-                        .collect(Collectors.toList());
-                recurringGoals.setValue(newRecurringGoals);
-            });
-        } else {
-            goalRepository.findCompleted(false, contextType).registerObserver(goals -> {
-                if (goals == null) return;
-                var newIncompleteGoals = goals.stream()
-                        .sorted(Comparator.comparingInt(Goal::id))
-                        .collect(Collectors.toList());
-                incompleteGoals.setValue(newIncompleteGoals);
-            });
-
-            goalRepository.findCompleted(true, contextType).registerObserver(goals -> {
-                if (goals == null) return;
-                var newCompleteGoals = goals.stream()
-                        .sorted(Comparator.comparingInt(Goal::id))
-                        .collect(Collectors.toList());
-                completeGoals.setValue(newCompleteGoals);
-            });
-            goalRepository.findRecurring().registerObserver(goals -> {
-                if (goals == null) return;
-
-                var newRecurringGoals = goals.stream()
-                        .sorted(Comparator.comparing(goal -> LocalDateTime.parse(goal.date())))
-                        .collect(Collectors.toList());
-
-                recurringGoals.setValue(newRecurringGoals);
-            });
-        }
-
-    }
-
- */
     public void removeSpecificGoal(int id){goalRepository.remove(id);}
 
 
@@ -149,8 +94,29 @@ public class MainViewModel extends ViewModel{
         return goalRepository.count(); 
     }
 
+    public int getMaxId() {
+        return goalRepository.getMaxId();
+    }
+
+    public Goal find(int id) {
+        return goalRepository.findNonLive(id);
+    }
+
     public void changeCompleteStatus(int id){
         goalRepository.changeCompleted(id);
+    }
+    public void removeAllCreatedBy(int id){
+        var goals = goalRepository.findAllCreatedById(id);
+        if(goals==null){
+            return;
+        }
+        for(Goal goal : goals){
+            goalRepository.remove(goal.id());
+        }
+    }
+
+    public List<Goal> findAllCreatedById(int id) {
+        return goalRepository.findAllCreatedById(id);
     }
     public SimpleSubject<List<Goal>> getIncompleteGoals(){
         return incompleteGoals;
@@ -164,8 +130,9 @@ public class MainViewModel extends ViewModel{
         return recurringGoals;
     }
 
+
     public void deleteCompleted(){
-        goalRepository.deleteCompleted();
+        goalRepository.deleteCompleted(currentDate);
     }
     public void updateModelCurrentDate(LocalDateTime datetime){
             this.currentDate = datetime;
@@ -184,12 +151,14 @@ public class MainViewModel extends ViewModel{
         goalRepository.changeToTodayView(id, isComplete, currentDate.plusDays(1));
     }
     public void refreshDatabase(){
+        Log.d("Database refresh", "refreshing database");
         addGoal(new Goal(-1,
                 "",
                 false,
                 LocalDateTime.now().withHour(2).withMinute(0).withSecond(0).withNano(0).toString(),
                 "Once",
-                "Work"));
+                "Work",
+                null));
         removeSpecificGoal(-1);
     }
 
@@ -215,8 +184,6 @@ public class MainViewModel extends ViewModel{
     public String getContext() {
         return this.contextType;
     }
-
-
 
 
 }

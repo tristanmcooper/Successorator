@@ -48,19 +48,24 @@ public class TodayListFragment extends Fragment {
         FragmentTodayListBinding binding = FragmentTodayListBinding.inflate(inflater, container, false);
         this.view = binding;
 
-        currentDate = LocalDateTime.now();
         // Initialize the Model
         var modelOwner = requireActivity();
         var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
+
+        currentDate = activityModel.getCurrentDate();
+
         // Initialize the Adapter (with an empty list for now) for incomplete tasks
         this.incompleteAdapter = new GoalListAdapter(requireContext(), List.of(), id -> {
             activityModel.changeCompleteStatus(id);
-        }, 0);
+        }, 0, activityModel);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm", Locale.getDefault());
 
+        activityModel.getIncompleteGoals().removeAllObservers();
         activityModel.getIncompleteGoals().registerObserver(goals -> {
+            System.out.println("Today Incomplete Goals Observer");
+            System.out.println(currentDate);
             if (goals == null) return;
 
             var todaysGoals = new ArrayList<Goal>();
@@ -69,10 +74,11 @@ public class TodayListFragment extends Fragment {
                 if (!g.date().equals("")){
                     goalDate = LocalDateTime.parse(g.date(), formatter);
                 }
-                if(!(goalDate ==null) && goalDate.getDayOfYear()<=currentDate.getDayOfYear() && (activityModel.getContext().equals("N/A") || g.getContextType().equals(activityModel.getContext()))){
+                if (goalDate != null
+                        && (goalDate.isBefore(currentDate) || goalDate.equals(currentDate))
+                        && (activityModel.getContext().equals("N/A") || g.getContextType().equals(activityModel.getContext()))
+                        && !(g.repType().equals("Daily") || g.repType().equals("Weekly") || g.repType().equals("Monthly") || g.repType().equals("Yearly"))) {
                     todaysGoals.add(g);
-                    Log.d("TodayListFrag", "is context here: " + g.getContextType());
-
                 }
             }
 
@@ -96,16 +102,23 @@ public class TodayListFragment extends Fragment {
         // Initialize the adapter for completed tasks
         this.completeAdapter = new GoalListAdapter(requireContext(), List.of(), id -> {
             activityModel.changeCompleteStatus(id);
-        }, 0);
+        }, 0, activityModel);
+
+        activityModel.getCompleteGoals().removeAllObservers();
         activityModel.getCompleteGoals().registerObserver(goals -> {
+            System.out.println("Today Complete Goals Observer");
             if (goals == null) return;
+
             var todaysGoals = new ArrayList<Goal>();
             for(Goal g : goals){
                 LocalDateTime goalDate = null;
                 if (!g.date().equals("")){
                     goalDate = LocalDateTime.parse(g.date(), formatter);
                 }
-                if(!(goalDate==null) && goalDate.getDayOfYear()<=currentDate.getDayOfYear() && (activityModel.getContext().equals("N/A") || g.getContextType().equals(activityModel.getContext()))){
+                if (goalDate != null
+                        && (goalDate.isBefore(currentDate) || goalDate.equals(currentDate))
+                        && (activityModel.getContext().equals("N/A") || g.getContextType().equals(activityModel.getContext()))
+                        && !(g.repType().equals("Daily") || g.repType().equals("Weekly") || g.repType().equals("Monthly") || g.repType().equals("Yearly"))) {
                     todaysGoals.add(g);
                 }
             }
@@ -118,6 +131,13 @@ public class TodayListFragment extends Fragment {
         view.uncompletedGoalList.setAdapter(incompleteAdapter);
         view.completedGoalList.setAdapter(completeAdapter);
         return binding.getRoot();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        activityModel.getIncompleteGoals().removeAllObservers();
+        activityModel.getCompleteGoals().removeAllObservers();
     }
 
     public void updateDate(LocalDateTime date){

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
@@ -19,7 +20,9 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -32,7 +35,7 @@ public class RecurringAddGoalDialog extends DialogFragment{
     private @NonNull DialogRecurringAddGoalsBinding view;
     private MainViewModel activityModel;
     private Long selectedDateLong;
-    private LocalDateTime selectedDate = LocalDateTime.now().withHour(2).withMinute(0).withSecond(0).withNano(0);
+    private LocalDateTime selectedDate;
     private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(("E, M/d"), Locale.getDefault());
 
     RecurringAddGoalDialog() {
@@ -75,12 +78,15 @@ public class RecurringAddGoalDialog extends DialogFragment{
         var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
         var modelProvider = new ViewModelProvider(modelOwner,modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
+
+        selectedDate = activityModel.getCurrentDate();
+        selectedDateLong = selectedDate.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
     }
 
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
         // Get user input from the EditText
         String description = view.editText.getText().toString();
-        int currCount = activityModel.getCount();
+        int currCount = activityModel.getMaxId();
 
         if (description.length() == 0) {
             new AlertDialog.Builder(requireContext())
@@ -109,10 +115,13 @@ public class RecurringAddGoalDialog extends DialogFragment{
         String contextType = selectedContextTypeRadioButton.getText().toString();
 
         // Create new goal based on user input
-        Goal newGoal = new Goal(currCount+1, description, false, this.selectedDate.toString(), repType, contextType);
+        Goal newGoal = new Goal(currCount+1, description, false, this.selectedDate.toString(), repType, contextType,null);
 
         // Add the new goal to your model
         activityModel.addGoal(newGoal);
+
+        // Add 'instances' of recurring goals as needed
+        createInstances(currCount+1);
 
         // Dismiss the dialog
         dialog.dismiss();
@@ -175,8 +184,9 @@ public class RecurringAddGoalDialog extends DialogFragment{
          */
 
         // Makes only dates from today forward selectable.
+        Long dayBeforeStartDate = selectedDate.minusDays(1).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
         var constraintsBuilder = new CalendarConstraints.Builder()
-                .setValidator(DateValidatorPointForward.now());
+                .setValidator(DateValidatorPointForward.from(dayBeforeStartDate));
 
         // Create new datePicker instance
         MaterialDatePicker<Long> datePicker;
@@ -219,5 +229,23 @@ public class RecurringAddGoalDialog extends DialogFragment{
 
         // Display
         datePicker.show(getActivity().getSupportFragmentManager(), "datePicker");
+    }
+
+    private void createInstances(int id) {
+        Goal recurringGoal = activityModel.find(id);
+        int currCount = activityModel.getMaxId();
+        switch (recurringGoal.repType()) {
+            case "Daily":
+                // Create instance for today and tomorrow
+                Goal todayGoal = new Goal(currCount+1, recurringGoal.description(), false, selectedDate.toString(), "Once", recurringGoal.getContextType(), recurringGoal.id());
+                activityModel.addGoal(todayGoal);
+                Goal tmrGoal = new Goal(currCount+2, recurringGoal.description(), false, selectedDate.plusDays(1).toString(), "Once", recurringGoal.getContextType(), recurringGoal.id());
+                activityModel.addGoal(tmrGoal);
+                break;
+            default:
+                Goal newGoal = new Goal(currCount+1, recurringGoal.description(), false, selectedDate.toString(), "Once", recurringGoal.getContextType(), recurringGoal.id());
+                activityModel.addGoal(newGoal);
+                break;
+        }
     }
 }
