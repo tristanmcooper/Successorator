@@ -221,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
                     tmrwfrag.updateDate(currentDateTime);
                 }
             }
-            model.refreshDatabase();
+            //model.refreshDatabase();
         }
 
         model.updateModelCurrentDate(currentDateTime);
@@ -260,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
                         .commit();
                 setTitle("Today's Goals");
                 updateDate();
-                model.refreshDatabase();
+                //model.refreshDatabase();
                 break;
             case 1:
                 getSupportFragmentManager()
@@ -269,7 +269,7 @@ public class MainActivity extends AppCompatActivity {
                         .commit();
                 setTitle("Tomorrow's Goals");
                 updateDate();
-                model.refreshDatabase();
+                //model.refreshDatabase();
                 break;
             case 2:
                 getSupportFragmentManager()
@@ -277,7 +277,7 @@ public class MainActivity extends AppCompatActivity {
                         .replace(R.id.fragment_container, PendingListFragment.newInstance())
                         .commit();
                 setTitle("Pending Goals");
-                model.refreshDatabase();
+                //model.refreshDatabase();
                 break;
             case 3:
                 getSupportFragmentManager()
@@ -285,7 +285,7 @@ public class MainActivity extends AppCompatActivity {
                         .replace(R.id.fragment_container, RecurringListFragment.newInstance())
                         .commit();
                 setTitle("Recurring Goals");
-                model.refreshDatabase();
+                //model.refreshDatabase();
                 break;
             default:
                 break;
