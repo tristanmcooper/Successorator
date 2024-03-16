@@ -4,8 +4,11 @@ package edu.ucsd.cse110.successorator.app;
 import static androidx.test.core.app.ActivityScenario.launch;
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.longClick;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.Espresso.onView;
@@ -169,6 +172,67 @@ public class MainActivityTest {
         }
     }
 
+    @Test
+    public void pendingGoalTest(){
+        onView(withId(R.id.views_drop_down)).perform(click());
+        onView(withText("Pending Goals")).perform(click());
+
+        onView(withId(R.id.add_goal_button)).perform(click());
+        onView(withId(R.id.editText)).perform(typeText("Today Goal"), closeSoftKeyboard());
+        onView(withText("Create")).perform(click());
+
+        onView(withId(R.id.add_goal_button)).perform(click());
+        onView(withId(R.id.editText)).perform(typeText("Tomorrow Goal"), closeSoftKeyboard());
+        onView(withText("Create")).perform(click());
+
+        onView(withId(R.id.add_goal_button)).perform(click());
+        onView(withId(R.id.editText)).perform(typeText("Finished Goal"), closeSoftKeyboard());
+        onView(withText("Create")).perform(click());
+
+        onView(withId(R.id.add_goal_button)).perform(click());
+        onView(withId(R.id.editText)).perform(typeText("Deleted Goal"), closeSoftKeyboard());
+        onView(withText("Create")).perform(click());
+        //moving everything out of pending
+        onView(withText("Today Goal")).perform(longClick());
+        onView(withText("Today")).perform(click());
+
+        onView(withText("Tomorrow Goal")).perform(longClick());
+        onView(withText("Tomorrow")).perform(click());
+
+        onView(withText("Finished Goal")).perform(longClick());
+        onView(withText("Finished")).perform(click());
+
+        onView(withText("Deleted Goal")).perform(longClick());
+        onView(withText("Delete")).perform(click());
+
+        onView(withId(R.id.uncompleted_goal_list))
+                .check(matches(not(hasDescendant(withText("Today Goal")))));
+        onView(withId(R.id.uncompleted_goal_list))
+                .check(matches(not(hasDescendant(withText("Tomorrow Goal")))));
+        onView(withId(R.id.uncompleted_goal_list))
+                .check(matches(not(hasDescendant(withText("Finished Goal")))));
+        onView(withId(R.id.uncompleted_goal_list))
+                .check(matches(not(hasDescendant(withText("Deleted Goal")))));
+
+        //going to today
+        onView(withId(R.id.views_drop_down)).perform(click());
+        onView(withText("Today's Goals")).perform(click());
+
+        onView(withText("Today Goal")).check(matches(not(TextViewStrikeThroughMatcher.withStrikeThrough())));
+        onView(withText("Finished Goal")).check(matches((TextViewStrikeThroughMatcher.withStrikeThrough())));
+        onView(withId(R.id.uncompleted_goal_list))
+                .check(matches(not(hasDescendant(withText("Deleted Goal")))));
+        onView(withId(R.id.completed_goal_list))
+                .check(matches(not(hasDescendant(withText("Deleted Goal")))));
+
+        onView(withId(R.id.views_drop_down)).perform(click());
+        onView(withText("Tomorrow's Goals")).perform(click());
+        onView(withText("Tomorrow Goal")).check(matches(not(TextViewStrikeThroughMatcher.withStrikeThrough())));
+        onView(withId(R.id.uncompleted_goal_list))
+                .check(matches(not(hasDescendant(withText("Deleted Goal")))));
+        onView(withId(R.id.completed_goal_list))
+                .check(matches(not(hasDescendant(withText("Deleted Goal")))));
+    }
 
     private Fragment getCurrentFragment() {
         ActivityScenario<MainActivity> activityScenario = activityRule.getScenario();
