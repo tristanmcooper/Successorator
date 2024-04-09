@@ -1,4 +1,4 @@
-# Team 30 - Successorator 
+Successorator 
 
 ---
 
@@ -35,7 +35,7 @@ This means we have 12*6 = 72 hours.
 Taking into account a velocity of 0.75, we can 72*0.75 = 54 hours of actual work.
 
 
-User Stories for iteration 2:
+User Stories for Iteration 2:
 - Iteration 1 Overall Test [2]
 - US 1 Goal adding options for today and tomorrow views [8]
 - US 2 Calendar picker for recurring events [4]
